@@ -892,3 +892,59 @@
 		&:hover, &:focus-visible { text-decoration-color: var(--green-color); }
 	}
 	.sx-home .sx-tg.is-active .sx-tb { font-weight: 600; text-decoration-color: var(--green-color); }
+
+/* study of several organs (model v12a): header line without quote and «×», organ lines under it */
+.sx-line.sx-hd { padding-top: .25rem; }
+.sx-line.sx-hd .sx-t { font-weight: 600; }
+
+/* prototype-only: data tabs and the paste box for a raw model answer */
+.proto-data { margin-top: .25rem; }
+.proto-data a { padding: 1px 6px; margin-right: 2px; border-radius: 3px; cursor: pointer; }
+.proto-data a[aria-current="true"] { background: #444; color: #fff; text-decoration: none; }
+.proto-err { color: #c0392b; margin-left: .5rem; }
+.proto-paste { position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,.35); display: flex; align-items: center; justify-content: center; }
+.proto-paste[hidden] { display: none; }
+.proto-paste-in { background: #fff; padding: 1rem; border-radius: 8px; width: min(900px, 92vw); display: flex; flex-direction: column; gap: .5rem; font-size: 14px; }
+.proto-paste-in span { color: #777; }
+.proto-paste-in textarea { width: 100%; height: 55vh; font: 12px/1.4 ui-monospace, Menlo, monospace; padding: .5rem; border: 1px solid #ccc; border-radius: 4px; }
+.proto-paste-in .proto-err { margin-left: 0; }
+
+/* 2026-11-12 (Yuri): a suggestion has the same frame as the field it fills — same width, left edge, corner radius and
+   left padding. Number cards no longer borrow half of the column gap (was round 9); long button text wraps instead. */
+	.sx-block, .sx-diag { border-radius: 3.5px; }
+	.sx-cell > .sx-numcard, .sx-cell > .sx-numcard.is-last { width: 100%; margin-left: 0; }
+	.sx-cell > .sx-numcard.is-last::before { left: 1.25rem; }
+	.sx-numcard { padding-left: 12.25px; }
+	.sx-nc-acts .sx-btn { padding-left: .25rem; padding-right: .25rem; }
+	/* under a rich-text field the text starts where the editor's text starts (CKEditor: 14px) */
+	.sx-block:has(.sx-lines) { padding-left: 14px; }
+	/* buttons wrap by words inside the field-wide card: «Заменить / на 8»; the «» mark keeps its room in the value row only */
+	.sx-numcard { padding-right: 12.25px; }
+	.sx-nc-v { padding-right: 1rem; }
+	.sx-numcard .sx-nc-acts .button.sx-btn { white-space: normal !important; height: auto !important; min-height: 2rem; font-size: .75rem; padding: .25rem .125rem !important; }
+
+/* 2026-11-12 (Yuri): the pair highlight frames the field itself, not its caption — the same green border and soft ring
+   as the suggestion under it, so both frames have the same width and edges */
+	/* no outline on the caption at all: with the old transparent outline and its .15s transition, leaving the field
+	   animated the colour from currentColor (black) to transparent — a black frame flashed around field and caption */
+	#visit-form label, #visit-form label.scribe-target { outline: none !important; transition: none !important; }
+	#visit-form label.scribe-target input:not([type="hidden"]),
+	#visit-form label.scribe-target textarea {
+		border-color: var(--green-color) !important; box-shadow: 0 0 0 3px rgba(0, 150, 136, .15) !important;
+	}
+	#visit-form label.scribe-target .ck.ck-editor { border-radius: 3.5px; box-shadow: 0 0 0 3px rgba(0, 150, 136, .15); }
+	#visit-form label.scribe-target .ck.ck-editor .ck-toolbar,
+	#visit-form label.scribe-target .ck.ck-editor .ck-editor__editable { border-color: var(--green-color) !important; }
+	/* the Vet.AF editor draws its frame on the outer .ck-editor box: that border turns green too, like an input's */
+	#visit-form label.scribe-target .ck.ck-editor { border-color: var(--green-color) !important; }
+
+/* 2026-11-12 (Yuri): «Прозвучало:» in the colour of the quote itself; the field note under the quote / above the buttons;
+   every suggestion under a field points up to it, like the number cards */
+	.sx-ql { color: inherit; }
+	.sx-note-text { margin: .25rem 0 .125rem; }
+	.sx-host > .sx-block { position: relative; overflow: visible; }
+	.sx-host > .sx-block::before {
+		content: ''; position: absolute; top: -7px; left: 1.25rem; transform: translateX(-50%);
+		border: 7px solid transparent; border-top: 0; border-bottom-color: var(--sx-frame);
+	}
+	.sx-block.sx-pair::before { border-bottom-color: var(--green-color) !important; }

@@ -14,7 +14,6 @@
 // The layer is never inside CKEditor content and its inputs have no form owner: unaccepted text is never saved.
 (function () {
   const BASE = window.SCRIBE_BASE || '';
-  const D = window.SCRIBE_DRAFT;
   const PET = 'Барсик';
   const NOW = '10:52';
   const EMPTY_P = '<p><br data-cke-filler="true"></p>';
@@ -56,52 +55,99 @@
   };
   // short fallback stems added by the prototype to the model's `queries` (brand of the clinic is unknown to the model)
   const EXTRA_Q = { 'Локсиком': ['мелокс', 'локсик'] };
-  // Yuri 2026-11-12: no confirmation state for doses — what the vet must read (drug names, doses) is in bold,
-  // and a line with a dose always shows its quote. In the product this markup comes from the model.
-  const DOSES = [
-    [/^Локсиком 0,35 мл п\/к$/, '<b>Локсиком 0,35 мл</b> п/к'],
-    [/^Локсиком суспензия/, '<b>Локсиком суспензия</b> с завтра по <b>0,6 мл</b> внутрь <b>1 раз в день 4 дня</b>, с едой'],
-    [/^Стоп-цистит/, '<b>Стоп-цистит био</b> по <b>1 табл 2 раза в день 7 дней</b>, далее по <b>1 табл 1 раз в день 7 дней</b>']
-  ];
-  const DRUGS = /(Синулокс|Кантарен|Нобивак|Мильбемакс|Локсиком|Стоп-цистит био)/g;
+  // Yuri 2026-11-12: no confirmation state for doses — drug names and doses come in bold from the model (**…**),
+  // and a line with a dose always shows its quote.
   const TABS = [['inspections', 'Лист осмотра'], ['recommendations', 'Рекомендации'], ['items', 'Товары и услуги']];
 
-  const A = D.answer;
+  // ---- the model output as is (prompt v12a, fit check 2026-11-12): window.SCRIBE_MODEL — parsed JSON or the raw text.
+  // ?run=<name> picks window.SCRIBE_MODELS[name] when a local file provides several answers (real runs stay out of git).
+  function parseModel(m) {
+    if (typeof m !== 'string') return m;
+    const body = m.slice(m.indexOf('{'), m.lastIndexOf('}') + 1);
+    for (const fix of ['', '}', '}}']) { try { return JSON.parse(body + fix); } catch (e) { /* the model sometimes drops the last brace */ } }
+    throw new Error('ответ модели не разобран как JSON');
+  }
+  // data source (prototype-only): ?run=<key> — a local real run, ?run=paste — the raw answer pasted in the bottom bar
+  const RUN = new URLSearchParams(location.search).get('run') || '';
+  const PASTE_KEY = 'scribe-paste';
+  const pasted = () => { try { return sessionStorage.getItem(PASTE_KEY) || ''; } catch (e) { return ''; } };
+  let LOAD_ERR = '';
+  let M = {};
+  try {
+    const src = RUN === 'paste' ? pasted() : (RUN && window.SCRIBE_MODELS && window.SCRIBE_MODELS[RUN]) || window.SCRIBE_MODEL;
+    const parsed = parseModel(src);
+    if (parsed && typeof parsed === 'object') M = parsed; else LOAD_ERR = 'ответ модели — не объект JSON';
+  } catch (e) { LOAD_ERR = e.message; }
   const fmtNum = n => String(n).replace('.', ',');
   const U = [];
   const unit = u => (U.push(Object.assign({ status: 'new' }, u)), u);
-  const lines = arr => arr.map(x => {
-    const d = DOSES.find(r => r[0].test(x.text));
-    return { text: x.text, quote: x.quote, dose: !!d, html: d ? d[1] : esc(x.text).replace(DRUGS, '<b>$1</b>'), excluded: false };
-  });
+  const plain = s => String(s || '').replace(/\*\*/g, '');
+  const md = s => esc(s || '').replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  const bolds = s => [...String(s || '').matchAll(/\*\*(.+?)\*\*/g)].map(m => m[1]);
+  // a dose line: a bold fragment with a digit, only where doses belong (a target weight in care advice is not a dose)
+  const DOSE_FIELDS = ['manipulations', 'treatment'];
+  // the block name starts the line where the line is unclear without it (field-template-v3, rule 3 «Тема: факты»)
+  const PREFIX_FIELDS = ['anamnesis', 'examination', 'recommendations'];
+  function lineText(name, t, prefix) {
+    t = String(t || '').trim();
+    if (!prefix || plain(t).toLowerCase().startsWith(name.toLowerCase())) return t;
+    const w = (t.match(/^\S+/) || [''])[0];
+    const low = /^[А-ЯЁ]/.test(w) && !/[А-ЯЁA-Z]/.test(w.slice(1)) ? t[0].toLowerCase() + t.slice(1) : t;   // keep «УЗИ», «ЭхоКГ», «**Синулокс**»
+    return name + ': ' + low;
+  }
+  const mkLine = (field, t, q, extra) => Object.assign({ text: plain(t), src: t, quote: q || '', html: md(t),
+    dose: DOSE_FIELDS.includes(field) && bolds(t).some(b => /\d/.test(b)), excluded: false }, extra);
+  // a field of blocks {name: {q, t}}; a study of several organs {study: {organ: {q, t}}} → a header line and a line per organ
+  function lines(field) {
+    const out = [];
+    Object.entries(M[field] || {}).forEach(([name, b], gi) => {
+      if (!b || typeof b !== 'object') return;
+      if (!('t' in b)) {
+        const organs = Object.entries(b).filter(([, ob]) => ob && plain(ob.t).trim());
+        if (!organs.length) return;
+        out.push({ header: true, group: 'g' + gi, text: name + ':', quote: '', html: esc(name) + ':', dose: false, excluded: false });
+        organs.forEach(([organ, ob]) => out.push(mkLine(field, lineText(organ, ob.t, true), ob.q, { group: 'g' + gi })));
+      } else if (plain(b.t).trim()) out.push(mkLine(field, lineText(name, b.t, PREFIX_FIELDS.includes(field)), b.q));
+    });
+    return out;
+  }
+  const filled = f => M[f] && plain(M[f].t).trim() ? M[f] : null;
+  const number = f => M[f] && M[f].v != null && M[f].v !== '' ? M[f] : null;
+  const textUnit = (id, tab, field, label, key) => { const ls = lines(key); if (ls.length) unit({ id, tab, kind: 'text', field, label, lines: ls }); };
 
-  // order = Vet.AF tab order, then field order inside the tab
-  unit({ id: 'title', tab: 'inspections', kind: 'input', field: 'title', label: 'Цель визита', value: A.title.value, quote: A.title.quote });
-  unit({ id: 'anamnesis', tab: 'inspections', kind: 'text', field: 'anamnesis', label: 'Анамнез', lines: lines(A.anamnesis) });
-  unit({ id: 'examination', tab: 'inspections', kind: 'text', field: 'examination', label: 'Осмотр', lines: lines(A.examination) });
-  unit({ id: 'symptom', tab: 'inspections', kind: 'input', field: 'symptom', label: 'Ведущие симптомы', value: A.symptoms.value, quote: A.symptoms.quote, group: 'triple' });
-  unit({ id: 'weight', tab: 'inspections', kind: 'number', field: 'weight', label: 'Вес, кг', value: String(A.weight.value), show: fmtNum(A.weight.value), quote: A.weight.quote, group: 'triple' });
-  unit({ id: 'temperature', tab: 'inspections', kind: 'number', field: 'temperature', label: 'Температура, °C', value: String(A.temperature.value), show: fmtNum(A.temperature.value), quote: A.temperature.quote, group: 'triple' });
-  A.diagnoses.forEach((d, i) => unit({ id: 'dg' + i, tab: 'inspections', kind: 'diag', label: 'Диагноз', title: d.title, quote: d.quote, dkind: d.kind }));
-  unit({ id: 'manipulation', tab: 'inspections', kind: 'text', field: 'manipulation', label: 'Манипуляции', lines: lines(A.manipulations) });
-  unit({ id: 'treatment', tab: 'recommendations', kind: 'text', field: 'treatment', label: 'План лечения', lines: lines(A.treatment) });
-  unit({ id: 'recommendation', tab: 'recommendations', kind: 'text', field: 'recommendation', label: 'Рекомендация по уходу', lines: lines(A.recommendations) });
+  // order = Vet.AF tab order, then field order inside the tab; nothing heard → no suggestion
+  if (filled('title')) unit({ id: 'title', tab: 'inspections', kind: 'input', field: 'title', label: 'Цель визита', value: plain(M.title.t), quote: M.title.q || '' });
+  textUnit('anamnesis', 'inspections', 'anamnesis', 'Анамнез', 'anamnesis');
+  textUnit('examination', 'inspections', 'examination', 'Осмотр', 'examination');
+  if (filled('symptoms')) unit({ id: 'symptom', tab: 'inspections', kind: 'input', field: 'symptom', label: 'Ведущие симптомы', value: plain(M.symptoms.t), quote: M.symptoms.q || '', group: 'triple' });
+  if (number('weight')) unit({ id: 'weight', tab: 'inspections', kind: 'number', field: 'weight', label: 'Вес, кг', value: String(M.weight.v), show: fmtNum(M.weight.v), quote: M.weight.q || '', group: 'triple' });
+  if (number('temperature')) unit({ id: 'temperature', tab: 'inspections', kind: 'number', field: 'temperature', label: 'Температура, °C', value: String(M.temperature.v), show: fmtNum(M.temperature.v), quote: M.temperature.q || '', group: 'triple' });
+  (M.diagnoses || []).filter(d => d && d.title).forEach((d, i) => unit({ id: 'dg' + i, tab: 'inspections', kind: 'diag', label: 'Диагноз', title: d.title, quote: d.q || '', dkind: d.kind }));
+  textUnit('manipulation', 'inspections', 'manipulation', 'Манипуляции', 'manipulations');
+  textUnit('treatment', 'recommendations', 'treatment', 'План лечения', 'treatment');
+  textUnit('recommendation', 'recommendations', 'recommendation', 'Рекомендация по уходу', 'recommendations');
   // goods and services: search tags, the vet picks the position in Vet.AF (approved 2026-11-11)
-  A.items.forEach((it, i) => unit({ id: 'it' + i, tab: 'items', kind: 'good', label: it.name, name: it.name, quote: it.quote,
-    type: it.type, recQty: it.quantity, recUnit: it.unit || '', qs: it.queries.concat(EXTRA_Q[it.name] || []) }));
+  const stems = name => { const w = name.split(' ')[0].toLowerCase(); return [...new Set([w, w.length > 7 ? w.slice(0, 6) : w, name.toLowerCase()])]; };
+  (M.items || []).filter(it => it && it.name).forEach((it, i) => unit({ id: 'it' + i, tab: 'items', kind: 'good', label: it.name, name: it.name, quote: it.q || '',
+    type: it.type, recQty: it.quantity, recUnit: it.unit || '',
+    qs: [...new Set(((it.queries || []).length ? it.queries : stems(it.name)).concat(EXTRA_Q[it.name] || []))] }));
   // drugs prescribed for home (Yuri 2026-11-12): clickable like the goods above, but optional — not counted in «не в счёте».
-  // The prototype takes them from the dose lines of «План лечения»; in the product the model returns them as a list with queries.
-  const HOME_Q = { 'Локсиком суспензия': ['локсиком', 'мелокс', 'локсик'], 'Стоп-цистит био': ['стоп-цистит', 'стоп'] };
-  A.treatment.filter(x => DOSES.some(r => r[0].test(x.text))).forEach((x, i) => {
-    const name = (x.text.match(/^(.+?)(?= с завтра| по |,)/) || [0, x.text])[1];
-    unit({ id: 'hm' + i, tab: 'items', kind: 'good', home: true, label: name, name, quote: x.quote, type: 'good', recQty: null, recUnit: '',
-      qs: HOME_Q[name] || [name.split(' ')[0].toLowerCase()] });
+  // Taken from the dose lines of «План лечения»: the drug is the first bold fragment, queries are its first word and stem.
+  // The model's own list (prompt v12e, «home_drugs» with queries) wins; v12a has none, so the rule below stays as the fallback.
+  if (Array.isArray(M.home_drugs) && M.home_drugs.length) M.home_drugs.filter(h => h && h.name).forEach((h, i) => unit({ id: 'hm' + i, tab: 'items', kind: 'good', home: true,
+    label: h.name, name: h.name, quote: h.q || '', type: 'good', recQty: null, recUnit: '', qs: [...new Set(((h.queries || []).length ? h.queries : stems(h.name)))] }));
+  else (U.find(u => u.id === 'treatment')?.lines || []).filter(l => l.dose).forEach((l, i) => {
+    const name = bolds(l.src).find(b => !/\d/.test(b));
+    if (!name) return;
+    unit({ id: 'hm' + i, tab: 'items', kind: 'good', home: true, label: name, name, quote: l.quote, type: 'good', recQty: null, recUnit: '',
+      qs: [...new Set(stems(name).concat(EXTRA_Q[name.split(' ')[0]] || []))] });
   });
 
   // state helpers
   const byId = id => U.find(u => u.id === id);
   const isPending = u => u.status === 'new';
-  const liveLines = u => (u.lines || []).filter(l => !l.excluded);
+  // a study header lives while at least one of its organ lines does
+  const liveLines = u => { const ls = (u.lines || []).filter(l => !l.excluded); return ls.filter(l => !l.header || ls.some(x => !x.header && x.group === l.group)); };
   const isField = u => u.kind === 'input' || u.kind === 'text' || u.kind === 'number';
   function remain(tab) {
     const us = U.filter(u => (!tab || u.tab === tab) && isPending(u));
@@ -300,6 +346,7 @@
   // a line: names and doses in bold; a line with a dose always shows its quote (no confirmation step, Yuri 2026-11-12)
   function lineHtml(u, l, i) {
     if (l.excluded) return '';
+    if (l.header) return liveLines(u).includes(l) ? '<li class="sx-line sx-hd" data-l="' + i + '"><span class="sx-t">' + l.html + '</span></li>' : '';
     return '<li class="sx-line' + (l.dose ? ' has-dose' : '') + '" data-l="' + i + '"><span class="sx-t">' + l.html + '</span>' +
       '<button type="button" class="sx-x" data-a="drop" title="Убрать строку" aria-label="Убрать строку">' + ICON.x + '</button>' +
       '<div class="sx-q">' + quoteHtml(l.quote) + '</div></li>';
@@ -313,11 +360,11 @@
       ? '<button type="button" class="button green sx-btn" data-a="accept" data-mode="append">Дописать</button>' +
         '<button type="button" class="button sx-btn" data-a="accept" data-mode="replace">Заменить</button>'
       : '<button type="button" class="button green sx-btn" data-a="accept" data-mode="set">Принять</button>';
-    const anyQuoteHidden = liveLines(u).some(l => !l.dose);
+    const anyQuoteHidden = liveLines(u).some(l => !l.dose && !l.header);
     return '<div class="sx-block' + (u.showQuotes ? ' show-quotes' : '') + '" data-u="' + u.id + '">' +
-      head(u, (has ? '<span class="sx-note">В поле уже есть текст — «Дописать» его сохранит</span>' : '') +
+      head(u,
         (anyQuoteHidden ? '<button type="button" class="sx-link sx-qtoggle" data-a="quotes">' + (u.showQuotes ? 'Скрыть цитаты' : 'Показать цитаты') + '</button>' : '')) +
-      '<ul class="sx-lines">' + lis + '</ul>' +
+      '<ul class="sx-lines">' + lis + '</ul>' + (has ? '<div class="sx-note sx-note-text">В поле уже есть текст — «Дописать» его сохранит</div>' : '') +
       '<div class="sx-acts">' + main + '<button type="button" class="sx-link" data-a="reject">Убрать</button></div></div>';
   }
 
@@ -325,7 +372,7 @@
     if (u.status !== 'new') return receipt(u);
     const cur = formInput(u.field).value.trim();
     const extend = cur && u.value.toLowerCase().startsWith(cur.toLowerCase());
-    let val, acts;
+    let val, acts, note = '';
     if (!cur) {
       val = '<div class="sx-val">' + esc(u.value) + '</div>';
       acts = '<button type="button" class="button green sx-btn" data-a="accept" data-mode="set">Принять</button>';
@@ -333,12 +380,13 @@
       val = '<div class="sx-val"><span class="sx-vl">Станет:</span> ' + esc(u.value.slice(0, cur.length)) + '<ins>' + esc(u.value.slice(cur.length)) + '</ins></div>';
       acts = '<button type="button" class="button green sx-btn" data-a="accept" data-mode="extend">Принять</button>';
     } else {
-      val = '<div class="sx-val">' + esc(u.value) + '</div><div class="sx-note">В поле уже есть текст: «' + esc(cur) + '»</div>';
+      val = '<div class="sx-val">' + esc(u.value) + '</div>';
+      note = '<div class="sx-note">В поле уже есть текст: «' + esc(cur) + '»</div>';   // under the quote (Yuri 2026-11-12)
       acts = '<button type="button" class="button green sx-btn" data-a="accept" data-mode="append">Дописать</button>' +
         '<button type="button" class="button sx-btn" data-a="accept" data-mode="replace">Заменить</button>';
     }
     return '<div class="sx-item" data-u="' + u.id + '">' + (u.group ? '<div class="sx-il">' + esc(u.label) + '</div>' : '') + val +
-      '<div class="sx-q">' + quoteHtml(u.quote) + '</div>' +
+      '<div class="sx-q">' + quoteHtml(u.quote) + '</div>' + note +
       '<div class="sx-acts">' + acts + '<button type="button" class="sx-link" data-a="reject">Убрать</button></div></div>';
   }
 
@@ -409,10 +457,18 @@
     const row = q('#visit-form .triple-row');
     const th = host('triple', after(row));
     th.classList.add('sx-cells');
-    const cs = getComputedStyle(row);
-    th.style.gridTemplateColumns = cs.gridTemplateColumns; th.style.columnGap = cs.columnGap;
-    th.innerHTML = U.filter(u => u.group === 'triple').map(u => '<div class="sx-cell">' +
-      (!isPending(u) ? receipt(u, true) : u.kind === 'number' ? numCard(u) : '<div class="sx-block sx-triple" data-u="' + u.id + '">' + head(null) + inputItem(u) + '</div>') + '</div>').join('');
+    // each card sits exactly under its own input: columns are measured from the inputs (widths and gaps), and a field
+    // without a suggestion keeps an empty cell, so «Температура» never slides under «Вес» (fit check 2026-11-12)
+    const TRIPLE = ['symptom', 'weight', 'temperature'];
+    const rs = TRIPLE.map(f => formInput(f).getBoundingClientRect());
+    th.style.columnGap = '0';
+    th.style.gridTemplateColumns = rs.map((r, i) => (i ? (r.left - rs[i - 1].right) + 'px ' : '') + r.width + 'px').join(' ');
+    th.style.marginLeft = (rs[0].left - row.getBoundingClientRect().left) + 'px';
+    th.innerHTML = TRIPLE.map((f, i) => {
+      const u = U.find(x => x.group === 'triple' && x.field === f);
+      return '<div class="sx-cell" style="grid-column:' + (2 * i + 1) + '">' + (!u ? '' : !isPending(u) ? receipt(u, true)
+        : u.kind === 'number' ? numCard(u) : '<div class="sx-block sx-triple" data-u="' + u.id + '">' + head(null) + inputItem(u) + '</div>') + '</div>';
+    }).join('');
     const dl = q('#list-diagnoses .list');
     host('diag', el => dl.insertBefore(el, q('.empty-list', dl))).innerHTML = U.filter(u => u.kind === 'diag').map(diagRow).join('');
     renderTags();
@@ -423,7 +479,7 @@
     if (u.kind === 'text') {
       const e = editor(u.field);
       undoStore[u.id] = e.innerHTML;
-      const html = '<p>' + liveLines(u).map(l => esc(l.text)).join('<br>') + '</p>';
+      const html = '<p>' + liveLines(u).map(l => l.html).join('<br>') + '</p>';   // bold from the model goes into the card
       if (isEmptyEditor(e) || mode === 'replace' || mode === 'set') e.innerHTML = html; else e.innerHTML += html;
     } else {
       const i = formInput(u.field);
@@ -1091,15 +1147,31 @@
 
     // paired highlight (Yuri 2026-11-12, lab variant 1): hover or focus on a suggestion or on its Vet.AF field
     // lights up both, so the eye finds the pair without reading labels
+    // the zone of the current pair: caption + field + its suggestion, the gap between them included (Yuri 2026-11-12:
+    // leaving the field towards its suggestion must not switch the highlight off and on)
+    let pairU = null;
+    function inPairZone(e) {
+      if (!pairU || e.clientX == null) return false;
+      const rs = [fieldLabel(pairU.field), ...qa('.sx-host [data-u="' + pairU.id + '"]').map(x => x.closest('.sx-block') || x)]
+        .filter(Boolean).map(x => x.getBoundingClientRect()).filter(r => r.width);
+      if (!rs.length) return false;
+      const l = Math.min(...rs.map(r => r.left)), r = Math.max(...rs.map(r => r.right));
+      const t = Math.min(...rs.map(r => r.top)), b = Math.max(...rs.map(r => r.bottom));
+      return e.clientX >= l && e.clientX <= r && e.clientY >= t && e.clientY <= b;
+    }
     function pair(e) {
       if (!draftReady) return;
       let u = null;
       const it = e.target.closest('.sx-host [data-u]');
       if (it) u = byId(it.dataset.u);
       else { const lab = e.target.closest('#visit-form label'); if (lab) u = U.find(x => x.field && x.status === 'new' && fieldLabel(x.field) === lab); }
+      if (!u && inPairZone(e)) return;
+      if (u && u === pairU && qa('.sx-pair').length) return;
       qa('.scribe-target').forEach(x => x.classList.remove('scribe-target'));
       qa('.sx-pair').forEach(x => x.classList.remove('sx-pair'));
+      pairU = null;
       if (!u || !u.field || u.status !== 'new') return;
+      pairU = u;
       fieldLabel(u.field)?.classList.add('scribe-target');
       qa('.sx-host [data-u="' + u.id + '"]').forEach(x => x.closest('.sx-block')?.classList.add('sx-pair'));
     }
@@ -1111,6 +1183,8 @@
     document.addEventListener('mouseover', pair);
     document.addEventListener('focusin', pair);
     addEventListener('resize', () => { if (draftReady) renderInline(); });
+    // the number cards follow their inputs whenever the Vet.AF row itself changes size (window, side panel, fonts)
+    if (window.ResizeObserver) new ResizeObserver(() => { if (draftReady) renderInline(); }).observe(q('#visit-form .triple-row'));
 
     // the summary follows the Vet.AF tab the vet opens
     q('header.header-sticky nav').addEventListener('click', () => { bulk = null; setTimeout(renderPanel, 0); });
@@ -1227,8 +1301,37 @@
     // prototype-only bar
     const pb = document.createElement('div');
     pb.className = 'proto-bar';
-    pb.innerHTML = 'Прототип · основной сценарий · <a data-proto="skip">сразу к предложениям</a> · <a data-proto="reset">начать заново</a>';
+    // data tabs: the synthetic visit, local real runs (runs-local.js, never in git), a pasted raw model answer
+    const DATA = [['', 'Синтетика']]
+      .concat(Object.keys(window.SCRIBE_MODELS || {}).map(k => [k, (window.SCRIBE_MODEL_LABELS || {})[k] || k]))
+      .concat([['paste', 'Вставить ответ']]);
+    pb.innerHTML = 'Прототип · основной сценарий · <a data-proto="skip">сразу к предложениям</a> · <a data-proto="reset">начать заново</a>' +
+      '<div class="proto-data">Данные: ' + DATA.map(([k, l]) => '<a data-data="' + esc(k) + '"' + (RUN === k ? ' aria-current="true"' : '') + '>' + esc(l) + '</a>').join('') +
+      (LOAD_ERR ? '<span class="proto-err">Не показано: ' + esc(LOAD_ERR) + '</span>' : '') + '</div>';
+    const box = document.createElement('div');
+    box.className = 'proto-paste'; box.hidden = true;
+    box.innerHTML = '<div class="proto-paste-in"><b>Сырой ответ модели</b> <span>(raw_text: JSON целиком, можно с обёрткой ```json)</span>' +
+      '<textarea spellcheck="false" placeholder="{&quot;title&quot;: {&quot;q&quot;: &quot;…&quot;, &quot;t&quot;: &quot;…&quot;}, …}"></textarea>' +
+      '<div class="proto-err" hidden></div><div><button type="button" class="button green" data-paste="go">Показать</button> ' +
+      '<button type="button" class="button" data-paste="cancel">Отмена</button></div></div>';
+    document.body.appendChild(box);
+    box.addEventListener('click', e => {
+      const b = e.target.closest('[data-paste]'); if (!b) return;
+      if (b.dataset.paste === 'cancel') { box.hidden = true; return; }
+      const text = q('textarea', box).value, err = q('.proto-err', box);
+      try { parseModel(text); } catch (x) { err.hidden = false; err.textContent = 'Не разобрано: ' + x.message; return; }
+      try { sessionStorage.setItem(PASTE_KEY, text); } catch (x) { err.hidden = false; err.textContent = 'Браузер не дал сохранить ответ (sessionStorage)'; return; }
+      if (RUN === 'paste') { location.hash = 'draft'; location.reload(); } else location.href = location.pathname + '?run=paste#draft';
+    });
     pb.addEventListener('click', e => {
+      const d = e.target.closest('[data-data]');
+      if (d) {
+        e.preventDefault(); e.stopPropagation();
+        const k = d.dataset.data;
+        if (k === 'paste') { box.hidden = false; const t = q('textarea', box); t.value = pasted(); t.focus(); return; }
+        location.href = location.pathname + (k ? '?run=' + encodeURIComponent(k) : '') + '#draft';
+        return;
+      }
       const a = e.target.closest('[data-proto]'); if (!a) return;
       e.preventDefault(); e.stopPropagation();
       if (a.dataset.proto === 'reset') { location.hash = ''; location.reload(); }
