@@ -1,0 +1,20 @@
+@charset "utf-8";
+
+
+/* --------------------------------------------------------------------------
+   Messages
+-------------------------------------------------------------------------- */
+
+	#users-container #list-users div[data-role="message"] .data .extra {
+		color: var(--blue-color);
+		font-size: .875rem;
+		margin-top: .1rem;
+	}
+
+	#conversations-container .item-container .item .date svg {
+		color: var(--green-color);
+		margin-right: .4rem;
+		width: 1.25rem;
+		height: 1.25rem;
+		align-self: center;
+	}

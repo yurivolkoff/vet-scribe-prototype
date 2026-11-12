@@ -1,0 +1,1607 @@
+<!doctype html>
+<html data-device="desktop" lang="ru"><head>
+<meta name="robots" content="noindex, nofollow">
+    <title>Прототип: предложения из записи приёма</title>
+    <meta charset="utf-8">
+    <meta name="keywords" content="
+【Warning】Also, invalid string(s) was passed to the Language class. See log file for details.">
+    <meta name="description" content="
+【Warning】Also, invalid string(s) was passed to the Language class. See log file for details.">
+    <link href="prototype/vetaf/i/favicon.png" rel="icon" type="image/png">
+    <link href="prototype/vetaf/css/base.css" rel="stylesheet" type="text/css">
+    <link href="prototype/vetaf/css/frontend/components/jquery-ui.css" rel="stylesheet" type="text/css">
+    <link href="prototype/vetaf/css/frontend/components/uploader.css" rel="stylesheet" type="text/css">
+    <link href="prototype/vetaf/css/frontend/components/country.css" rel="stylesheet" type="text/css">
+    <link href="prototype/vetaf/css/frontend/components/select.css" rel="stylesheet" type="text/css">
+    <link href="prototype/vetaf/css/frontend/components/date-picker.css" rel="stylesheet" type="text/css">
+    <link href="prototype/vetaf/css/frontend/components/image-cropper.css" rel="stylesheet" type="text/css">
+    <link href="prototype/vetaf/css/frontend/components/notifications.css" rel="stylesheet" type="text/css">
+    <link href="prototype/vetaf/css/frontend/components/messages.css" rel="stylesheet" type="text/css">
+    <link href="prototype/vetaf/css/frontend/components/animal-status.css" rel="stylesheet" type="text/css">
+    <link href="prototype/vetaf/css/frontend/components/assistant.css" rel="stylesheet" type="text/css">
+    <link href="prototype/vetaf/css/frontend/components/delete-request.css" rel="stylesheet" type="text/css">
+    <link href="prototype/vetaf/css/frontend/components/left-pane-slider.css" rel="stylesheet" type="text/css">
+    <link href="prototype/vetaf/css/frontend/components/filter.css" rel="stylesheet" type="text/css">
+    <link href="prototype/vetaf/css/frontend/common.css" rel="stylesheet" type="text/css">
+    <link href="prototype/vetaf/css/frontend/employee/common.css" rel="stylesheet" type="text/css">
+    <link href="prototype/vetaf/css/frontend/employee/content/messages.css" rel="stylesheet" type="text/css">
+    <link href="prototype/vetaf/css/frontend/components/telephony-ws.css" rel="stylesheet" type="text/css">    <link href="prototype/vetaf/css/frontend/libs/fancybox.css" rel="stylesheet" type="text/css"><link href="prototype/vetaf/css/libs/ckeditor.css" rel="stylesheet" type="text/css"><link href="prototype/vetaf/css/frontend/components/marking.css" rel="stylesheet" type="text/css"><link href="prototype/vetaf/css/frontend/components/ckeditor.css" rel="stylesheet" type="text/css"><link href="prototype/vetaf/css/frontend/components/sales.css" rel="stylesheet" type="text/css"><link href="prototype/vetaf/css/frontend/components/items-category-selector.css" rel="stylesheet" type="text/css"><link href="prototype/vetaf/css/frontend/employee/content/patients/visits/history.css" rel="stylesheet" type="text/css"><link href="prototype/vetaf/css/frontend/employee/content/patients/visits/diagnoses.css" rel="stylesheet" type="text/css"><link href="prototype/vetaf/css/frontend/employee/content/patients/visits/documents.css" rel="stylesheet" type="text/css"><link href="prototype/vetaf/css/frontend/employee/content/patients/common.css" rel="stylesheet" type="text/css"><link href="prototype/vetaf/css/frontend/employee/content/patients/visits/index.css" rel="stylesheet" type="text/css"><link href="prototype/vetaf/css/frontend/employee/content/patients/prescriptions.css" rel="stylesheet" type="text/css"><link href="prototype/vetaf/css/frontend/employee/content/patients/visits/prescriptions.css" rel="stylesheet" type="text/css"><link href="prototype/vetaf/css/frontend/employee/content/patients/visits/analyzes.css" rel="stylesheet" type="text/css"><link href="prototype/vetaf/css/frontend/employee/content/patients/visits/laboratories/internal.css" rel="stylesheet" type="text/css"><link href="prototype/vetaf/css/frontend/components/categories-manager.css" rel="stylesheet" type="text/css"><link href="prototype/vetaf/css/frontend/employee/content/patients/visits/hospital/dynamic.css" rel="stylesheet" type="text/css"><link href="prototype/vetaf/css/frontend/employee/content/patients/visits/hospital/appointments.css" rel="stylesheet" type="text/css">    <link href="prototype/vetaf/css/screens.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="prototype/scribe-A.css?v=1794473983">
+<link rel="stylesheet" href="prototype/scribe-panel-A.css?v=1794474144">
+</head>
+<body cz-shortcut-listen="true">
+    <div id="settings" data-title="" data-message="" data-success="" data-page="animals" data-session="PROTOTYPE" data-user="0" data-office="0" data-currency=" ₽" data-timezone="Europe/Moscow" data-device="desktop">
+    </div>
+    <nav class="expanded" id="menu">
+        <header>
+            <a href="/" class="logo">
+                <span>V</span>
+                <span>VET</span>
+                <span>.AF</span>
+            </a>
+        </header>
+        <section class="general-menu">
+                            <div>
+                    <a data-page="news" href="/news">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#news"></use></svg>
+                        <span>Новости</span>
+                                                    <span class="counter">11</span>
+                                            </a>
+                </div>
+                            <div>
+                    <a data-page="dashboard" href="/dashboard">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#dashboard"></use></svg>
+                        <span>Сводка</span>
+                                            </a>
+                </div>
+                            <div>
+                    <a data-page="timetable" href="/timetable">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#timetable"></use></svg>
+                        <span>Расписание</span>
+                                            </a>
+                </div>
+                            <div>
+                    <a data-page="queue" href="/queue">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#queue"></use></svg>
+                        <span>Очередь</span>
+                                            </a>
+                </div>
+                            <div>
+                    <a data-page="tasks" href="/tasks">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tasks"></use></svg>
+                        <span>Календарь задач</span>
+                                            </a>
+                </div>
+                            <div>
+                    <a data-page="owners" href="/owners">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#owners"></use></svg>
+                        <span>Владельцы</span>
+                                            </a>
+                </div>
+                            <div>
+                    <a data-page="animals" href="/animals" class="selected">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#animals"></use></svg>
+                        <span>Пациенты</span>
+                                            </a>
+                </div>
+                            <div>
+                    <a data-page="bills" href="/bills">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#bills"></use></svg>
+                        <span>Счета</span>
+                                            </a>
+                </div>
+                            <div>
+                    <a data-page="shop" href="/shop">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#shop"></use></svg>
+                        <span>Продажи</span>
+                                            </a>
+                </div>
+                            <div>
+                    <a data-page="hospital" href="/hospital">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#hospital"></use></svg>
+                        <span>Стационар</span>
+                                            </a>
+                </div>
+                            <div>
+                    <a data-page="laboratory" href="/laboratory">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#laboratory"></use></svg>
+                        <span>Лаборатория</span>
+                                            </a>
+                </div>
+                            <div>
+                    <a data-page="telephony" href="/telephony">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#telephony"></use></svg>
+                        <span>Звонки</span>
+                                            </a>
+                </div>
+                                        <div class="multi">
+                    <header>
+                        <a href="#">
+                            <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#stock"></use></svg>
+                            <span>Склад</span>
+                            <svg class="arrow"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#arrow"></use></svg>
+                        </a>
+                    </header>
+                                            <a data-page="goods" href="/stock/goods">
+                            <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#goods"></use></svg>
+                            <span>Товары</span>
+                        </a>
+                                            <a data-page="services" href="/stock/services">
+                            <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#services"></use></svg>
+                            <span>Услуги</span>
+                        </a>
+                                            <a data-page="supplies" href="/stock/supplies">
+                            <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#supplies"></use></svg>
+                            <span>Учёт</span>
+                        </a>
+                                    </div>
+                                        <div class="multi">
+                    <header>
+                        <a href="#">
+                            <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#setting"></use></svg>
+                            <span>Настройки</span>
+                            <svg class="arrow"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#arrow"></use></svg>
+                        </a>
+                    </header>
+                                            <a data-page="organization" href="/settings/organization">
+                            <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#organization"></use></svg>
+                            <span>Организация</span>
+                        </a>
+                                            <a data-page="office" href="/settings/office">
+                            <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#office"></use></svg>
+                            <span>Филиал</span>
+                        </a>
+                                            <a data-page="employees" href="/settings/employees">
+                            <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#employees"></use></svg>
+                            <span>Сотрудники</span>
+                        </a>
+                                            <a data-page="documents" href="/settings/documents">
+                            <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#documents"></use></svg>
+                            <span>Шаблоны</span>
+                        </a>
+                                    </div>
+                    </section>
+        <div data-ai="">
+            <div data-role="form" data-loader="skeleton" data-url="/components/assistant">
+                <span><svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#ai-assistant"></use></svg></span>
+                <span>Помощник</span>
+            </div>
+        </div>
+        <button data-url="/profile/menu" data-role="menu-collapse">
+            <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#menu-collapse"></use></svg>
+        </button>
+    </nav>
+    <header id="top-header">
+        <div id="h-search">
+            <label class="search-field-block">
+                <input type="search" data-url="/search" data-style="search" data-append="#search-holder" autocomplete="off" placeholder="Поиск" class="ui-autocomplete-input">
+                <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#search"></use></svg>
+            </label>
+            <div id="search-holder"><ul id="ui-id-1" tabindex="0" class="ui-menu ui-widget ui-widget-content ui-autocomplete ui-front" style="display: none;"></ul></div>
+        </div>
+        <div id="h-indications">    <a id="h-messages" title="Сообщения" data-role="form" data-loader="circle" data-url="/components/messages" href="#">
+        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#chat"></use></svg>
+        <span class="counter invisible">0</span>
+    </a>
+
+    <a id="h-online" title="Онлайн-запись" href="/online-requests">
+        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#online-requests"></use></svg>
+        <span class="counter">4</span>
+    </a>
+
+<a id="h-notifications" title="Уведомления" href="#" data-role="form" data-loader="circle" data-url="/components/notifications">
+    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#notification"></use></svg>
+    <span class="counter">47</span>
+</a>
+
+    <a id="h-balance" title="Баланс" href="/settings/organization/tariffs">
+        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#wallet"></use></svg>
+        332 663 ₽
+    </a>
+</div>
+        <div id="h-profile">
+            <div class="profile">
+                <div data-target="avatar" class="avatar">
+                                            <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#user"></use></svg>
+                                    </div>
+                <section>
+                    <span class="title">Иванова Мария Петровна</span>
+                    <span>Ветеринарный центр «Пример»</span>
+                </section>
+            </div>
+            <div class="profile-menu-container">
+                <div class="profile-menu general-menu">
+                                            <div class="multi">
+                            <header>
+                                <a class="office-selector" href="#">
+                                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#change-office"></use></svg>
+                                    <span>Сменить филиал</span>
+                                    <svg class="arrow"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#arrow"></use></svg>
+                                </a>
+                            </header>
+                            <main>
+                                                                    <a href="/profile/offices/change/2">
+                                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+                                        <span>Ветеринарная клиника «Пример-2»</span>
+                                    </a>
+                                                                    <a class="current" href="/profile/offices/change/3">
+                                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+                                        <span>Ветеринарный центр «Пример»</span>
+                                    </a>
+                                                                    <a href="/profile/offices/change/1">
+                                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+                                        <span>ОРиИТ</span>
+                                    </a>
+                                                            </main>
+                        </div>
+                                        <div>
+                        <a href="/profile">
+                            <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#profile"></use></svg>
+                            <span>Мой профиль</span>
+                        </a>
+                    </div>
+                                            <div>
+                            <a data-role="form" data-loader="skeleton" data-url="/modules/cashbox/operation/form" href="#">
+                                <span><svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#cashbox"></use></svg></span>
+                                <span>Онлайн-кассы</span>
+                            </a>
+                        </div>
+                                        <div><a href="/help">
+                            <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#help"></use></svg>
+                            <span>Справка</span>
+                        </a></div>
+                    <div>
+                        <a href="/logout">
+                            <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#logout"></use></svg>
+                            <span>Выход из системы</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+    <aside class="left-section" data-type="actual">
+                                    <div id="local-storage" class="attention-block">
+                    <div>Имеется ранее не сохранённый приём!</div>
+                    <div>
+                        <button data-action="delete" class="button">Отменить</button>
+                        <button data-action="load" class="button green">Загрузить</button>
+                    </div>
+                </div>
+                <section class="visit-block">
+            <header>
+                <a href="/animals/history/animal:400001">
+                    <svg class="arrow"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#arrow"></use></svg>
+                    <span>К приёмам</span>
+                </a>
+                <div class="status-block" data-status="1">№ 10000001</div>
+            </header>
+            <div class="date">
+                <span><svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#calendar"></use></svg></span>
+                <span>
+                                        10:30, 5 ноября 2026
+                </span>
+            </div>
+                            <form class="share-block">
+                    <header>
+                            <span data-type="print">
+                                <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#print"></use></svg>
+                                Печатать
+                            </span>
+                        <span data-type="share">
+                                <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#message"></use></svg>
+                                Отправить
+                            </span>
+                    </header>
+                    <section>
+                        <div data-id="sections">
+                            <header>
+                                <div>Текущий приём</div>
+                                <span data-role="date">Период</span>
+                                <label>
+                                    <input id="period" autocomplete="off" placeholder="дд.мм.гггг - дд.мм.гггг" data-mask-alias="datetime" data-mask-format="dd.mm.yyyy - dd.mm.yyyy" data-mask-placeholder="дд.мм.гггг - дд.мм.гггг" class="calendar" inputmode="numeric">
+                                </label>
+                            </header>
+                            <section>
+                                <label class="checkbox">
+                                    <input data-name="inspection" checked="" type="checkbox">
+                                    <span>Лист осмотра</span>
+                                </label>
+                                <label class="checkbox">
+                                    <input data-name="treatment" checked="" type="checkbox">
+                                    <span>План лечения</span>
+                                </label>
+                                <label class="checkbox">
+                                    <input data-name="recommendation" checked="" type="checkbox">
+                                    <span>Рекомендации</span>
+                                </label>
+                            </section>
+                        </div>
+                        <div data-id="print">
+                            <a href="#" data-loader="circle" data-url="/animals/history/share" class="button green">Печатать</a>
+                        </div>
+                        <div data-id="share">
+                            <section>
+                                <div>
+                                    <label class="slider small">
+                                        <span><input type="checkbox" data-name="email-selector">Электронная почта</span>
+                                    </label>
+                                    <label><input type="text" data-name="email" value="owner@example.com"></label>
+                                </div>
+                                                                                                                                                                                            </section>
+                            <a href="#" data-loader="circle" data-url="/animals/history/share" class="button disabled">Отправить</a>
+                        </div>
+                    </section>
+                </form>
+                    </section>
+        <section class="collaborators-block">
+            <header>
+                Совместная работа
+                <span title="Внимание другие сотрудники работают с приёмом, есть вероятность, что данные приёма будут перезаписаны другим сотрудником." class="help tooltip">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#help"></use></svg>
+                </span>
+            </header>
+            <section></section>
+        </section>
+        <section class="payment-block">
+            <div>Стоимость <span>15 141 ₽</span></div>
+            <div>
+                <div class="progress"><div style="width: 100%;"></div></div>
+                <div data-title-empty="Нет товаров и услуг" data-title-paid="Оплачено" data-title-paid-partly="из" class="title">
+                                            Оплачено
+                                    </div>
+            </div>
+                                        <button type="button" class="button visible" data-role="form" data-post-id="10000001" data-url="/sales/pay" data-loader="circle">Платежи</button>
+                    </section>
+        <section class="animal-block collapse-block opened">
+            <header>
+                <span>
+                    <span>Барсик</span>
+                    <svg class="arrow"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#arrow"></use></svg>
+                </span>
+            </header>
+            <div class="details">
+    <header>№ пациента</header>
+    <span class="profile"><span>400001</span><a class="button green-title" data-loader="circle" data-post-animal="400001" data-role="form" data-url="/animals/update"><span>профиль</span></a></span>
+    <header>Вид</header>
+    <span>Кошка</span>
+            <header>Порода</header>
+        <span>Метис</span>
+        <header>Пол</header>
+    <span>Самец</span>
+    <header>Возраст</header>
+    <span>6 лет</span>
+            <header>Вес</header>
+        <span class="weight">6,1 кг</span>
+        <header>Стерилизация</header>
+    <span>Нет</span>
+        
+</div>
+            <div class="control">
+                <div class="dropdown-button">
+                    <div class="button green"><svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#more"></use></svg>Детали</div>
+                    <div class="data">
+                        <span class="button green"><svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#more"></use></svg>Детали</span>
+                        <div>
+                            <a target="_blank" href="/animals/vaccinations/animal:400001">Вакцинации <svg class="arrow"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#arrow"></use></svg></a>
+                            <a target="_blank" href="/animals/tasks/animal:400001">Задачи <svg class="arrow"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#arrow"></use></svg></a>
+                            <a data-role="form" data-loader="skeleton" data-post-id="10000001" data-url="/animals/history/queue" href="#"><span>Передать в очередь</span></a>
+                            <a data-role="form" data-loader="skeleton" data-post-id="10000001" data-url="/animals/history/control" href="#"><span>Контроль приёма</span></a>
+                                                            <a data-role="form" data-loader="skeleton" data-post-id="10000001" data-url="/animals/prescriptions/create" href="#"><span>Выписать рецепт</span></a>
+                                                    </div>
+                    </div>
+                </div>
+                <a data-role="form" class="button green-title" data-loader="circle" data-url="/animals/history/medical-history" data-post-visit="10000001" data-post-animal="400001" href="#">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#history"></use></svg>
+                    <span>История</span>
+                </a>
+            </div>
+            <div class="animal-status-positive" data-animal="400001">
+                <div data-template="status" class="custom-select">
+    <div class="data">
+                                                                        <label>
+            <input type="hidden" value="positive" name="status" id="status" data-onselect="/animals/status">
+            <input readonly="" autocomplete="off" type="text" data-title="Улучшение" value="Улучшение" placeholder="Выберите статус">
+            <svg class="close visible"><use href="prototype/vetaf/i/frontend/svg/icons.svg#close"></use></svg>
+            <svg class="arrow  hidden"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#arrow"></use></svg>
+        </label>
+    </div>
+    <div class="select">
+                            <label data-role="search" class="search-field-block">
+                <input autocomplete="off" type="search" placeholder="Поиск">
+                <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#search"></use></svg>
+            </label>
+                <div data-view="list">
+                            <div class="empty-list">
+                    <span><svg><use href="prototype/vetaf/i/frontend/svg/icons.svg#empty-list-by-search"></use></svg></span>
+                    <div>Ничего не найдено</div>
+                </div>
+                            <span data-id="healthy">
+        <span><span class="status"></span>Здоров</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+    <span data-id="positive">
+        <span><span class="status"></span>Улучшение</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+    <span data-id="treatment">
+        <span><span class="status"></span>На лечении</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+    <span data-id="negative">
+        <span><span class="status"></span>Ухудшение</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+    <span data-id="examination">
+        <span><span class="status"></span>Обследование</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+    <span data-id="death">
+        <span><span class="status"></span>Погиб</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+    <span data-id="inactive">
+        <span><span class="status"></span>Неактивен</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+                    </div>
+            </div>
+</div>            </div>
+            <a class="user-profile" target="_blank" href="/owners/id:300001">
+                <span class="avatar">
+                                            ДИ
+                                    </span>
+                <span class="data">
+                    <span class="label">Владелец</span>
+                    <span class="name">Смирнова Ольга Николаевна</span>
+                </span>
+            </a>
+        </section>
+                <section class="employee-block collapse-block">
+            <header>
+                <span>
+                    <span>Исполнитель</span>
+                    <svg class="arrow"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#arrow"></use></svg>
+                </span>
+            </header>
+            
+    <a class="user-profile" target="_blank" data-post-employees="1000001" data-post-type="changeEmployee" data-post-visit="10000001" data-role="form" data-loader="skeleton" data-url="/sales/employees" href="#">
+        <span class="avatar">
+                            <img alt="" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='96' height='96'><rect width='96' height='96' fill='%23DCDCDC'/><circle cx='48' cy='38' r='18' fill='%23B4B4B4'/><rect x='18' y='62' width='60' height='40' rx='30' fill='%23B4B4B4'/></svg>">
+                    </span>
+        <span class="data">
+            <span class="label">Сотрудник</span>
+            <span class="name">Петрова Анна Сергеевна</span>
+        </span>
+    </a>
+
+        </section>
+    </aside>
+    <div class="template" data-type="actual">
+        <header class="header-sticky">
+            <div>
+                <nav data-tab="control">
+    <a data-id="inspections" data-status="active" href="#">Лист осмотра</a>
+            <a data-id="recommendations" href="#" data-status="">Рекомендации</a>
+        <a data-id="items" href="#" data-status="">Товары и услуги</a>
+        <a data-id="documents" href="#" data-status="">Документы</a>
+        <a data-id="analyzes" href="#" data-status="">Анализы</a>
+        <a data-id="hospital" href="#" data-status="">Стационар</a>
+    
+</nav>
+                <div class="dropdown-button">
+                    <div class="button green">Сохранить</div>
+                    <div class="data">
+                        <span class="button green">Сохранить</span>
+                        <div>
+                                                                                        <a href="#" data-role="form" data-target="#visit-form" data-post-status="1" data-url="/animals/history/submit" data-loader="skeleton">
+                                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#visit-completed"></use></svg>
+                                    <span>Завершить</span>
+                                </a>
+                                <a href="#" data-role="form" data-target="#visit-form" data-post-status="0" data-url="/animals/history/submit" data-loader="skeleton">
+                                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#visit-in-work"></use></svg>
+                                    <span>В работе</span>
+                                </a>
+                                                        <a href="/animals/history/animal:400001">
+                                <svg><use href="prototype/vetaf/i/frontend/svg/icons.svg#close"></use></svg>
+                                <span>Не сохранять</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <form id="visit-form" action="#">
+            <input type="hidden" id="id" name="id" value="10000001">
+            <div data-status="active" data-tab="pane" data-id="inspections">
+                <div>
+                    <label class="visit-target">
+                                                <span>
+                            Цель визита
+                            <span id="title-length" class="" style="display: none;">
+                                <span>22</span>
+                                <span class="slash">/</span>
+                                <span>65</span>
+                                </span></span>
+                            <span>
+                            <input autofocus="" name="title" id="title" value="Первичный прием" type="text">
+                        </span>
+                    </label>
+                    <label>
+                        <span>Анамнез</span>
+                        <textarea data-ckeditor="" data-ckeditor-exlude="Alignment,Image,Indent,IndentBlock,LineHeight,Link,Heading,HorizontalLine,PageBreak,ShowBlocks" id="anamnesis" name="anamnesis" style="display: none;"></textarea><div class="ck ck-reset ck-editor ck-rounded-corners" role="application" dir="ltr" lang="en" aria-labelledby="ck-editor__label_e98dd7ec32af852b630a4e9194faa3717"><label class="ck ck-label ck-voice-label" id="ck-editor__label_e98dd7ec32af852b630a4e9194faa3717">Редактор</label><div class="ck ck-editor__top ck-reset_all" role="presentation"><div class="ck ck-sticky-panel"><div class="ck ck-sticky-panel__placeholder" style="display: none;"></div><div class="ck ck-sticky-panel__content"><div class="ck ck-toolbar ck-toolbar_grouping" role="toolbar" aria-label="Панель инструментов редактора" tabindex="-1"><div class="ck ck-toolbar__items"><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e28337a88f4301f6724d788301966ed1a" data-cke-tooltip-text="Жирный (⌘B)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10.187 17H5.773q-.956 0-1.364-.415-.41-.416-.409-1.323V4.738q0-.926.419-1.332.418-.405 1.354-.406h4.68q1.035 0 1.793.124.76.124 1.36.478.512.296.906.75a3.26 3.26 0 0 1 .808 2.162q0 2.102-2.167 3.075 2.846.879 2.847 3.421a3.76 3.76 0 0 1-2.296 3.504 6 6 0 0 1-1.517.377q-.857.11-2 .11zm-.217-6.217H7v4.087h3.069q2.965 0 2.965-2.072 0-1.061-.768-1.537-.768-.478-2.296-.478M7 5.13v3.619h2.606q1.093 0 1.69-.2a1.6 1.6 0 0 0 .91-.765q.247-.4.247-.897 0-1.06-.778-1.409-.778-.348-2.375-.348z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e28337a88f4301f6724d788301966ed1a">Жирный</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_eb85d5d29a83373fd201fa0e88e337879" data-cke-tooltip-text="Курсив (⌘I)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="m9.586 14.633.021.004q-.054.502.393.962.123.125.274.201h1.474a.6.6 0 1 1 0 1.2H5.304a.6.6 0 0 1 0-1.2h1.15q.711-.106 1.005-.334.235-.182.404-.597l2.416-9.55a1.05 1.05 0 0 0-.281-.823 1.1 1.1 0 0 0-.442-.296H8.15a.6.6 0 0 1 0-1.2h6.443a.6.6 0 1 1 0 1.2h-1.195q-.564.084-.823.296-.323.263-.623.79z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_eb85d5d29a83373fd201fa0e88e337879">Курсив</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_efd0203ddfce2ee75cb06745c77ffa018" data-cke-tooltip-text="Подчеркнутый (⌘U)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 18v-1.5h14V18zm2.2-8V3.6c0-.4.4-.6.8-.6.3 0 .7.2.7.6v6.2c0 2 1.3 2.8 3.2 2.8s3.4-.9 3.4-2.9V3.6c0-.3.4-.5.8-.5.3 0 .7.2.7.5V10c0 2.7-2.2 4-4.9 4-2.6 0-4.7-1.2-4.7-4"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_efd0203ddfce2ee75cb06745c77ffa018">Подчеркнутый</span></button><div class="ck ck-dropdown ck-font-size-dropdown"><button class="ck ck-button ck-off ck-dropdown__button" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_efff7e1508bccc603c861306c0c84d0a4" data-cke-tooltip-text="Размер шрифта" data-cke-tooltip-position="s" aria-haspopup="true" aria-expanded="false"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.816 11.5 7.038 4.785 4.261 11.5zm.62 1.5H3.641l-1.666 4.028H.312l5.789-14h1.875l5.789 14h-1.663zm7.55 2.279.779-.779.707.707-2.265 2.265-2.193-2.265.707-.707.765.765V4.825q0-.063.002-.123l-.77.77-.707-.707L17.207 2.5l2.265 2.265-.707.707-.782-.782q.003.065.003.135z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_efff7e1508bccc603c861306c0c84d0a4">Размер шрифта</span><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-dropdown__arrow" viewBox="0 0 10 10" aria-hidden="true"><path d="M.941 4.523a.75.75 0 1 1 1.06-1.06l3.006 3.005 3.005-3.005a.75.75 0 1 1 1.06 1.06l-3.549 3.55a.75.75 0 0 1-1.168-.136z"></path></svg></button><div class="ck ck-reset ck-dropdown__panel ck-dropdown__panel_se" tabindex="-1"></div></div><button class="ck ck-button ck-disabled ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_ee0a23012f86508ae6401872917f20294" aria-disabled="true" data-cke-tooltip-text="Убрать форматирование" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M8.69 14.915q.08.078.36.093a.366.366 0 0 1 .345.485l-.003.01a.74.74 0 0 1-.697.497h-2.67a.374.374 0 0 1-.353-.496l.013-.038a.68.68 0 0 1 .644-.458q.295-.018.386-.093a.3.3 0 0 0 .072-.11L9.592 4.5H6.269q-.538-.026-.75.09-.213.117-.442.563c-.192.29-.516.464-.864.464H4.17a.43.43 0 0 1-.407-.569L4.46 3h13.08l-.62 2.043a.81.81 0 0 1-.775.574h-.114a.486.486 0 0 1-.486-.486q.002-.426-.167-.54-.168-.114-.766-.091h-3.28l-2.68 10.257q-.009.111.038.158M3 17h8a.5.5 0 1 1 0 1H3a.5.5 0 1 1 0-1m11.299 1.17a.75.75 0 1 1-1.06-1.06l1.414-1.415-1.415-1.414a.75.75 0 0 1 1.06-1.06l1.415 1.414 1.414-1.415a.75.75 0 1 1 1.06 1.06l-1.413 1.415 1.414 1.415a.75.75 0 0 1-1.06 1.06l-1.415-1.414z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_ee0a23012f86508ae6401872917f20294">Убрать форматирование</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e4ce23375a9f6fcd84c76b3e5cb166b55" data-cke-tooltip-text="Цитата" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10.423a6.5 6.5 0 0 1 6.056-6.408l.038.67C6.448 5.423 5.354 7.663 5.22 10H9c.552 0 .5.432.5.986v4.511c0 .554-.448.503-1 .503h-5c-.552 0-.5-.449-.5-1.003zm8 0a6.5 6.5 0 0 1 6.056-6.408l.038.67c-2.646.739-3.74 2.979-3.873 5.315H17c.552 0 .5.432.5.986v4.511c0 .554-.448.503-1 .503h-5c-.552 0-.5-.449-.5-1.003z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e4ce23375a9f6fcd84c76b3e5cb166b55">Цитата</span></button><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_ea9be65e3f6f0fa0763935f972804a081" data-cke-tooltip-text="Маркированный список" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5.75c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75m-6 0C1 4.784 1.777 4 2.75 4c.966 0 1.75.777 1.75 1.75 0 .966-.777 1.75-1.75 1.75C1.784 7.5 1 6.723 1 5.75m6 9c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75m-6 0c0-.966.777-1.75 1.75-1.75.966 0 1.75.777 1.75 1.75 0 .966-.777 1.75-1.75 1.75-.966 0-1.75-.777-1.75-1.75"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_ea9be65e3f6f0fa0763935f972804a081">Маркированный список</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_eb8a61c65bdc3205e321dda309b660143" data-cke-tooltip-text="Нумерованный список" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5.75c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75M3.5 3v5H2V3.7H1v-1h2.5zM.343 17.857l2.59-3.257H2.92a.6.6 0 1 0-1.04 0H.302a2 2 0 1 1 3.995 0h-.001q-.073.607-.333.988-.263.381-1.244 1.312H4.3v1h-4zM7 14.75a.75.75 0 0 1 .75-.75h9.5a.75.75 0 1 1 0 1.5h-9.5a.75.75 0 0 1-.75-.75"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_eb8a61c65bdc3205e321dda309b660143">Нумерованный список</span></button><span class="ck ck-toolbar__separator"></span><div class="ck ck-dropdown"><button class="ck ck-button ck-off ck-dropdown__button" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e0a5eb538fc902736f894b3d9eb53ab05" data-cke-tooltip-text="Вставить таблицу" data-cke-tooltip-position="s" aria-haspopup="true" aria-expanded="false"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5.5v3h4v-3zm0 4v3h4v-3zm0 4v3h4v-3zm5 3h4v-3H8zm5 0h4v-3h-4zm4-4v-3h-4v3zm0-4v-3h-4v3zm1.5 8A1.5 1.5 0 0 1 17 18H3a1.5 1.5 0 0 1-1.5-1.5V3c.222-.863 1.068-1.5 2-1.5h13c.932 0 1.778.637 2 1.5zm-6.5-4v-3H8v3zm0-4v-3H8v3z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e0a5eb538fc902736f894b3d9eb53ab05">Вставить таблицу</span><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-dropdown__arrow" viewBox="0 0 10 10" aria-hidden="true"><path d="M.941 4.523a.75.75 0 1 1 1.06-1.06l3.006 3.005 3.005-3.005a.75.75 0 1 1 1.06 1.06l-3.549 3.55a.75.75 0 0 1-1.168-.136z"></path></svg></button><div class="ck ck-reset ck-dropdown__panel ck-dropdown__panel_se" tabindex="-1"></div></div><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e70a65726e611f7de69582d6ff42b8bb8" data-cke-tooltip-text="Загрузка шаблона" data-cke-tooltip-position="s" data-role="form" data-url="/animals/documents/list" data-loader="circle" data-post-target="anamnesis"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M 6 3 L 6 29 L 26 29 L 26 9.5996094 L 25.699219 9.3007812 L 19.699219 3.3007812 L 19.400391 3 L 6 3 z M 8 5 L 18 5 L 18 11 L 24 11 L 24 27 L 8 27 L 8 5 z M 20 6.4003906 L 22.599609 9 L 20 9 L 20 6.4003906 z M 15 13 L 15 18 L 12 18 L 16 22 L 20 18 L 17 18 L 17 13 L 15 13 z M 12 23 L 12 25 L 20 25 L 20 23 L 12 23 z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e70a65726e611f7de69582d6ff42b8bb8">Загрузка шаблона</span></button></div></div></div></div></div><div class="ck ck-editor__main" role="presentation"><div class="ck-table-show-hidden-borders ck-blurred ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline" lang="en" dir="ltr" role="textbox" aria-label="Редактор форматированного текста. Область редактирования: main. Нажмите ⌥0 для получения помощи." contenteditable="true"><p><br data-cke-filler="true"></p></div></div></div>
+                    </label>
+                    <label>
+                        <span>Осмотр</span>
+                        <textarea data-ckeditor="" data-ckeditor-exlude="Alignment,Image,Indent,IndentBlock,LineHeight,Link,Heading,HorizontalLine,PageBreak,ShowBlocks" id="examination" name="examination" style="display: none;"></textarea><div class="ck ck-reset ck-editor ck-rounded-corners" role="application" dir="ltr" lang="en" aria-labelledby="ck-editor__label_e32bfe6e48f82c2abdd6c19ed1f0413e3"><label class="ck ck-label ck-voice-label" id="ck-editor__label_e32bfe6e48f82c2abdd6c19ed1f0413e3">Редактор</label><div class="ck ck-editor__top ck-reset_all" role="presentation"><div class="ck ck-sticky-panel"><div class="ck ck-sticky-panel__placeholder" style="display: none;"></div><div class="ck ck-sticky-panel__content"><div class="ck ck-toolbar ck-toolbar_grouping" role="toolbar" aria-label="Панель инструментов редактора" tabindex="-1"><div class="ck ck-toolbar__items"><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_ef46b595470b5acd9c1a89313080b8489" data-cke-tooltip-text="Жирный (⌘B)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10.187 17H5.773q-.956 0-1.364-.415-.41-.416-.409-1.323V4.738q0-.926.419-1.332.418-.405 1.354-.406h4.68q1.035 0 1.793.124.76.124 1.36.478.512.296.906.75a3.26 3.26 0 0 1 .808 2.162q0 2.102-2.167 3.075 2.846.879 2.847 3.421a3.76 3.76 0 0 1-2.296 3.504 6 6 0 0 1-1.517.377q-.857.11-2 .11zm-.217-6.217H7v4.087h3.069q2.965 0 2.965-2.072 0-1.061-.768-1.537-.768-.478-2.296-.478M7 5.13v3.619h2.606q1.093 0 1.69-.2a1.6 1.6 0 0 0 .91-.765q.247-.4.247-.897 0-1.06-.778-1.409-.778-.348-2.375-.348z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_ef46b595470b5acd9c1a89313080b8489">Жирный</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e588768b19fde812d8001ce49d494e8c5" data-cke-tooltip-text="Курсив (⌘I)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="m9.586 14.633.021.004q-.054.502.393.962.123.125.274.201h1.474a.6.6 0 1 1 0 1.2H5.304a.6.6 0 0 1 0-1.2h1.15q.711-.106 1.005-.334.235-.182.404-.597l2.416-9.55a1.05 1.05 0 0 0-.281-.823 1.1 1.1 0 0 0-.442-.296H8.15a.6.6 0 0 1 0-1.2h6.443a.6.6 0 1 1 0 1.2h-1.195q-.564.084-.823.296-.323.263-.623.79z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e588768b19fde812d8001ce49d494e8c5">Курсив</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e902216ab09b899acce6a89011c88cf61" data-cke-tooltip-text="Подчеркнутый (⌘U)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 18v-1.5h14V18zm2.2-8V3.6c0-.4.4-.6.8-.6.3 0 .7.2.7.6v6.2c0 2 1.3 2.8 3.2 2.8s3.4-.9 3.4-2.9V3.6c0-.3.4-.5.8-.5.3 0 .7.2.7.5V10c0 2.7-2.2 4-4.9 4-2.6 0-4.7-1.2-4.7-4"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e902216ab09b899acce6a89011c88cf61">Подчеркнутый</span></button><div class="ck ck-dropdown ck-font-size-dropdown"><button class="ck ck-button ck-off ck-dropdown__button" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e9a0eaa4351d3b61f0af6db52edf9d75e" data-cke-tooltip-text="Размер шрифта" data-cke-tooltip-position="s" aria-haspopup="true" aria-expanded="false"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.816 11.5 7.038 4.785 4.261 11.5zm.62 1.5H3.641l-1.666 4.028H.312l5.789-14h1.875l5.789 14h-1.663zm7.55 2.279.779-.779.707.707-2.265 2.265-2.193-2.265.707-.707.765.765V4.825q0-.063.002-.123l-.77.77-.707-.707L17.207 2.5l2.265 2.265-.707.707-.782-.782q.003.065.003.135z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e9a0eaa4351d3b61f0af6db52edf9d75e">Размер шрифта</span><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-dropdown__arrow" viewBox="0 0 10 10" aria-hidden="true"><path d="M.941 4.523a.75.75 0 1 1 1.06-1.06l3.006 3.005 3.005-3.005a.75.75 0 1 1 1.06 1.06l-3.549 3.55a.75.75 0 0 1-1.168-.136z"></path></svg></button><div class="ck ck-reset ck-dropdown__panel ck-dropdown__panel_se" tabindex="-1"></div></div><button class="ck ck-button ck-disabled ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e56a4b3bde5981496984dd5e9776ed8d4" aria-disabled="true" data-cke-tooltip-text="Убрать форматирование" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M8.69 14.915q.08.078.36.093a.366.366 0 0 1 .345.485l-.003.01a.74.74 0 0 1-.697.497h-2.67a.374.374 0 0 1-.353-.496l.013-.038a.68.68 0 0 1 .644-.458q.295-.018.386-.093a.3.3 0 0 0 .072-.11L9.592 4.5H6.269q-.538-.026-.75.09-.213.117-.442.563c-.192.29-.516.464-.864.464H4.17a.43.43 0 0 1-.407-.569L4.46 3h13.08l-.62 2.043a.81.81 0 0 1-.775.574h-.114a.486.486 0 0 1-.486-.486q.002-.426-.167-.54-.168-.114-.766-.091h-3.28l-2.68 10.257q-.009.111.038.158M3 17h8a.5.5 0 1 1 0 1H3a.5.5 0 1 1 0-1m11.299 1.17a.75.75 0 1 1-1.06-1.06l1.414-1.415-1.415-1.414a.75.75 0 0 1 1.06-1.06l1.415 1.414 1.414-1.415a.75.75 0 1 1 1.06 1.06l-1.413 1.415 1.414 1.415a.75.75 0 0 1-1.06 1.06l-1.415-1.414z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e56a4b3bde5981496984dd5e9776ed8d4">Убрать форматирование</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e63516f65a8b8e722b7701af4d7df852c" data-cke-tooltip-text="Цитата" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10.423a6.5 6.5 0 0 1 6.056-6.408l.038.67C6.448 5.423 5.354 7.663 5.22 10H9c.552 0 .5.432.5.986v4.511c0 .554-.448.503-1 .503h-5c-.552 0-.5-.449-.5-1.003zm8 0a6.5 6.5 0 0 1 6.056-6.408l.038.67c-2.646.739-3.74 2.979-3.873 5.315H17c.552 0 .5.432.5.986v4.511c0 .554-.448.503-1 .503h-5c-.552 0-.5-.449-.5-1.003z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e63516f65a8b8e722b7701af4d7df852c">Цитата</span></button><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e0066d193abc6cbbd7f5a6834ad2e8f8e" data-cke-tooltip-text="Маркированный список" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5.75c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75m-6 0C1 4.784 1.777 4 2.75 4c.966 0 1.75.777 1.75 1.75 0 .966-.777 1.75-1.75 1.75C1.784 7.5 1 6.723 1 5.75m6 9c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75m-6 0c0-.966.777-1.75 1.75-1.75.966 0 1.75.777 1.75 1.75 0 .966-.777 1.75-1.75 1.75-.966 0-1.75-.777-1.75-1.75"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e0066d193abc6cbbd7f5a6834ad2e8f8e">Маркированный список</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e7e5a14839395c103b6f882d2dc17a9f9" data-cke-tooltip-text="Нумерованный список" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5.75c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75M3.5 3v5H2V3.7H1v-1h2.5zM.343 17.857l2.59-3.257H2.92a.6.6 0 1 0-1.04 0H.302a2 2 0 1 1 3.995 0h-.001q-.073.607-.333.988-.263.381-1.244 1.312H4.3v1h-4zM7 14.75a.75.75 0 0 1 .75-.75h9.5a.75.75 0 1 1 0 1.5h-9.5a.75.75 0 0 1-.75-.75"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e7e5a14839395c103b6f882d2dc17a9f9">Нумерованный список</span></button><span class="ck ck-toolbar__separator"></span><div class="ck ck-dropdown"><button class="ck ck-button ck-off ck-dropdown__button" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e8aec72aa35c022ab3687d7018e7acd0a" data-cke-tooltip-text="Вставить таблицу" data-cke-tooltip-position="s" aria-haspopup="true" aria-expanded="false"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5.5v3h4v-3zm0 4v3h4v-3zm0 4v3h4v-3zm5 3h4v-3H8zm5 0h4v-3h-4zm4-4v-3h-4v3zm0-4v-3h-4v3zm1.5 8A1.5 1.5 0 0 1 17 18H3a1.5 1.5 0 0 1-1.5-1.5V3c.222-.863 1.068-1.5 2-1.5h13c.932 0 1.778.637 2 1.5zm-6.5-4v-3H8v3zm0-4v-3H8v3z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e8aec72aa35c022ab3687d7018e7acd0a">Вставить таблицу</span><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-dropdown__arrow" viewBox="0 0 10 10" aria-hidden="true"><path d="M.941 4.523a.75.75 0 1 1 1.06-1.06l3.006 3.005 3.005-3.005a.75.75 0 1 1 1.06 1.06l-3.549 3.55a.75.75 0 0 1-1.168-.136z"></path></svg></button><div class="ck ck-reset ck-dropdown__panel ck-dropdown__panel_se" tabindex="-1"></div></div><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e9fe07759c480f97d3e403d21fd408948" data-cke-tooltip-text="Загрузка шаблона" data-cke-tooltip-position="s" data-role="form" data-url="/animals/documents/list" data-loader="circle" data-post-target="examination"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M 6 3 L 6 29 L 26 29 L 26 9.5996094 L 25.699219 9.3007812 L 19.699219 3.3007812 L 19.400391 3 L 6 3 z M 8 5 L 18 5 L 18 11 L 24 11 L 24 27 L 8 27 L 8 5 z M 20 6.4003906 L 22.599609 9 L 20 9 L 20 6.4003906 z M 15 13 L 15 18 L 12 18 L 16 22 L 20 18 L 17 18 L 17 13 L 15 13 z M 12 23 L 12 25 L 20 25 L 20 23 L 12 23 z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e9fe07759c480f97d3e403d21fd408948">Загрузка шаблона</span></button></div></div></div></div></div><div class="ck ck-editor__main" role="presentation"><div class="ck-table-show-hidden-borders ck-blurred ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline" lang="en" dir="ltr" role="textbox" aria-label="Редактор форматированного текста. Область редактирования: main. Нажмите ⌥0 для получения помощи." contenteditable="true"><p><br data-cke-filler="true"></p></div></div></div>
+                    </label>
+                    <div class="triple-row">
+                        <label>
+                            <span>Ведущие симптомы</span>
+                            <input name="symptom" id="symptom" value="" type="text">
+                        </label>
+                        <label>
+                            <span>Вес, кг</span>
+                            <input autocomplete="off" name="weight" id="weight" value="6.00" type="number">
+                        </label>
+                        <label>
+                            <span>Температура, °C</span>
+                            <input autocomplete="off" name="temperature" id="temperature" value="" type="text" data-mask-regex="(32|33|34|35|36|37|38|39|40|41|42|43)\.\d" inputmode="text">
+                        </label>
+                    </div>
+                    <div id="list-diagnoses">
+    <label><span>Диагнозы</span></label>
+    <div class="list">
+        <header>
+            <span>Диагноз</span>
+            <span>Тип</span>
+            <span>Дата</span>
+            <span>Статус</span>
+        </header>
+        <section>
+      
+    
+</section>
+        <div class="empty-list visible">
+            <span><svg><use href="prototype/vetaf/i/frontend/svg/icons.svg#empty-list"></use></svg></span>
+            <div>Диагнозы ещё не поставлены</div>
+        </div>
+    </div>
+            <footer>
+            <button type="button" class="button green visible" data-loader="circle" data-role="form" data-post-visit="10000001" data-post-animal="400001" data-url="/animals/diagnoses/create">Добавить диагноз</button>
+                                        <button type="button" class="button" data-loader="circle" data-role="form" data-post-animal="400001" data-type="archive" data-url="/animals/diagnoses/load/archive" data-action="archive">Показать архивные</button>
+                    </footer>
+    
+</div>
+                    <label>
+                        <span>Манипуляции</span>
+                        <textarea data-ckeditor="" data-ckeditor-exlude="Alignment,Image,Indent,IndentBlock,LineHeight,Link,Heading,HorizontalLine,PageBreak,ShowBlocks" id="manipulation" name="manipulation" style="display: none;"></textarea><div class="ck ck-reset ck-editor ck-rounded-corners" role="application" dir="ltr" lang="en" aria-labelledby="ck-editor__label_e031cae10e926289add2d555081fc60ca"><label class="ck ck-label ck-voice-label" id="ck-editor__label_e031cae10e926289add2d555081fc60ca">Редактор</label><div class="ck ck-editor__top ck-reset_all" role="presentation"><div class="ck ck-sticky-panel"><div class="ck ck-sticky-panel__placeholder" style="display: none;"></div><div class="ck ck-sticky-panel__content"><div class="ck ck-toolbar ck-toolbar_grouping" role="toolbar" aria-label="Панель инструментов редактора" tabindex="-1"><div class="ck ck-toolbar__items"><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e048861a6a4b432b3df1211d1a17bd5c1" data-cke-tooltip-text="Жирный (⌘B)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10.187 17H5.773q-.956 0-1.364-.415-.41-.416-.409-1.323V4.738q0-.926.419-1.332.418-.405 1.354-.406h4.68q1.035 0 1.793.124.76.124 1.36.478.512.296.906.75a3.26 3.26 0 0 1 .808 2.162q0 2.102-2.167 3.075 2.846.879 2.847 3.421a3.76 3.76 0 0 1-2.296 3.504 6 6 0 0 1-1.517.377q-.857.11-2 .11zm-.217-6.217H7v4.087h3.069q2.965 0 2.965-2.072 0-1.061-.768-1.537-.768-.478-2.296-.478M7 5.13v3.619h2.606q1.093 0 1.69-.2a1.6 1.6 0 0 0 .91-.765q.247-.4.247-.897 0-1.06-.778-1.409-.778-.348-2.375-.348z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e048861a6a4b432b3df1211d1a17bd5c1">Жирный</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e11ef72ef699d35ef79b7be504971eeda" data-cke-tooltip-text="Курсив (⌘I)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="m9.586 14.633.021.004q-.054.502.393.962.123.125.274.201h1.474a.6.6 0 1 1 0 1.2H5.304a.6.6 0 0 1 0-1.2h1.15q.711-.106 1.005-.334.235-.182.404-.597l2.416-9.55a1.05 1.05 0 0 0-.281-.823 1.1 1.1 0 0 0-.442-.296H8.15a.6.6 0 0 1 0-1.2h6.443a.6.6 0 1 1 0 1.2h-1.195q-.564.084-.823.296-.323.263-.623.79z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e11ef72ef699d35ef79b7be504971eeda">Курсив</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e7c6a34417585791f4380cab71c4a049b" data-cke-tooltip-text="Подчеркнутый (⌘U)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 18v-1.5h14V18zm2.2-8V3.6c0-.4.4-.6.8-.6.3 0 .7.2.7.6v6.2c0 2 1.3 2.8 3.2 2.8s3.4-.9 3.4-2.9V3.6c0-.3.4-.5.8-.5.3 0 .7.2.7.5V10c0 2.7-2.2 4-4.9 4-2.6 0-4.7-1.2-4.7-4"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e7c6a34417585791f4380cab71c4a049b">Подчеркнутый</span></button><div class="ck ck-dropdown ck-font-size-dropdown"><button class="ck ck-button ck-off ck-dropdown__button" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e6030d489f11fe0f43162e9b18703e076" data-cke-tooltip-text="Размер шрифта" data-cke-tooltip-position="s" aria-haspopup="true" aria-expanded="false"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.816 11.5 7.038 4.785 4.261 11.5zm.62 1.5H3.641l-1.666 4.028H.312l5.789-14h1.875l5.789 14h-1.663zm7.55 2.279.779-.779.707.707-2.265 2.265-2.193-2.265.707-.707.765.765V4.825q0-.063.002-.123l-.77.77-.707-.707L17.207 2.5l2.265 2.265-.707.707-.782-.782q.003.065.003.135z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e6030d489f11fe0f43162e9b18703e076">Размер шрифта</span><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-dropdown__arrow" viewBox="0 0 10 10" aria-hidden="true"><path d="M.941 4.523a.75.75 0 1 1 1.06-1.06l3.006 3.005 3.005-3.005a.75.75 0 1 1 1.06 1.06l-3.549 3.55a.75.75 0 0 1-1.168-.136z"></path></svg></button><div class="ck ck-reset ck-dropdown__panel ck-dropdown__panel_se" tabindex="-1"></div></div><button class="ck ck-button ck-disabled ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e7ba03347230f15d36870db258ee1fbe6" aria-disabled="true" data-cke-tooltip-text="Убрать форматирование" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M8.69 14.915q.08.078.36.093a.366.366 0 0 1 .345.485l-.003.01a.74.74 0 0 1-.697.497h-2.67a.374.374 0 0 1-.353-.496l.013-.038a.68.68 0 0 1 .644-.458q.295-.018.386-.093a.3.3 0 0 0 .072-.11L9.592 4.5H6.269q-.538-.026-.75.09-.213.117-.442.563c-.192.29-.516.464-.864.464H4.17a.43.43 0 0 1-.407-.569L4.46 3h13.08l-.62 2.043a.81.81 0 0 1-.775.574h-.114a.486.486 0 0 1-.486-.486q.002-.426-.167-.54-.168-.114-.766-.091h-3.28l-2.68 10.257q-.009.111.038.158M3 17h8a.5.5 0 1 1 0 1H3a.5.5 0 1 1 0-1m11.299 1.17a.75.75 0 1 1-1.06-1.06l1.414-1.415-1.415-1.414a.75.75 0 0 1 1.06-1.06l1.415 1.414 1.414-1.415a.75.75 0 1 1 1.06 1.06l-1.413 1.415 1.414 1.415a.75.75 0 0 1-1.06 1.06l-1.415-1.414z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e7ba03347230f15d36870db258ee1fbe6">Убрать форматирование</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e7de0365497a4243b7d2f4fa904819f3d" data-cke-tooltip-text="Цитата" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10.423a6.5 6.5 0 0 1 6.056-6.408l.038.67C6.448 5.423 5.354 7.663 5.22 10H9c.552 0 .5.432.5.986v4.511c0 .554-.448.503-1 .503h-5c-.552 0-.5-.449-.5-1.003zm8 0a6.5 6.5 0 0 1 6.056-6.408l.038.67c-2.646.739-3.74 2.979-3.873 5.315H17c.552 0 .5.432.5.986v4.511c0 .554-.448.503-1 .503h-5c-.552 0-.5-.449-.5-1.003z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e7de0365497a4243b7d2f4fa904819f3d">Цитата</span></button><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e953478482882658f7622c2f1ff7da377" data-cke-tooltip-text="Маркированный список" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5.75c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75m-6 0C1 4.784 1.777 4 2.75 4c.966 0 1.75.777 1.75 1.75 0 .966-.777 1.75-1.75 1.75C1.784 7.5 1 6.723 1 5.75m6 9c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75m-6 0c0-.966.777-1.75 1.75-1.75.966 0 1.75.777 1.75 1.75 0 .966-.777 1.75-1.75 1.75-.966 0-1.75-.777-1.75-1.75"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e953478482882658f7622c2f1ff7da377">Маркированный список</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_eade83adc19d951ebbdd2422ba2310d2c" data-cke-tooltip-text="Нумерованный список" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5.75c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75M3.5 3v5H2V3.7H1v-1h2.5zM.343 17.857l2.59-3.257H2.92a.6.6 0 1 0-1.04 0H.302a2 2 0 1 1 3.995 0h-.001q-.073.607-.333.988-.263.381-1.244 1.312H4.3v1h-4zM7 14.75a.75.75 0 0 1 .75-.75h9.5a.75.75 0 1 1 0 1.5h-9.5a.75.75 0 0 1-.75-.75"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_eade83adc19d951ebbdd2422ba2310d2c">Нумерованный список</span></button><span class="ck ck-toolbar__separator"></span><div class="ck ck-dropdown"><button class="ck ck-button ck-off ck-dropdown__button" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e04b32edfb2c27cdbef03769627eed3c7" data-cke-tooltip-text="Вставить таблицу" data-cke-tooltip-position="s" aria-haspopup="true" aria-expanded="false"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5.5v3h4v-3zm0 4v3h4v-3zm0 4v3h4v-3zm5 3h4v-3H8zm5 0h4v-3h-4zm4-4v-3h-4v3zm0-4v-3h-4v3zm1.5 8A1.5 1.5 0 0 1 17 18H3a1.5 1.5 0 0 1-1.5-1.5V3c.222-.863 1.068-1.5 2-1.5h13c.932 0 1.778.637 2 1.5zm-6.5-4v-3H8v3zm0-4v-3H8v3z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e04b32edfb2c27cdbef03769627eed3c7">Вставить таблицу</span><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-dropdown__arrow" viewBox="0 0 10 10" aria-hidden="true"><path d="M.941 4.523a.75.75 0 1 1 1.06-1.06l3.006 3.005 3.005-3.005a.75.75 0 1 1 1.06 1.06l-3.549 3.55a.75.75 0 0 1-1.168-.136z"></path></svg></button><div class="ck ck-reset ck-dropdown__panel ck-dropdown__panel_se" tabindex="-1"></div></div><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_ed15ab74c239874771213828337f4e4cd" data-cke-tooltip-text="Загрузка шаблона" data-cke-tooltip-position="s" data-role="form" data-url="/animals/documents/list" data-loader="circle" data-post-target="manipulation"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M 6 3 L 6 29 L 26 29 L 26 9.5996094 L 25.699219 9.3007812 L 19.699219 3.3007812 L 19.400391 3 L 6 3 z M 8 5 L 18 5 L 18 11 L 24 11 L 24 27 L 8 27 L 8 5 z M 20 6.4003906 L 22.599609 9 L 20 9 L 20 6.4003906 z M 15 13 L 15 18 L 12 18 L 16 22 L 20 18 L 17 18 L 17 13 L 15 13 z M 12 23 L 12 25 L 20 25 L 20 23 L 12 23 z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_ed15ab74c239874771213828337f4e4cd">Загрузка шаблона</span></button></div></div></div></div></div><div class="ck ck-editor__main" role="presentation"><div class="ck-table-show-hidden-borders ck-blurred ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline" lang="en" dir="ltr" role="textbox" aria-label="Редактор форматированного текста. Область редактирования: main. Нажмите ⌥0 для получения помощи." contenteditable="true"><p><br data-cke-filler="true"></p></div></div></div>
+                    </label>
+                    <label>
+                        <span>Комментарий</span>
+                        <textarea id="comment" name="comment"></textarea>
+                    </label>
+                </div>
+            </div>
+            <div data-tab="pane" data-id="recommendations" data-status="">
+                <div class="padding">
+                    <label>
+                        <span>План лечения</span>
+                        <textarea data-ckeditor="" data-ckeditor-exlude="Alignment,Image,Indent,IndentBlock,LineHeight,Link,Heading,HorizontalLine,PageBreak,ShowBlocks" id="treatment" name="treatment" style="display: none;"></textarea><div class="ck ck-reset ck-editor ck-rounded-corners" role="application" dir="ltr" lang="en" aria-labelledby="ck-editor__label_e0d2543d39bb018700c09346512d4ea71"><label class="ck ck-label ck-voice-label" id="ck-editor__label_e0d2543d39bb018700c09346512d4ea71">Редактор</label><div class="ck ck-editor__top ck-reset_all" role="presentation"><div class="ck ck-sticky-panel"><div class="ck ck-sticky-panel__placeholder" style="display: none;"></div><div class="ck ck-sticky-panel__content"><div class="ck ck-toolbar ck-toolbar_grouping" role="toolbar" aria-label="Панель инструментов редактора" tabindex="-1"><div class="ck ck-toolbar__items"><button class="ck ck-button ck-on" type="button" tabindex="-1" aria-pressed="true" aria-labelledby="ck-editor__aria-label_e50f3f137a11ac5e3ae551ddbf33d2123" data-cke-tooltip-text="Жирный (⌘B)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10.187 17H5.773q-.956 0-1.364-.415-.41-.416-.409-1.323V4.738q0-.926.419-1.332.418-.405 1.354-.406h4.68q1.035 0 1.793.124.76.124 1.36.478.512.296.906.75a3.26 3.26 0 0 1 .808 2.162q0 2.102-2.167 3.075 2.846.879 2.847 3.421a3.76 3.76 0 0 1-2.296 3.504 6 6 0 0 1-1.517.377q-.857.11-2 .11zm-.217-6.217H7v4.087h3.069q2.965 0 2.965-2.072 0-1.061-.768-1.537-.768-.478-2.296-.478M7 5.13v3.619h2.606q1.093 0 1.69-.2a1.6 1.6 0 0 0 .91-.765q.247-.4.247-.897 0-1.06-.778-1.409-.778-.348-2.375-.348z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e50f3f137a11ac5e3ae551ddbf33d2123">Жирный</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_ed79a267b85573ca6e43605b112c50e03" data-cke-tooltip-text="Курсив (⌘I)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="m9.586 14.633.021.004q-.054.502.393.962.123.125.274.201h1.474a.6.6 0 1 1 0 1.2H5.304a.6.6 0 0 1 0-1.2h1.15q.711-.106 1.005-.334.235-.182.404-.597l2.416-9.55a1.05 1.05 0 0 0-.281-.823 1.1 1.1 0 0 0-.442-.296H8.15a.6.6 0 0 1 0-1.2h6.443a.6.6 0 1 1 0 1.2h-1.195q-.564.084-.823.296-.323.263-.623.79z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_ed79a267b85573ca6e43605b112c50e03">Курсив</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e9b50bc673751507fe5d93ba7a57a38ef" data-cke-tooltip-text="Подчеркнутый (⌘U)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 18v-1.5h14V18zm2.2-8V3.6c0-.4.4-.6.8-.6.3 0 .7.2.7.6v6.2c0 2 1.3 2.8 3.2 2.8s3.4-.9 3.4-2.9V3.6c0-.3.4-.5.8-.5.3 0 .7.2.7.5V10c0 2.7-2.2 4-4.9 4-2.6 0-4.7-1.2-4.7-4"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e9b50bc673751507fe5d93ba7a57a38ef">Подчеркнутый</span></button><div class="ck ck-dropdown ck-font-size-dropdown"><button class="ck ck-button ck-off ck-dropdown__button" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e39f629db0addfc6977d59f7e43bf974c" data-cke-tooltip-text="Размер шрифта" data-cke-tooltip-position="s" aria-haspopup="true" aria-expanded="false"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.816 11.5 7.038 4.785 4.261 11.5zm.62 1.5H3.641l-1.666 4.028H.312l5.789-14h1.875l5.789 14h-1.663zm7.55 2.279.779-.779.707.707-2.265 2.265-2.193-2.265.707-.707.765.765V4.825q0-.063.002-.123l-.77.77-.707-.707L17.207 2.5l2.265 2.265-.707.707-.782-.782q.003.065.003.135z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e39f629db0addfc6977d59f7e43bf974c">Размер шрифта</span><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-dropdown__arrow" viewBox="0 0 10 10" aria-hidden="true"><path d="M.941 4.523a.75.75 0 1 1 1.06-1.06l3.006 3.005 3.005-3.005a.75.75 0 1 1 1.06 1.06l-3.549 3.55a.75.75 0 0 1-1.168-.136z"></path></svg></button><div class="ck ck-reset ck-dropdown__panel ck-dropdown__panel_se" tabindex="-1"></div></div><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e5c15eb7caa1718b9eb3c90005be70c43" data-cke-tooltip-text="Убрать форматирование" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M8.69 14.915q.08.078.36.093a.366.366 0 0 1 .345.485l-.003.01a.74.74 0 0 1-.697.497h-2.67a.374.374 0 0 1-.353-.496l.013-.038a.68.68 0 0 1 .644-.458q.295-.018.386-.093a.3.3 0 0 0 .072-.11L9.592 4.5H6.269q-.538-.026-.75.09-.213.117-.442.563c-.192.29-.516.464-.864.464H4.17a.43.43 0 0 1-.407-.569L4.46 3h13.08l-.62 2.043a.81.81 0 0 1-.775.574h-.114a.486.486 0 0 1-.486-.486q.002-.426-.167-.54-.168-.114-.766-.091h-3.28l-2.68 10.257q-.009.111.038.158M3 17h8a.5.5 0 1 1 0 1H3a.5.5 0 1 1 0-1m11.299 1.17a.75.75 0 1 1-1.06-1.06l1.414-1.415-1.415-1.414a.75.75 0 0 1 1.06-1.06l1.415 1.414 1.414-1.415a.75.75 0 1 1 1.06 1.06l-1.413 1.415 1.414 1.415a.75.75 0 0 1-1.06 1.06l-1.415-1.414z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e5c15eb7caa1718b9eb3c90005be70c43">Убрать форматирование</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e9561eb6efef84754c15b327c43702ce1" data-cke-tooltip-text="Цитата" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10.423a6.5 6.5 0 0 1 6.056-6.408l.038.67C6.448 5.423 5.354 7.663 5.22 10H9c.552 0 .5.432.5.986v4.511c0 .554-.448.503-1 .503h-5c-.552 0-.5-.449-.5-1.003zm8 0a6.5 6.5 0 0 1 6.056-6.408l.038.67c-2.646.739-3.74 2.979-3.873 5.315H17c.552 0 .5.432.5.986v4.511c0 .554-.448.503-1 .503h-5c-.552 0-.5-.449-.5-1.003z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e9561eb6efef84754c15b327c43702ce1">Цитата</span></button><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e38a1474eac7abea902738c1cd84faf86" data-cke-tooltip-text="Маркированный список" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5.75c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75m-6 0C1 4.784 1.777 4 2.75 4c.966 0 1.75.777 1.75 1.75 0 .966-.777 1.75-1.75 1.75C1.784 7.5 1 6.723 1 5.75m6 9c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75m-6 0c0-.966.777-1.75 1.75-1.75.966 0 1.75.777 1.75 1.75 0 .966-.777 1.75-1.75 1.75-.966 0-1.75-.777-1.75-1.75"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e38a1474eac7abea902738c1cd84faf86">Маркированный список</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e59ec5e9a10439b195ead9f43f3c8e477" data-cke-tooltip-text="Нумерованный список" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5.75c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75M3.5 3v5H2V3.7H1v-1h2.5zM.343 17.857l2.59-3.257H2.92a.6.6 0 1 0-1.04 0H.302a2 2 0 1 1 3.995 0h-.001q-.073.607-.333.988-.263.381-1.244 1.312H4.3v1h-4zM7 14.75a.75.75 0 0 1 .75-.75h9.5a.75.75 0 1 1 0 1.5h-9.5a.75.75 0 0 1-.75-.75"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e59ec5e9a10439b195ead9f43f3c8e477">Нумерованный список</span></button><span class="ck ck-toolbar__separator"></span><div class="ck ck-dropdown"><button class="ck ck-button ck-off ck-dropdown__button" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e8bf83a59de00a3ebec1a0a7175926908" data-cke-tooltip-text="Вставить таблицу" data-cke-tooltip-position="s" aria-haspopup="true" aria-expanded="false"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5.5v3h4v-3zm0 4v3h4v-3zm0 4v3h4v-3zm5 3h4v-3H8zm5 0h4v-3h-4zm4-4v-3h-4v3zm0-4v-3h-4v3zm1.5 8A1.5 1.5 0 0 1 17 18H3a1.5 1.5 0 0 1-1.5-1.5V3c.222-.863 1.068-1.5 2-1.5h13c.932 0 1.778.637 2 1.5zm-6.5-4v-3H8v3zm0-4v-3H8v3z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e8bf83a59de00a3ebec1a0a7175926908">Вставить таблицу</span><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-dropdown__arrow" viewBox="0 0 10 10" aria-hidden="true"><path d="M.941 4.523a.75.75 0 1 1 1.06-1.06l3.006 3.005 3.005-3.005a.75.75 0 1 1 1.06 1.06l-3.549 3.55a.75.75 0 0 1-1.168-.136z"></path></svg></button><div class="ck ck-reset ck-dropdown__panel ck-dropdown__panel_se" tabindex="-1"></div></div><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_ef69a4f683edf1cf16397eecbf4ff9321" data-cke-tooltip-text="Загрузка шаблона" data-cke-tooltip-position="s" data-role="form" data-url="/animals/documents/list" data-loader="circle" data-post-target="treatment"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M 6 3 L 6 29 L 26 29 L 26 9.5996094 L 25.699219 9.3007812 L 19.699219 3.3007812 L 19.400391 3 L 6 3 z M 8 5 L 18 5 L 18 11 L 24 11 L 24 27 L 8 27 L 8 5 z M 20 6.4003906 L 22.599609 9 L 20 9 L 20 6.4003906 z M 15 13 L 15 18 L 12 18 L 16 22 L 20 18 L 17 18 L 17 13 L 15 13 z M 12 23 L 12 25 L 20 25 L 20 23 L 12 23 z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_ef69a4f683edf1cf16397eecbf4ff9321">Загрузка шаблона</span></button></div></div></div></div></div><div class="ck ck-editor__main" role="presentation"><div class="ck-table-show-hidden-borders ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline ck-blurred" lang="en" dir="ltr" role="textbox" aria-label="Редактор форматированного текста. Область редактирования: main. Нажмите ⌥0 для получения помощи." contenteditable="true"><p><br data-cke-filler="true"></p></div></div></div>
+                    </label>
+                    <label>
+                        <span>Рекомендация по уходу</span>
+                        <textarea data-ckeditor="" data-ckeditor-exlude="Alignment,Image,Indent,IndentBlock,LineHeight,Link,Heading,HorizontalLine,PageBreak,ShowBlocks" id="recommendation" name="recommendation" style="display: none;"></textarea><div class="ck ck-reset ck-editor ck-rounded-corners" role="application" dir="ltr" lang="en" aria-labelledby="ck-editor__label_eb7cc47dad55226ee773cc12263607517"><label class="ck ck-label ck-voice-label" id="ck-editor__label_eb7cc47dad55226ee773cc12263607517">Редактор</label><div class="ck ck-editor__top ck-reset_all" role="presentation"><div class="ck ck-sticky-panel"><div class="ck ck-sticky-panel__placeholder" style="display: none;"></div><div class="ck ck-sticky-panel__content"><div class="ck ck-toolbar ck-toolbar_grouping" role="toolbar" aria-label="Панель инструментов редактора" tabindex="-1"><div class="ck ck-toolbar__items"><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e7ea24735aafc06a63f50c15e7a159107" data-cke-tooltip-text="Жирный (⌘B)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10.187 17H5.773q-.956 0-1.364-.415-.41-.416-.409-1.323V4.738q0-.926.419-1.332.418-.405 1.354-.406h4.68q1.035 0 1.793.124.76.124 1.36.478.512.296.906.75a3.26 3.26 0 0 1 .808 2.162q0 2.102-2.167 3.075 2.846.879 2.847 3.421a3.76 3.76 0 0 1-2.296 3.504 6 6 0 0 1-1.517.377q-.857.11-2 .11zm-.217-6.217H7v4.087h3.069q2.965 0 2.965-2.072 0-1.061-.768-1.537-.768-.478-2.296-.478M7 5.13v3.619h2.606q1.093 0 1.69-.2a1.6 1.6 0 0 0 .91-.765q.247-.4.247-.897 0-1.06-.778-1.409-.778-.348-2.375-.348z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e7ea24735aafc06a63f50c15e7a159107">Жирный</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e0d156b311fb20862aaa56ab0cd83a5d5" data-cke-tooltip-text="Курсив (⌘I)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="m9.586 14.633.021.004q-.054.502.393.962.123.125.274.201h1.474a.6.6 0 1 1 0 1.2H5.304a.6.6 0 0 1 0-1.2h1.15q.711-.106 1.005-.334.235-.182.404-.597l2.416-9.55a1.05 1.05 0 0 0-.281-.823 1.1 1.1 0 0 0-.442-.296H8.15a.6.6 0 0 1 0-1.2h6.443a.6.6 0 1 1 0 1.2h-1.195q-.564.084-.823.296-.323.263-.623.79z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e0d156b311fb20862aaa56ab0cd83a5d5">Курсив</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_ed6654ea966f0e4f6de2f70a96c2114e0" data-cke-tooltip-text="Подчеркнутый (⌘U)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 18v-1.5h14V18zm2.2-8V3.6c0-.4.4-.6.8-.6.3 0 .7.2.7.6v6.2c0 2 1.3 2.8 3.2 2.8s3.4-.9 3.4-2.9V3.6c0-.3.4-.5.8-.5.3 0 .7.2.7.5V10c0 2.7-2.2 4-4.9 4-2.6 0-4.7-1.2-4.7-4"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_ed6654ea966f0e4f6de2f70a96c2114e0">Подчеркнутый</span></button><div class="ck ck-dropdown ck-font-size-dropdown"><button class="ck ck-button ck-off ck-dropdown__button" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_ea46bd9358474cb91bf8fde34fa26a27f" data-cke-tooltip-text="Размер шрифта" data-cke-tooltip-position="s" aria-haspopup="true" aria-expanded="false"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.816 11.5 7.038 4.785 4.261 11.5zm.62 1.5H3.641l-1.666 4.028H.312l5.789-14h1.875l5.789 14h-1.663zm7.55 2.279.779-.779.707.707-2.265 2.265-2.193-2.265.707-.707.765.765V4.825q0-.063.002-.123l-.77.77-.707-.707L17.207 2.5l2.265 2.265-.707.707-.782-.782q.003.065.003.135z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_ea46bd9358474cb91bf8fde34fa26a27f">Размер шрифта</span><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-dropdown__arrow" viewBox="0 0 10 10" aria-hidden="true"><path d="M.941 4.523a.75.75 0 1 1 1.06-1.06l3.006 3.005 3.005-3.005a.75.75 0 1 1 1.06 1.06l-3.549 3.55a.75.75 0 0 1-1.168-.136z"></path></svg></button><div class="ck ck-reset ck-dropdown__panel ck-dropdown__panel_se" tabindex="-1"></div></div><button class="ck ck-button ck-disabled ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e3b7bd769ce54b159245bb22cd5f1e136" aria-disabled="true" data-cke-tooltip-text="Убрать форматирование" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M8.69 14.915q.08.078.36.093a.366.366 0 0 1 .345.485l-.003.01a.74.74 0 0 1-.697.497h-2.67a.374.374 0 0 1-.353-.496l.013-.038a.68.68 0 0 1 .644-.458q.295-.018.386-.093a.3.3 0 0 0 .072-.11L9.592 4.5H6.269q-.538-.026-.75.09-.213.117-.442.563c-.192.29-.516.464-.864.464H4.17a.43.43 0 0 1-.407-.569L4.46 3h13.08l-.62 2.043a.81.81 0 0 1-.775.574h-.114a.486.486 0 0 1-.486-.486q.002-.426-.167-.54-.168-.114-.766-.091h-3.28l-2.68 10.257q-.009.111.038.158M3 17h8a.5.5 0 1 1 0 1H3a.5.5 0 1 1 0-1m11.299 1.17a.75.75 0 1 1-1.06-1.06l1.414-1.415-1.415-1.414a.75.75 0 0 1 1.06-1.06l1.415 1.414 1.414-1.415a.75.75 0 1 1 1.06 1.06l-1.413 1.415 1.414 1.415a.75.75 0 0 1-1.06 1.06l-1.415-1.414z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e3b7bd769ce54b159245bb22cd5f1e136">Убрать форматирование</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_ea2e4b70a31b6dd7845a22572a39fc4e8" data-cke-tooltip-text="Цитата" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10.423a6.5 6.5 0 0 1 6.056-6.408l.038.67C6.448 5.423 5.354 7.663 5.22 10H9c.552 0 .5.432.5.986v4.511c0 .554-.448.503-1 .503h-5c-.552 0-.5-.449-.5-1.003zm8 0a6.5 6.5 0 0 1 6.056-6.408l.038.67c-2.646.739-3.74 2.979-3.873 5.315H17c.552 0 .5.432.5.986v4.511c0 .554-.448.503-1 .503h-5c-.552 0-.5-.449-.5-1.003z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_ea2e4b70a31b6dd7845a22572a39fc4e8">Цитата</span></button><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_eb99b1c8511338bade0836ded19eb15c6" data-cke-tooltip-text="Маркированный список" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5.75c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75m-6 0C1 4.784 1.777 4 2.75 4c.966 0 1.75.777 1.75 1.75 0 .966-.777 1.75-1.75 1.75C1.784 7.5 1 6.723 1 5.75m6 9c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75m-6 0c0-.966.777-1.75 1.75-1.75.966 0 1.75.777 1.75 1.75 0 .966-.777 1.75-1.75 1.75-.966 0-1.75-.777-1.75-1.75"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_eb99b1c8511338bade0836ded19eb15c6">Маркированный список</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_ec481629c5389cb0adbad77b1f67265b5" data-cke-tooltip-text="Нумерованный список" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5.75c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75M3.5 3v5H2V3.7H1v-1h2.5zM.343 17.857l2.59-3.257H2.92a.6.6 0 1 0-1.04 0H.302a2 2 0 1 1 3.995 0h-.001q-.073.607-.333.988-.263.381-1.244 1.312H4.3v1h-4zM7 14.75a.75.75 0 0 1 .75-.75h9.5a.75.75 0 1 1 0 1.5h-9.5a.75.75 0 0 1-.75-.75"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_ec481629c5389cb0adbad77b1f67265b5">Нумерованный список</span></button><span class="ck ck-toolbar__separator"></span><div class="ck ck-dropdown"><button class="ck ck-button ck-off ck-dropdown__button" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e9945668a8f659b5af423475b7b6868c7" data-cke-tooltip-text="Вставить таблицу" data-cke-tooltip-position="s" aria-haspopup="true" aria-expanded="false"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5.5v3h4v-3zm0 4v3h4v-3zm0 4v3h4v-3zm5 3h4v-3H8zm5 0h4v-3h-4zm4-4v-3h-4v3zm0-4v-3h-4v3zm1.5 8A1.5 1.5 0 0 1 17 18H3a1.5 1.5 0 0 1-1.5-1.5V3c.222-.863 1.068-1.5 2-1.5h13c.932 0 1.778.637 2 1.5zm-6.5-4v-3H8v3zm0-4v-3H8v3z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e9945668a8f659b5af423475b7b6868c7">Вставить таблицу</span><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-dropdown__arrow" viewBox="0 0 10 10" aria-hidden="true"><path d="M.941 4.523a.75.75 0 1 1 1.06-1.06l3.006 3.005 3.005-3.005a.75.75 0 1 1 1.06 1.06l-3.549 3.55a.75.75 0 0 1-1.168-.136z"></path></svg></button><div class="ck ck-reset ck-dropdown__panel ck-dropdown__panel_se" tabindex="-1"></div></div><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e342aa23e02d8602f83c656df9edaa7e8" data-cke-tooltip-text="Загрузка шаблона" data-cke-tooltip-position="s" data-role="form" data-url="/animals/documents/list" data-loader="circle" data-post-target="recommendation"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M 6 3 L 6 29 L 26 29 L 26 9.5996094 L 25.699219 9.3007812 L 19.699219 3.3007812 L 19.400391 3 L 6 3 z M 8 5 L 18 5 L 18 11 L 24 11 L 24 27 L 8 27 L 8 5 z M 20 6.4003906 L 22.599609 9 L 20 9 L 20 6.4003906 z M 15 13 L 15 18 L 12 18 L 16 22 L 20 18 L 17 18 L 17 13 L 15 13 z M 12 23 L 12 25 L 20 25 L 20 23 L 12 23 z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e342aa23e02d8602f83c656df9edaa7e8">Загрузка шаблона</span></button></div></div></div></div></div><div class="ck ck-editor__main" role="presentation"><div class="ck-table-show-hidden-borders ck-blurred ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline" lang="en" dir="ltr" role="textbox" aria-label="Редактор форматированного текста. Область редактирования: main. Нажмите ⌥0 для получения помощи." contenteditable="true"><p><br data-cke-filler="true"></p></div></div></div>
+                    </label>
+                </div>
+            </div>
+        </form>
+        <div data-tab="pane" data-id="items" data-status="">
+            
+    <div id="prescription-block">
+            </div>
+
+            
+    <div id="list-items-in-sale" data-url="/sales/item/update" data-url-good-submit="/sales/good/submit">
+                    <form action="#">
+                <label>
+                    <span>&nbsp;</span>
+                    <span data-role="form" data-loader="circle" data-before="prepareEmployeesForLoadForm" data-post-employees="" data-post-type="changeEmployeesCreate" data-url="/sales/employees" title="Выбрать сотрудников" class="employee tooltip">1</span>
+                </label>
+                <div>
+                    <label>
+                        <span>
+                            Товар или услуга
+                            <span title="Введите / просканируйте название товара или услуги для продажи." class="help tooltip">
+                                <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#help"></use></svg>
+                            </span>
+                        </span>
+                        <span class="title-holder">
+                            <label>
+                                <input type="text" id="itemTitle" data-append=".ui-holder" data-url="/components/search/items" data-style="sale" autocomplete="off" class="barcode ui-autocomplete-input" placeholder="Введите название товара или услуги">
+                            </label>
+                            <input type="hidden" name="employees" id="employees" value="1000001">
+                            <input data-target-error="#list-items-in-sale #title" type="hidden" id="id" name="id">
+                            <input data-target-error="#list-items-in-sale #title" type="hidden" id="warehouse" name="warehouse">
+                            <input data-target-error="#list-items-in-sale #title" type="hidden" id="barcode" name="barcode">
+                            <input data-target-error="#list-items-in-sale #title" type="hidden" id="markingCode" name="markingCode">
+                            <input data-target-error="#list-items-in-sale #title" type="hidden" id="sale" name="sale" value="10000001">
+                        </span>
+                    </label>
+                    <label>
+                        <span>Количество</span>
+                        <span class="quantity-container">
+                            <input data-target-error="#quantity" type="text" id="quantity" name="quantity" autocomplete="off">
+                            <span>0</span>
+                        </span>
+                    </label>
+                    <label>
+                    <span>
+                        Скидка
+                        <span title="Если у клиента есть персональная скидка, то она автоматически применится. Вы можете указать скидку до 100%, а так же наценку до 100%, если число будет отрицательным." class="help tooltip">
+                            <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#help"></use></svg>
+                        </span>
+                    </span>
+                    <input type="text" data-target-error="#discount" id="discount" name="discount" data-good="0" data-service="0" autocomplete="off">
+                    </label>
+                    <span class="ui-holder"><ul id="ui-id-2" tabindex="0" class="ui-menu ui-widget ui-widget-content ui-autocomplete ui-front" style="display: none;"></ul></span>
+                </div>
+                <label>
+                    <span>Сумма</span>
+                    <span data-price="0" id="total">—</span>
+                </label>
+                <label>
+                    <span>&nbsp;</span>
+                    <button type="submit" class="button green-title" data-role="form" data-url="/sales/item/create/submit" data-loader="circle">Добавить</button>
+                </label>
+            </form>
+                <section class="list visible">
+            <header>
+                <span>Название</span>
+                <span>Тип</span>
+                <span class="right">Количество</span>
+                <span class="right">Цена</span>
+                <span class="right">Скидка</span>
+                <span class="right">Сумма</span>
+            </header>
+            <section>
+                    <div data-item="" data-id="34430818">
+            <header>
+                <span>
+                    <svg class="arrow"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#arrow"></use></svg>
+                    <span title="Первичный приём">Первичный приём</span>
+                </span>
+                <span>
+                    <span>услуга <span class="total">2</span></span>
+                </span>
+                <span class="right">
+                    <span data-value="1" data-type="quantity" data-ratio="" data-text=" прд">
+                        1 прд
+                    </span>
+                </span>
+                <span class="right">
+                    <span data-role="inline-edit" data-value="4000" data-text=" ₽" data-type="price">
+                        4 000 ₽
+                    </span>
+                </span>
+                <span class="right">
+                    <span data-role="inline-edit" data-value="0" data-type="sale" data-text=" %">0 %</span>
+                </span>
+                <span class="right">4 000 ₽</span>
+                <span class="control">
+                    <span title="Удалить" class="tooltip" data-post-id="34430818" data-loader="circle" data-url="/sales/item/delete" data-role="form">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                    </span>
+                    <span class="dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </span>
+            </header>
+            <section>
+                                    <div class="list visible">
+                        <header>
+                            <span>Товар</span>
+                            <span class="right">Количество</span>
+                            <span class="right">Цена</span>
+                            <span class="right">Сумма</span>
+                        </header>
+                        <section>
+                            
+            <div data-id="101749">
+            <span>Перчатки нестерильные</span>
+            <span class="right">
+                <span data-role="inline-edit" data-value="2" data-ratio="1" data-type="quantity" data-good="" data-text=" пр">2 пр</span>
+            </span>
+            <span class="right">43 ₽</span>
+            <span class="right">86 ₽</span>
+            <span class="control">
+                <span title="Удалить" class="tooltip" data-loader="circle" data-role="form" data-post-sale="10000001" data-post-service="34430818" data-post-good="101749" data-url="/sales/good/delete">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                </span>
+                <span class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </span>
+        </div>
+            <div data-id="285382">
+            <span>-КР</span>
+            <span class="right">
+                <span data-role="inline-edit" data-value="6" data-ratio="1" data-type="quantity" data-good="" data-text=" шт">6 шт</span>
+            </span>
+            <span class="right">88 ₽</span>
+            <span class="right">528 ₽</span>
+            <span class="control">
+                <span title="Удалить" class="tooltip" data-loader="circle" data-role="form" data-post-sale="10000001" data-post-service="34430818" data-post-good="285382" data-url="/sales/good/delete">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                </span>
+                <span class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </span>
+        </div>
+    
+                            <div data-id="last">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span class="right">Итого&nbsp;<span class="total-in-service">614</span>&nbsp;₽</span>
+                            </div>
+                        </section>
+                    </div>
+                                <div class="sale-item-details">
+                                            <button class="button green-title" data-role="form" data-post-sale="10000001" data-post-service="34430818" data-url="/sales/good/create" data-loader="circle"><span>+</span><span>Добавить товар</span></button>
+                                        <div data-role="form" data-post-id="34430818" data-post-type="changeEmployeesUpdate" data-url="/sales/employees">
+                        <div>Исполнители</div>
+                        
+            <div class="single">
+            <span class="avatar">
+                                    <img alt="" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='96' height='96'><rect width='96' height='96' fill='%23DCDCDC'/><circle cx='48' cy='38' r='18' fill='%23B4B4B4'/><rect x='18' y='62' width='60' height='40' rx='30' fill='%23B4B4B4'/></svg>">
+                            </span>
+            <span class="title">Петрова Анна Сергеевна</span>
+        </div>
+    
+                    </div>
+                </div>
+            </section>
+        </div>
+                    <div data-item="" data-id="34430821">
+            <header>
+                <span>
+                    <svg class="arrow"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#arrow"></use></svg>
+                    <span title="УЗИ">УЗИ</span>
+                </span>
+                <span>
+                    <span>услуга <span class="total">4</span></span>
+                </span>
+                <span class="right">
+                    <span data-value="1" data-type="quantity" data-ratio="" data-text=" прд">
+                        1 прд
+                    </span>
+                </span>
+                <span class="right">
+                    <span data-role="inline-edit" data-value="4000" data-text=" ₽" data-type="price">
+                        4 000 ₽
+                    </span>
+                </span>
+                <span class="right">
+                    <span data-role="inline-edit" data-value="0" data-type="sale" data-text=" %">0 %</span>
+                </span>
+                <span class="right">4 000 ₽</span>
+                <span class="control">
+                    <span title="Удалить" class="tooltip" data-post-id="34430821" data-loader="circle" data-url="/sales/item/delete" data-role="form">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                    </span>
+                    <span class="dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </span>
+            </header>
+            <section>
+                                    <div class="list visible">
+                        <header>
+                            <span>Товар</span>
+                            <span class="right">Количество</span>
+                            <span class="right">Цена</span>
+                            <span class="right">Сумма</span>
+                        </header>
+                        <section>
+                            
+            <div data-id="101738">
+            <span>Пеленка одноразовая</span>
+            <span class="right">
+                <span data-role="inline-edit" data-value="1" data-ratio="1" data-type="quantity" data-good="" data-text=" шт">1 шт</span>
+            </span>
+            <span class="right">53 ₽</span>
+            <span class="right">53 ₽</span>
+            <span class="control">
+                <span title="Удалить" class="tooltip" data-loader="circle" data-role="form" data-post-sale="10000001" data-post-service="34430821" data-post-good="101738" data-url="/sales/good/delete">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                </span>
+                <span class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </span>
+        </div>
+            <div data-id="101749">
+            <span>Перчатки нестерильные</span>
+            <span class="right">
+                <span data-role="inline-edit" data-value="2" data-ratio="1" data-type="quantity" data-good="" data-text=" пр">2 пр</span>
+            </span>
+            <span class="right">43 ₽</span>
+            <span class="right">86 ₽</span>
+            <span class="control">
+                <span title="Удалить" class="tooltip" data-loader="circle" data-role="form" data-post-sale="10000001" data-post-service="34430821" data-post-good="101749" data-url="/sales/good/delete">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                </span>
+                <span class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </span>
+        </div>
+            <div data-id="285382">
+            <span>-КР</span>
+            <span class="right">
+                <span data-role="inline-edit" data-value="7" data-ratio="1" data-type="quantity" data-good="" data-text=" шт">7 шт</span>
+            </span>
+            <span class="right">88 ₽</span>
+            <span class="right">616 ₽</span>
+            <span class="control">
+                <span title="Удалить" class="tooltip" data-loader="circle" data-role="form" data-post-sale="10000001" data-post-service="34430821" data-post-good="285382" data-url="/sales/good/delete">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                </span>
+                <span class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </span>
+        </div>
+            <div data-id="769648">
+            <span>Расходник</span>
+            <span class="right">
+                <span data-role="inline-edit" data-value="2" data-ratio="1" data-type="quantity" data-good="" data-text=" шт">2 шт</span>
+            </span>
+            <span class="right">20 ₽</span>
+            <span class="right">40 ₽</span>
+            <span class="control">
+                <span title="Удалить" class="tooltip" data-loader="circle" data-role="form" data-post-sale="10000001" data-post-service="34430821" data-post-good="769648" data-url="/sales/good/delete">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                </span>
+                <span class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </span>
+        </div>
+    
+                            <div data-id="last">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span class="right">Итого&nbsp;<span class="total-in-service">795</span>&nbsp;₽</span>
+                            </div>
+                        </section>
+                    </div>
+                                <div class="sale-item-details">
+                                            <button class="button green-title" data-role="form" data-post-sale="10000001" data-post-service="34430821" data-url="/sales/good/create" data-loader="circle"><span>+</span><span>Добавить товар</span></button>
+                                        <div data-role="form" data-post-id="34430821" data-post-type="changeEmployeesUpdate" data-url="/sales/employees">
+                        <div>Исполнители</div>
+                        
+            <div class="single">
+            <span class="avatar">
+                                    <img alt="" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='96' height='96'><rect width='96' height='96' fill='%23DCDCDC'/><circle cx='48' cy='38' r='18' fill='%23B4B4B4'/><rect x='18' y='62' width='60' height='40' rx='30' fill='%23B4B4B4'/></svg>">
+                            </span>
+            <span class="title">Петрова Анна Сергеевна</span>
+        </div>
+    
+                    </div>
+                </div>
+            </section>
+        </div>
+                    <div data-item="" data-id="34430826">
+            <header>
+                <span>
+                    <svg class="arrow"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#arrow"></use></svg>
+                    <span title="Рентген">Рентген</span>
+                </span>
+                <span>
+                    <span>услуга <span class="total">2</span></span>
+                </span>
+                <span class="right">
+                    <span data-value="1" data-type="quantity" data-ratio="" data-text=" прд">
+                        1 прд
+                    </span>
+                </span>
+                <span class="right">
+                    <span data-role="inline-edit" data-value="3200" data-text=" ₽" data-type="price">
+                        3 200 ₽
+                    </span>
+                </span>
+                <span class="right">
+                    <span data-role="inline-edit" data-value="0" data-type="sale" data-text=" %">0 %</span>
+                </span>
+                <span class="right">3 200 ₽</span>
+                <span class="control">
+                    <span title="Удалить" class="tooltip" data-post-id="34430826" data-loader="circle" data-url="/sales/item/delete" data-role="form">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                    </span>
+                    <span class="dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </span>
+            </header>
+            <section>
+                                    <div class="list visible">
+                        <header>
+                            <span>Товар</span>
+                            <span class="right">Количество</span>
+                            <span class="right">Цена</span>
+                            <span class="right">Сумма</span>
+                        </header>
+                        <section>
+                            
+            <div data-id="101749">
+            <span>Перчатки нестерильные</span>
+            <span class="right">
+                <span data-role="inline-edit" data-value="2" data-ratio="1" data-type="quantity" data-good="" data-text=" пр">2 пр</span>
+            </span>
+            <span class="right">43 ₽</span>
+            <span class="right">86 ₽</span>
+            <span class="control">
+                <span title="Удалить" class="tooltip" data-loader="circle" data-role="form" data-post-sale="10000001" data-post-service="34430826" data-post-good="101749" data-url="/sales/good/delete">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                </span>
+                <span class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </span>
+        </div>
+            <div data-id="285382">
+            <span>-КР</span>
+            <span class="right">
+                <span data-role="inline-edit" data-value="6" data-ratio="1" data-type="quantity" data-good="" data-text=" шт">6 шт</span>
+            </span>
+            <span class="right">88 ₽</span>
+            <span class="right">528 ₽</span>
+            <span class="control">
+                <span title="Удалить" class="tooltip" data-loader="circle" data-role="form" data-post-sale="10000001" data-post-service="34430826" data-post-good="285382" data-url="/sales/good/delete">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                </span>
+                <span class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </span>
+        </div>
+    
+                            <div data-id="last">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span class="right">Итого&nbsp;<span class="total-in-service">614</span>&nbsp;₽</span>
+                            </div>
+                        </section>
+                    </div>
+                                <div class="sale-item-details">
+                                            <button class="button green-title" data-role="form" data-post-sale="10000001" data-post-service="34430826" data-url="/sales/good/create" data-loader="circle"><span>+</span><span>Добавить товар</span></button>
+                                        <div data-role="form" data-post-id="34430826" data-post-type="changeEmployeesUpdate" data-url="/sales/employees">
+                        <div>Исполнители</div>
+                        
+            <div class="single">
+            <span class="avatar">
+                                    <img alt="" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='96' height='96'><rect width='96' height='96' fill='%23DCDCDC'/><circle cx='48' cy='38' r='18' fill='%23B4B4B4'/><rect x='18' y='62' width='60' height='40' rx='30' fill='%23B4B4B4'/></svg>">
+                            </span>
+            <span class="title">Петрова Анна Сергеевна</span>
+        </div>
+    
+                    </div>
+                </div>
+            </section>
+        </div>
+                    <div data-item="" data-id="34430829">
+            <header>
+                <span>
+                    <svg class="arrow"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#arrow"></use></svg>
+                    <span title="Подкожная/ внутримышечная инъекция">Подкожная/ внутримышечная инъекция</span>
+                </span>
+                <span>
+                    <span>услуга <span class="total"></span></span>
+                </span>
+                <span class="right">
+                    <span data-role="inline-edit" data-value="2" data-type="quantity" data-ratio="" data-text=" прд">
+                        2 прд
+                    </span>
+                </span>
+                <span class="right">
+                    <span data-role="inline-edit" data-value="600" data-text=" ₽" data-type="price">
+                        600 ₽
+                    </span>
+                </span>
+                <span class="right">
+                    <span data-role="inline-edit" data-value="0" data-type="sale" data-text=" %">0 %</span>
+                </span>
+                <span class="right">1 200 ₽</span>
+                <span class="control">
+                    <span title="Удалить" class="tooltip" data-post-id="34430829" data-loader="circle" data-url="/sales/item/delete" data-role="form">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                    </span>
+                    <span class="dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </span>
+            </header>
+            <section>
+                                    <div class="list">
+                        <header>
+                            <span>Товар</span>
+                            <span class="right">Количество</span>
+                            <span class="right">Цена</span>
+                            <span class="right">Сумма</span>
+                        </header>
+                        <section>
+                            
+    
+                            <div data-id="last">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span class="right">Итого&nbsp;<span class="total-in-service">0</span>&nbsp;₽</span>
+                            </div>
+                        </section>
+                    </div>
+                                <div class="sale-item-details">
+                                            <button class="button green-title" data-role="form" data-post-sale="10000001" data-post-service="34430829" data-url="/sales/good/create" data-loader="circle"><span>+</span><span>Добавить товар</span></button>
+                                        <div data-role="form" data-post-id="34430829" data-post-type="changeEmployeesUpdate" data-url="/sales/employees">
+                        <div>Исполнители</div>
+                        
+            <div class="single">
+            <span class="avatar">
+                                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#user"></use></svg>
+                            </span>
+            <span class="title">Кузнецова Елена</span>
+        </div>
+    
+                    </div>
+                </div>
+            </section>
+        </div>
+                    <div data-item="" data-id="34430832">
+            <header>
+                <span>
+                    <svg class="arrow"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#arrow"></use></svg>
+                    <span title="Применение лекарственных препаратов в клинике">Применение лекарственных препаратов в клинике</span>
+                </span>
+                <span>
+                    <span>услуга <span class="total">7</span></span>
+                </span>
+                <span class="right">
+                    <span data-value="1" data-type="quantity" data-ratio="" data-text=" прд">
+                        1 прд
+                    </span>
+                </span>
+                <span class="right">
+                    <span data-role="inline-edit" data-value="2041" data-text=" ₽" data-type="price">
+                        2 041 ₽
+                    </span>
+                </span>
+                <span class="right">
+                    <span data-role="inline-edit" data-value="0" data-type="sale" data-text=" %">0 %</span>
+                </span>
+                <span class="right">2 041 ₽</span>
+                <span class="control">
+                    <span title="Удалить" class="tooltip" data-post-id="34430832" data-loader="circle" data-url="/sales/item/delete" data-role="form">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                    </span>
+                    <span class="dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </span>
+            </header>
+            <section>
+                                    <div class="list visible">
+                        <header>
+                            <span>Товар</span>
+                            <span class="right">Количество</span>
+                            <span class="right">Цена</span>
+                            <span class="right">Сумма</span>
+                        </header>
+                        <section>
+                            
+            <div data-id="302529">
+            <span>Шприц 5 мл</span>
+            <span class="right">
+                <span data-role="inline-edit" data-value="1" data-ratio="1" data-type="quantity" data-good="" data-text=" шт">1 шт</span>
+            </span>
+            <span class="right">16 ₽</span>
+            <span class="right">16 ₽</span>
+            <span class="control">
+                <span title="Удалить" class="tooltip" data-loader="circle" data-role="form" data-post-sale="10000001" data-post-service="34430832" data-post-good="302529" data-url="/sales/good/delete">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                </span>
+                <span class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </span>
+        </div>
+            <div data-id="302425">
+            <span>Препарат</span>
+            <span class="right">
+                <span data-role="inline-edit" data-value="4" data-ratio="1" data-type="quantity" data-good="" data-text=" мл">4 мл</span>
+            </span>
+            <span class="right">387 ₽</span>
+            <span class="right">1 548 ₽</span>
+            <span class="control">
+                <span title="Удалить" class="tooltip" data-loader="circle" data-role="form" data-post-sale="10000001" data-post-service="34430832" data-post-good="302425" data-url="/sales/good/delete">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                </span>
+                <span class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </span>
+        </div>
+            <div data-id="101299">
+            <span>Препарат</span>
+            <span class="right">
+                <span data-role="inline-edit" data-value="1" data-ratio="1" data-type="quantity" data-good="" data-text=" амп">1 амп</span>
+            </span>
+            <span class="right">45 ₽</span>
+            <span class="right">45 ₽</span>
+            <span class="control">
+                <span title="Удалить" class="tooltip" data-loader="circle" data-role="form" data-post-sale="10000001" data-post-service="34430832" data-post-good="101299" data-url="/sales/good/delete">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                </span>
+                <span class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </span>
+        </div>
+            <div data-id="302531">
+            <span>Шприц 2 мл</span>
+            <span class="right">
+                <span data-role="inline-edit" data-value="1" data-ratio="1" data-type="quantity" data-good="" data-text=" шт">1 шт</span>
+            </span>
+            <span class="right">14 ₽</span>
+            <span class="right">14 ₽</span>
+            <span class="control">
+                <span title="Удалить" class="tooltip" data-loader="circle" data-role="form" data-post-sale="10000001" data-post-service="34430832" data-post-good="302531" data-url="/sales/good/delete">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                </span>
+                <span class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </span>
+        </div>
+            <div data-id="302532">
+            <span>Шприц 20 мл</span>
+            <span class="right">
+                <span data-role="inline-edit" data-value="1" data-ratio="1" data-type="quantity" data-good="" data-text=" шт">1 шт</span>
+            </span>
+            <span class="right">27 ₽</span>
+            <span class="right">27 ₽</span>
+            <span class="control">
+                <span title="Удалить" class="tooltip" data-loader="circle" data-role="form" data-post-sale="10000001" data-post-service="34430832" data-post-good="302532" data-url="/sales/good/delete">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                </span>
+                <span class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </span>
+        </div>
+            <div data-id="1055456">
+            <span>Расходник</span>
+            <span class="right">
+                <span data-role="inline-edit" data-value="1" data-ratio="1" data-type="quantity" data-good="" data-text=" шт">1 шт</span>
+            </span>
+            <span class="right">28 ₽</span>
+            <span class="right">28 ₽</span>
+            <span class="control">
+                <span title="Удалить" class="tooltip" data-loader="circle" data-role="form" data-post-sale="10000001" data-post-service="34430832" data-post-good="1055456" data-url="/sales/good/delete">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                </span>
+                <span class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </span>
+        </div>
+            <div data-id="101644">
+            <span>Препарат</span>
+            <span class="right">
+                <span data-role="inline-edit" data-value="1" data-ratio="1" data-type="quantity" data-good="" data-text=" пип">1 пип</span>
+            </span>
+            <span class="right">361 ₽</span>
+            <span class="right">361 ₽</span>
+            <span class="control">
+                <span title="Удалить" class="tooltip" data-loader="circle" data-role="form" data-post-sale="10000001" data-post-service="34430832" data-post-good="101644" data-url="/sales/good/delete">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                </span>
+                <span class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </span>
+        </div>
+    
+                            <div data-id="last">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span class="right">Итого&nbsp;<span class="total-in-service">2 039</span>&nbsp;₽</span>
+                            </div>
+                        </section>
+                    </div>
+                                <div class="sale-item-details">
+                                            <button class="button green-title" data-role="form" data-post-sale="10000001" data-post-service="34430832" data-url="/sales/good/create" data-loader="circle"><span>+</span><span>Добавить товар</span></button>
+                                        <div data-role="form" data-post-id="34430832" data-post-type="changeEmployeesUpdate" data-url="/sales/employees">
+                        <div>Исполнители</div>
+                        
+            <div class="single">
+            <span class="avatar">
+                                    <img alt="" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='96' height='96'><rect width='96' height='96' fill='%23DCDCDC'/><circle cx='48' cy='38' r='18' fill='%23B4B4B4'/><rect x='18' y='62' width='60' height='40' rx='30' fill='%23B4B4B4'/></svg>">
+                            </span>
+            <span class="title">Петрова Анна Сергеевна</span>
+        </div>
+    
+                    </div>
+                </div>
+            </section>
+        </div>
+                    <div data-item="" data-id="34430967">
+            <header>
+                <span>
+                    <svg class="arrow"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#arrow"></use></svg>
+                    <span title="Услуга">Услуга</span>
+                </span>
+                <span>
+                    <span>услуга <span class="total"></span></span>
+                </span>
+                <span class="right">
+                    <span data-role="inline-edit" data-value="1" data-type="quantity" data-ratio="" data-text=" прд">
+                        1 прд
+                    </span>
+                </span>
+                <span class="right">
+                    <span data-role="inline-edit" data-value="700" data-text=" ₽" data-type="price">
+                        700 ₽
+                    </span>
+                </span>
+                <span class="right">
+                    <span data-role="inline-edit" data-value="0" data-type="sale" data-text=" %">0 %</span>
+                </span>
+                <span class="right">700 ₽</span>
+                <span class="control">
+                    <span title="Удалить" class="tooltip" data-post-id="34430967" data-loader="circle" data-url="/sales/item/delete" data-role="form">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                    </span>
+                    <span class="dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+                </span>
+            </header>
+            <section>
+                                    <div class="list">
+                        <header>
+                            <span>Товар</span>
+                            <span class="right">Количество</span>
+                            <span class="right">Цена</span>
+                            <span class="right">Сумма</span>
+                        </header>
+                        <section>
+                            
+    
+                            <div data-id="last">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span class="right">Итого&nbsp;<span class="total-in-service">0</span>&nbsp;₽</span>
+                            </div>
+                        </section>
+                    </div>
+                                <div class="sale-item-details">
+                                            <button class="button green-title" data-role="form" data-post-sale="10000001" data-post-service="34430967" data-url="/sales/good/create" data-loader="circle"><span>+</span><span>Добавить товар</span></button>
+                                        <div data-role="form" data-post-id="34430967" data-post-type="changeEmployeesUpdate" data-url="/sales/employees">
+                        <div>Исполнители</div>
+                        
+            <div class="single">
+            <span class="avatar">
+                                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#user"></use></svg>
+                            </span>
+            <span class="title">Кузнецова Елена</span>
+        </div>
+    
+                    </div>
+                </div>
+            </section>
+        </div>
+    
+</section>
+            <footer>
+                <a target="_blank" href="/modules/html/packing-list/id:10000001">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#print"></use></svg>
+                    Печать товарной накладной
+                </a>
+                <div>Итого <span class="sum-total">15 141 ₽</span></div>
+            </footer>
+        </section>
+    </div>
+
+        </div>
+        <div data-tab="pane" data-id="documents" data-status="">
+            
+    <div class="uploaders-container">
+        <div data-settings="{&quot;preset&quot;:&quot;Document&quot;,&quot;maxAmount&quot;:20,&quot;maxSize&quot;:30,&quot;Extensions&quot;:[&quot;doc&quot;,&quot;docx&quot;,&quot;jpeg&quot;,&quot;jpg&quot;,&quot;pdf&quot;,&quot;png&quot;,&quot;bmp&quot;,&quot;txt&quot;,&quot;xlsx&quot;,&quot;xls&quot;,&quot;dcm&quot;,&quot;zip&quot;,&quot;rar&quot;],&quot;table&quot;:&quot;visits&quot;,&quot;view&quot;:&quot;document&quot;,&quot;messages&quot;:{&quot;upload&quot;:&quot;\u0437\u0430\u0433\u0440\u0443\u0437\u0438\u043b(\u0430) \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442&quot;,&quot;delete&quot;:&quot;\u0443\u0434\u0430\u043b\u0438\u043b\u0438(\u0430) \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430&quot;},&quot;title&quot;:&quot;\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u0435 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442&quot;,&quot;Files&quot;:[{&quot;id&quot;:&quot;2717710&quot;,&quot;author&quot;:&quot;1000001&quot;,&quot;name&quot;:&quot;2de67225b078ae33e4c9c575f5eba0ec&quot;,&quot;parent&quot;:&quot;10000001&quot;,&quot;type&quot;:&quot;Document&quot;,&quot;ext&quot;:&quot;text&quot;,&quot;date&quot;:&quot;2026-10-16 07:42:12&quot;,&quot;description&quot;:&quot;\u0423\u0417\u0418 \u0416\u041a\u0422&quot;,&quot;size&quot;:&quot;4008&quot;,&quot;visible&quot;:&quot;1&quot;}],&quot;parent&quot;:10000001}" class="container-uploader">
+    <form method="post" action="/modules/file/upload" enctype="multipart/form-data">
+        <input type="file" name="upl" multiple="" accept=".doc,.docx,.jpeg,.jpg,.pdf,.png,.bmp,.txt,.xlsx,.xls,.dcm,.zip,.rar">
+        <div data-loading-text="Загрузка файла" data-role="file" data-action="upload">
+             <span><svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#upload-file"></use></svg></span>
+             <div data-result="Загрузка завершена">
+                 Загрузите документы с устройства
+             </div>
+        </div>
+    </form>
+</div>        <div data-role="form" data-post-target="template" data-loader="skeleton" data-url="/animals/documents/list">
+            <span><svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#upload-template"></use></svg></span>
+            <div>Выберите готовый шаблон документа</div>
+        </div>
+    </div>
+    <div class="list visible sticky-list">
+        <header>
+            <span>Название</span>
+            <span>Тип</span>
+            <span>Дата</span>
+            <span class="right">Размер</span>
+        </header>
+        <section>
+            <a data-post-id="2717710" data-role="form" data-loader="skeleton" data-post-visit="10000001" data-url="/animals/documents/view" href="#">
+            <span>
+                <img alt="" src="prototype/vetaf/i/frontend/extensions/AF.svg">
+                <span class="title main">УЗИ ЖКТ</span>
+            </span>
+            <span>.text</span>
+            <span>10:40, 5 ноября</span>
+            <span class="right">4 KB</span>
+            <span class="control">
+                                    <span title="Изменить" class="tooltip" data-post-id="2717710" data-post-visit="10000001" data-loader="circle" data-url="/animals/documents/rename" data-role="form">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#edit"></use></svg>
+                    </span>
+                    <span title="Отправить" class="tooltip" data-post-type="document" data-post-id="2717710" data-post-visit="10000001" data-loader="circle" data-url="/components/send-file" data-role="form">
+                        <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#email"></use></svg>
+                    </span>
+                                <span title="Удалить" class="tooltip" data-post-id="2717710" data-post-visit="10000001" data-loader="circle" data-url="/animals/documents/delete" data-role="form">
+                    <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#delete"></use></svg>
+                </span>
+                <span class="dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </span>
+         </a>
+    
+</section>
+    </div>
+
+        </div>                     <div data-tab="pane" data-id="analyzes" data-status="">
+                
+    <div class="create-button-container">
+                    <div data-role="form" data-loader="skeleton" data-post-visit="10000001" data-url="/animals/laboratories/internal/create">
+                <span><svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#create"></use></svg></span>
+                <div>Добавьте из «Внутренняя лаборатория»</div>
+            </div>
+                <div data-settings="{&quot;preset&quot;:&quot;Analysis&quot;,&quot;maxAmount&quot;:20,&quot;maxSize&quot;:30,&quot;Extensions&quot;:[&quot;doc&quot;,&quot;docx&quot;,&quot;jpeg&quot;,&quot;jpg&quot;,&quot;pdf&quot;,&quot;png&quot;],&quot;table&quot;:&quot;visits&quot;,&quot;view&quot;:&quot;analysis&quot;,&quot;messages&quot;:{&quot;upload&quot;:&quot;\u0437\u0430\u0433\u0440\u0443\u0437\u0438\u043b(\u0430) \u0430\u043d\u0430\u043b\u0438\u0437&quot;,&quot;delete&quot;:&quot;\u0443\u0434\u0430\u043b\u0438\u043b\u0438(\u0430) \u0430\u043d\u0430\u043b\u0438\u0437&quot;},&quot;title&quot;:&quot;\u0417\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u0435 \u0430\u043d\u0430\u043b\u0438\u0437&quot;,&quot;Files&quot;:[],&quot;parent&quot;:10000001}" class="container-uploader">
+    <form method="post" action="/modules/file/upload" enctype="multipart/form-data">
+        <input type="file" name="upl" multiple="" accept=".doc,.docx,.jpeg,.jpg,.pdf,.png">
+        <div data-loading-text="Загрузка файла" data-role="file" data-action="upload">
+             <span><svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#upload-file"></use></svg></span>
+             <div data-result="Загрузка завершена">Загрузите исследования с устройства</div>
+        </div>
+    </form>
+</div>    </div>
+    <div class="list sticky-list">
+        <header>
+            <span>Статус</span>
+            <span>Название</span>
+            <span>Категория</span>
+            <span>Лаборатория</span>
+            <span>Дата</span>
+        </header>
+        <section>
+    
+</section>
+    </div>
+
+            </div>
+                            <div data-tab="pane" data-id="hospital" data-status="">
+                
+                <div class="create-button-container">
+            <div data-role="form" data-loader="skeleton" data-post-visit="10000001" data-url="/animals/hospital/hospitalize">
+                <span><svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#create"></use></svg></span>
+                <div>Добавить пациента в стационар</div>
+            </div>
+        </div>
+    
+            </div>
+            </div>
+
+</main>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        
+<div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="log" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div class="ck-body-wrapper"><div class="ck ck-reset_all ck-body ck-rounded-corners" dir="ltr" role="application"><div class="ck ck-clipboard-drop-target-line ck-hidden"></div><div class="ck ck-aria-live-announcer"><div aria-live="polite" aria-relevant="additions"><ul class="ck ck-aria-live-region-list"></ul></div><div aria-live="assertive" aria-relevant="additions"><ul class="ck ck-aria-live-region-list"></ul></div></div></div><div class="ck ck-reset_all ck-body ck-rounded-corners" dir="ltr" role="application"><div class="ck ck-clipboard-drop-target-line ck-hidden"></div><div class="ck ck-aria-live-announcer"><div aria-live="polite" aria-relevant="additions"><ul class="ck ck-aria-live-region-list"></ul></div><div aria-live="assertive" aria-relevant="additions"><ul class="ck ck-aria-live-region-list"></ul></div></div></div><div class="ck ck-reset_all ck-body ck-rounded-corners" dir="ltr" role="application"><div class="ck ck-clipboard-drop-target-line ck-hidden"></div><div class="ck ck-aria-live-announcer"><div aria-live="polite" aria-relevant="additions"><ul class="ck ck-aria-live-region-list"></ul></div><div aria-live="assertive" aria-relevant="additions"><ul class="ck ck-aria-live-region-list"></ul></div></div></div><div class="ck ck-reset_all ck-body ck-rounded-corners" dir="ltr" role="application"><div class="ck ck-clipboard-drop-target-line ck-hidden"></div><div class="ck ck-aria-live-announcer"><div aria-live="polite" aria-relevant="additions"><ul class="ck ck-aria-live-region-list"></ul></div><div aria-live="assertive" aria-relevant="additions"><ul class="ck ck-aria-live-region-list"></ul></div></div><div class="ck ck-balloon-panel ck-balloon-panel_position_border-side_right ck-powered-by-balloon" style="top: 1186px; left: 1695px;"><div class="ck ck-powered-by" aria-hidden="true"><a href="https://ckeditor.com/powered-by-ckeditor/?utm_source=ckeditor&amp;utm_medium=referral&amp;utm_campaign=701Dn000000hVgmIAE_powered_by_ckeditor_logo" target="_blank" tabindex="-1"><span class="ck ck-powered-by__label">Powered by</span><svg class="ck ck-icon ck-reset_all-excluded" viewBox="0 0 53 10" aria-hidden="true"><path fill="#1C2331" d="M31.724 1.492a15.139 15.139 0 0 0 .045 1.16 2.434 2.434 0 0 0-.687-.34 3.68 3.68 0 0 0-1.103-.166 2.332 2.332 0 0 0-1.14.255 1.549 1.549 0 0 0-.686.87c-.15.41-.225.98-.225 1.712 0 .939.148 1.659.444 2.161.297.503.792.754 1.487.754.452.015.9-.094 1.294-.316.296-.174.557-.4.771-.669l.14.852h1.282V.007h-1.623v1.485ZM31 6.496a1.77 1.77 0 0 1-.494.061.964.964 0 0 1-.521-.127.758.758 0 0 1-.296-.466 3.984 3.984 0 0 1-.093-.992 4.208 4.208 0 0 1 .098-1.052.753.753 0 0 1 .307-.477 1.08 1.08 0 0 1 .55-.122c.233-.004.466.026.69.089l.483.144v2.553c-.11.076-.213.143-.307.2a1.73 1.73 0 0 1-.417.189ZM35.68 0l-.702.004c-.322.002-.482.168-.48.497l.004.581c.002.33.164.493.486.49l.702-.004c.322-.002.481-.167.48-.496L36.165.49c-.002-.33-.164-.493-.486-.491ZM36.145 2.313l-1.612.01.034 5.482 1.613-.01-.035-5.482ZM39.623.79 37.989.8 38 2.306l-.946.056.006 1.009.949-.006.024 2.983c.003.476.143.844.419 1.106.275.26.658.39 1.148.387.132 0 .293-.01.483-.03.19-.02.38-.046.57-.08.163-.028.324-.068.482-.119l-.183-1.095-.702.004a.664.664 0 0 1-.456-.123.553.553 0 0 1-.14-.422l-.016-2.621 1.513-.01-.006-1.064-1.514.01-.01-1.503ZM46.226 2.388c-.41-.184-.956-.274-1.636-.27-.673.004-1.215.101-1.627.29-.402.179-.72.505-.888.91-.18.419-.268.979-.264 1.68.004.688.1 1.24.285 1.655.172.404.495.724.9.894.414.18.957.268 1.63.264.68-.004 1.224-.099 1.632-.284.4-.176.714-.501.878-.905.176-.418.263-.971.258-1.658-.004-.702-.097-1.261-.28-1.677a1.696 1.696 0 0 0-.888-.9Zm-.613 3.607a.77.77 0 0 1-.337.501 1.649 1.649 0 0 1-1.317.009.776.776 0 0 1-.343-.497 4.066 4.066 0 0 1-.105-1.02 4.136 4.136 0 0 1 .092-1.03.786.786 0 0 1 .337-.507 1.59 1.59 0 0 1 1.316-.008.79.79 0 0 1 .344.502c.078.337.113.683.105 1.03.012.343-.019.685-.092 1.02ZM52.114 2.07a2.67 2.67 0 0 0-1.128.278c-.39.191-.752.437-1.072.73l-.157-.846-1.273.008.036 5.572 1.623-.01-.024-3.78c.35-.124.646-.22.887-.286.26-.075.53-.114.8-.118l.45-.003.144-1.546-.286.001ZM22.083 7.426l-1.576-2.532a2.137 2.137 0 0 0-.172-.253 1.95 1.95 0 0 0-.304-.29.138.138 0 0 1 .042-.04 1.7 1.7 0 0 0 .328-.374l1.75-2.71c.01-.015.025-.028.024-.048-.01-.01-.021-.007-.031-.007L20.49 1.17a.078.078 0 0 0-.075.045l-.868 1.384c-.23.366-.46.732-.688 1.099a.108.108 0 0 1-.112.06c-.098-.005-.196-.001-.294-.002-.018 0-.038.006-.055-.007.002-.02.002-.039.005-.058a4.6 4.6 0 0 0 .046-.701V1.203c0-.02-.009-.032-.03-.03h-.033L16.93 1.17c-.084 0-.073-.01-.073.076v6.491c-.001.018.006.028.025.027h1.494c.083 0 .072.007.072-.071v-2.19c0-.055-.003-.11-.004-.166a3.366 3.366 0 0 0-.05-.417h.06c.104 0 .209.002.313-.002a.082.082 0 0 1 .084.05c.535.913 1.07 1.824 1.607 2.736a.104.104 0 0 0 .103.062c.554-.003 1.107-.002 1.66-.002l.069-.003-.019-.032-.188-.304ZM27.112 6.555c-.005-.08-.004-.08-.082-.08h-2.414c-.053 0-.106-.003-.159-.011a.279.279 0 0 1-.246-.209.558.558 0 0 1-.022-.15c0-.382 0-.762-.002-1.143 0-.032.007-.049.042-.044h2.504c.029.003.037-.012.034-.038V3.814c0-.089.013-.078-.076-.078h-2.44c-.07 0-.062.003-.062-.06v-.837c0-.047.004-.093.013-.14a.283.283 0 0 1 .241-.246.717.717 0 0 1 .146-.011h2.484c.024.002.035-.009.036-.033l.003-.038.03-.496c.01-.183.024-.365.034-.548.005-.085.003-.087-.082-.094-.218-.018-.437-.038-.655-.05a17.845 17.845 0 0 0-.657-.026 72.994 72.994 0 0 0-1.756-.016 1.7 1.7 0 0 0-.471.064 1.286 1.286 0 0 0-.817.655c-.099.196-.149.413-.145.633v3.875c0 .072.003.144.011.216a1.27 1.27 0 0 0 .711 1.029c.228.113.48.167.734.158.757-.005 1.515.002 2.272-.042.274-.016.548-.034.82-.053.03-.002.043-.008.04-.041-.008-.104-.012-.208-.019-.312a69.964 69.964 0 0 1-.05-.768ZM16.14 7.415l-.127-1.075c-.004-.03-.014-.04-.044-.037a13.125 13.125 0 0 1-.998.073c-.336.01-.672.02-1.008.016-.116-.001-.233-.014-.347-.039a.746.746 0 0 1-.45-.262c-.075-.1-.132-.211-.167-.33a3.324 3.324 0 0 1-.126-.773 9.113 9.113 0 0 1-.015-.749c0-.285.022-.57.065-.852.023-.158.066-.312.127-.46a.728.728 0 0 1 .518-.443 1.64 1.64 0 0 1 .397-.048c.628-.001 1.255.003 1.882.05.022.001.033-.006.036-.026l.003-.031.06-.55c.019-.177.036-.355.057-.532.004-.034-.005-.046-.04-.056a5.595 5.595 0 0 0-1.213-.21 10.783 10.783 0 0 0-.708-.02c-.24-.003-.48.01-.719.041a3.477 3.477 0 0 0-.625.14 1.912 1.912 0 0 0-.807.497c-.185.2-.33.433-.424.688a4.311 4.311 0 0 0-.24 1.096c-.031.286-.045.572-.042.86-.006.43.024.86.091 1.286.04.25.104.497.193.734.098.279.26.53.473.734.214.205.473.358.756.446.344.11.702.17 1.063.177a8.505 8.505 0 0 0 1.578-.083 6.11 6.11 0 0 0 .766-.18c.03-.008.047-.023.037-.057a.157.157 0 0 1-.003-.025Z"></path><path fill="#AFE229" d="M6.016 6.69a1.592 1.592 0 0 0-.614.21c-.23.132-.422.32-.56.546-.044.072-.287.539-.287.539l-.836 1.528.009.006c.038.025.08.046.123.063.127.046.26.07.395.073.505.023 1.011-.007 1.517-.003.29.009.58.002.869-.022a.886.886 0 0 0 .395-.116.962.962 0 0 0 .312-.286c.056-.083.114-.163.164-.249.24-.408.48-.816.718-1.226.075-.128.148-.257.222-.386l.112-.192a1.07 1.07 0 0 0 .153-.518l-1.304.023s-1.258-.005-1.388.01Z"></path><path fill="#771BFF" d="m2.848 9.044.76-1.39.184-.352c-.124-.067-.245-.14-.367-.21-.346-.204-.706-.384-1.045-.6a.984.984 0 0 1-.244-.207c-.108-.134-.136-.294-.144-.46-.021-.409-.002-.818-.009-1.227-.003-.195 0-.39.003-.585.004-.322.153-.553.427-.713l.833-.488c.22-.13.44-.257.662-.385.05-.029.105-.052.158-.077.272-.128.519-.047.76.085l.044.028c.123.06.242.125.358.196.318.178.635.357.952.537.095.056.187.117.275.184.194.144.254.35.266.578.016.284.007.569.006.853-.001.28.004.558 0 .838.592-.003 1.259 0 1.259 0l.723-.013c-.003-.292-.007-.584-.007-.876 0-.524.015-1.048-.016-1.571-.024-.42-.135-.8-.492-1.067a5.02 5.02 0 0 0-.506-.339A400.52 400.52 0 0 0 5.94.787C5.722.664 5.513.524 5.282.423 5.255.406 5.228.388 5.2.373 4.758.126 4.305-.026 3.807.21c-.097.046-.197.087-.29.14A699.896 699.896 0 0 0 .783 1.948c-.501.294-.773.717-.778 1.31-.004.36-.009.718-.001 1.077.016.754-.017 1.508.024 2.261.016.304.07.6.269.848.127.15.279.28.448.382.622.4 1.283.734 1.92 1.11l.183.109Z"></path></svg></a></div></div></div><div class="ck ck-reset_all ck-body ck-rounded-corners" dir="ltr" role="application"><div class="ck ck-clipboard-drop-target-line ck-hidden"></div><div class="ck ck-aria-live-announcer"><div aria-live="polite" aria-relevant="additions"><ul class="ck ck-aria-live-region-list"></ul></div><div aria-live="assertive" aria-relevant="additions"><ul class="ck ck-aria-live-region-list"></ul></div></div></div></div><div role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div></div><dialog id="proto-diag-dialog" autofocus="">
+    <section>
+        <header><div>Добавить диагноз</div><svg data-action="dialog-close" aria-hidden="true"><use href="prototype/vetaf/i/frontend/svg/icons.svg#close"></use></svg></header>
+        <section>
+            <form action="#">
+                <label>
+                    <span>Тип</span>
+                    <div data-template="" class="custom-select bottom">
+    <div class="data">
+                        <label>
+            <input type="hidden" value="" name="kind" id="kind">
+            <input readonly="" autocomplete="off" type="text" data-title="" value="" placeholder="Выберите тип">
+            <svg class="close"><use href="prototype/vetaf/i/frontend/svg/icons.svg#close"></use></svg>
+            <svg class="arrow rotate"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#arrow"></use></svg>
+        </label>
+    </div>
+    <div class="select height" style="position: fixed; top: 339.875px; bottom: auto; left: 667.125px; width: 393.75px;">
+                        <div data-view="list">
+                            <span data-id="differential">
+        <span>Дифференциальный</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+    <span data-id="final">
+        <span>Окончательный</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+    <span data-id="clinical">
+        <span>Клинический</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+    <span data-id="preliminary">
+        <span>Предварительный</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+                    </div>
+            </div>
+</div>                </label>
+                <label>
+                    <span>Диагноз</span>
+                    <input type="text" id="title" name="title" value="" placeholder="Введите диагноз">
+                    <input type="hidden" id="id" name="id" value="">
+                    <input type="hidden" id="visit" name="visit" value="10000001">
+                    <input type="hidden" id="animal" name="animal" value="400001">
+                </label>
+                <label>
+                    <span>Описание</span>
+                    <textarea data-ckeditor="" data-ckeditor-exlude="Alignment,Image,Indent,IndentBlock,LineHeight,Link,Heading,HorizontalLine,PageBreak,ShowBlocks,Table" id="description" name="description" style="display: none;"></textarea><div class="ck ck-reset ck-editor ck-rounded-corners" role="application" dir="ltr" lang="en" aria-labelledby="ck-editor__label_e4830f12950600e647c45d3f68158e5c7"><label class="ck ck-label ck-voice-label" id="ck-editor__label_e4830f12950600e647c45d3f68158e5c7">Редактор</label><div class="ck ck-editor__top ck-reset_all" role="presentation"><div class="ck ck-sticky-panel"><div class="ck ck-sticky-panel__placeholder" style="display: none;"></div><div class="ck ck-sticky-panel__content"><div class="ck ck-toolbar ck-toolbar_grouping" role="toolbar" aria-label="Панель инструментов редактора" tabindex="-1"><div class="ck ck-toolbar__items"><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e520b39bd7ce75a5b90e0fc1c26acd8a2" data-cke-tooltip-text="Жирный (⌘B)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M10.187 17H5.773q-.956 0-1.364-.415-.41-.416-.409-1.323V4.738q0-.926.419-1.332.418-.405 1.354-.406h4.68q1.035 0 1.793.124.76.124 1.36.478.512.296.906.75a3.26 3.26 0 0 1 .808 2.162q0 2.102-2.167 3.075 2.846.879 2.847 3.421a3.76 3.76 0 0 1-2.296 3.504 6 6 0 0 1-1.517.377q-.857.11-2 .11zm-.217-6.217H7v4.087h3.069q2.965 0 2.965-2.072 0-1.061-.768-1.537-.768-.478-2.296-.478M7 5.13v3.619h2.606q1.093 0 1.69-.2a1.6 1.6 0 0 0 .91-.765q.247-.4.247-.897 0-1.06-.778-1.409-.778-.348-2.375-.348z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e520b39bd7ce75a5b90e0fc1c26acd8a2">Жирный</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e97c0ec5348c641508be35a87a333a8a3" data-cke-tooltip-text="Курсив (⌘I)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="m9.586 14.633.021.004q-.054.502.393.962.123.125.274.201h1.474a.6.6 0 1 1 0 1.2H5.304a.6.6 0 0 1 0-1.2h1.15q.711-.106 1.005-.334.235-.182.404-.597l2.416-9.55a1.05 1.05 0 0 0-.281-.823 1.1 1.1 0 0 0-.442-.296H8.15a.6.6 0 0 1 0-1.2h6.443a.6.6 0 1 1 0 1.2h-1.195q-.564.084-.823.296-.323.263-.623.79z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e97c0ec5348c641508be35a87a333a8a3">Курсив</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e5611d2d2c0dc017d08c722fe7b52fd99" data-cke-tooltip-text="Подчеркнутый (⌘U)" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 18v-1.5h14V18zm2.2-8V3.6c0-.4.4-.6.8-.6.3 0 .7.2.7.6v6.2c0 2 1.3 2.8 3.2 2.8s3.4-.9 3.4-2.9V3.6c0-.3.4-.5.8-.5.3 0 .7.2.7.5V10c0 2.7-2.2 4-4.9 4-2.6 0-4.7-1.2-4.7-4"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e5611d2d2c0dc017d08c722fe7b52fd99">Подчеркнутый</span></button><div class="ck ck-dropdown ck-font-size-dropdown"><button class="ck ck-button ck-off ck-dropdown__button" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_ed7ee2e9022fd8275fbe63b9eeefda27c" data-cke-tooltip-text="Размер шрифта" data-cke-tooltip-position="s" aria-haspopup="true" aria-expanded="false"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.816 11.5 7.038 4.785 4.261 11.5zm.62 1.5H3.641l-1.666 4.028H.312l5.789-14h1.875l5.789 14h-1.663zm7.55 2.279.779-.779.707.707-2.265 2.265-2.193-2.265.707-.707.765.765V4.825q0-.063.002-.123l-.77.77-.707-.707L17.207 2.5l2.265 2.265-.707.707-.782-.782q.003.065.003.135z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_ed7ee2e9022fd8275fbe63b9eeefda27c">Размер шрифта</span><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-dropdown__arrow" viewBox="0 0 10 10" aria-hidden="true"><path d="M.941 4.523a.75.75 0 1 1 1.06-1.06l3.006 3.005 3.005-3.005a.75.75 0 1 1 1.06 1.06l-3.549 3.55a.75.75 0 0 1-1.168-.136z"></path></svg></button><div class="ck ck-reset ck-dropdown__panel ck-dropdown__panel_se" tabindex="-1"></div></div><button class="ck ck-button ck-disabled ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_ea9d97310c1a5e35abf02ed93dc2dfa6b" aria-disabled="true" data-cke-tooltip-text="Убрать форматирование" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M8.69 14.915q.08.078.36.093a.366.366 0 0 1 .345.485l-.003.01a.74.74 0 0 1-.697.497h-2.67a.374.374 0 0 1-.353-.496l.013-.038a.68.68 0 0 1 .644-.458q.295-.018.386-.093a.3.3 0 0 0 .072-.11L9.592 4.5H6.269q-.538-.026-.75.09-.213.117-.442.563c-.192.29-.516.464-.864.464H4.17a.43.43 0 0 1-.407-.569L4.46 3h13.08l-.62 2.043a.81.81 0 0 1-.775.574h-.114a.486.486 0 0 1-.486-.486q.002-.426-.167-.54-.168-.114-.766-.091h-3.28l-2.68 10.257q-.009.111.038.158M3 17h8a.5.5 0 1 1 0 1H3a.5.5 0 1 1 0-1m11.299 1.17a.75.75 0 1 1-1.06-1.06l1.414-1.415-1.415-1.414a.75.75 0 0 1 1.06-1.06l1.415 1.414 1.414-1.415a.75.75 0 1 1 1.06 1.06l-1.413 1.415 1.414 1.415a.75.75 0 0 1-1.06 1.06l-1.415-1.414z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_ea9d97310c1a5e35abf02ed93dc2dfa6b">Убрать форматирование</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_ed6f93886c903391c17984e517a9becae" data-cke-tooltip-text="Цитата" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10.423a6.5 6.5 0 0 1 6.056-6.408l.038.67C6.448 5.423 5.354 7.663 5.22 10H9c.552 0 .5.432.5.986v4.511c0 .554-.448.503-1 .503h-5c-.552 0-.5-.449-.5-1.003zm8 0a6.5 6.5 0 0 1 6.056-6.408l.038.67c-2.646.739-3.74 2.979-3.873 5.315H17c.552 0 .5.432.5.986v4.511c0 .554-.448.503-1 .503h-5c-.552 0-.5-.449-.5-1.003z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_ed6f93886c903391c17984e517a9becae">Цитата</span></button><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e19a2941110371663678cae83ce621176" data-cke-tooltip-text="Маркированный список" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5.75c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75m-6 0C1 4.784 1.777 4 2.75 4c.966 0 1.75.777 1.75 1.75 0 .966-.777 1.75-1.75 1.75C1.784 7.5 1 6.723 1 5.75m6 9c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75m-6 0c0-.966.777-1.75 1.75-1.75.966 0 1.75.777 1.75 1.75 0 .966-.777 1.75-1.75 1.75-.966 0-1.75-.777-1.75-1.75"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e19a2941110371663678cae83ce621176">Маркированный список</span></button><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-pressed="false" aria-labelledby="ck-editor__aria-label_e54d404a65ba6d3fe7f9df792bf1a6286" data-cke-tooltip-text="Нумерованный список" data-cke-tooltip-position="s"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 20 20" aria-hidden="true"><path d="M7 5.75c0 .414.336.75.75.75h9.5a.75.75 0 1 0 0-1.5h-9.5a.75.75 0 0 0-.75.75M3.5 3v5H2V3.7H1v-1h2.5zM.343 17.857l2.59-3.257H2.92a.6.6 0 1 0-1.04 0H.302a2 2 0 1 1 3.995 0h-.001q-.073.607-.333.988-.263.381-1.244 1.312H4.3v1h-4zM7 14.75a.75.75 0 0 1 .75-.75h9.5a.75.75 0 1 1 0 1.5h-9.5a.75.75 0 0 1-.75-.75"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e54d404a65ba6d3fe7f9df792bf1a6286">Нумерованный список</span></button><span class="ck ck-toolbar__separator"></span><button class="ck ck-button ck-off" type="button" tabindex="-1" aria-labelledby="ck-editor__aria-label_e0c1f3d59cacd12f04d9984474c54e110" data-cke-tooltip-text="Загрузка шаблона" data-cke-tooltip-position="s" data-role="form" data-url="/animals/documents/list" data-loader="circle" data-post-target="description"><svg class="ck ck-icon ck-reset_all-excluded ck-icon_inherit-color ck-button__icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M 6 3 L 6 29 L 26 29 L 26 9.5996094 L 25.699219 9.3007812 L 19.699219 3.3007812 L 19.400391 3 L 6 3 z M 8 5 L 18 5 L 18 11 L 24 11 L 24 27 L 8 27 L 8 5 z M 20 6.4003906 L 22.599609 9 L 20 9 L 20 6.4003906 z M 15 13 L 15 18 L 12 18 L 16 22 L 20 18 L 17 18 L 17 13 L 15 13 z M 12 23 L 12 25 L 20 25 L 20 23 L 12 23 z"></path></svg><span class="ck ck-button__label" id="ck-editor__aria-label_e0c1f3d59cacd12f04d9984474c54e110">Загрузка шаблона</span></button></div></div></div></div></div><div class="ck ck-editor__main" role="presentation"><div class="ck-table-show-hidden-borders ck-blurred ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline" lang="en" dir="ltr" role="textbox" aria-label="Редактор форматированного текста. Область редактирования: main. Нажмите ⌥0 для получения помощи." contenteditable="true"><p><br data-cke-filler="true"></p></div></div></div>
+                </label>
+                <label>
+                    <span>Статус</span>
+                    <div data-template="" class="custom-select">
+    <div class="data">
+                        <label>
+            <input type="hidden" value="" name="result" id="result">
+            <input readonly="" autocomplete="off" type="text" data-title="" value="" placeholder="Выберите результат">
+            <svg class="close"><use href="prototype/vetaf/i/frontend/svg/icons.svg#close"></use></svg>
+            <svg class="arrow "><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#arrow"></use></svg>
+        </label>
+    </div>
+    <div class="select">
+                            <label data-role="search" class="search-field-block">
+                <input autocomplete="off" type="search" placeholder="Поиск">
+                <svg><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#search"></use></svg>
+            </label>
+                <div data-view="list">
+                            <div class="empty-list">
+                    <span><svg><use href="prototype/vetaf/i/frontend/svg/icons.svg#empty-list-by-search"></use></svg></span>
+                    <div>Ничего не найдено</div>
+                </div>
+                            <span data-id="cured">
+        <span>Вылечен</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+    <span data-id="incurable">
+        <span>Инкурабельное состояние</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+    <span data-id="lethal">
+        <span>Летальный исход</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+    <span data-id="treatment">
+        <span>На лечении</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+    <span data-id="treatment refusal">
+        <span>Отказ от лечения</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+    <span data-id="diagnostic refusal">
+        <span>Отказ от диагностики</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+    <span data-id="remission">
+        <span>Ремиссия</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+    <span data-id="unconfirmed removal">
+        <span>Снят как неподтвержденный</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+    <span data-id="euthanasia">
+        <span>Эвтаназия</span>
+        <svg class="tick"><use href="prototype/vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>
+    </span>
+                    </div>
+            </div>
+</div>                </label>
+                                    <button type="submit" class="button green" data-role="form" data-url="/animals/diagnoses/submit" data-loader="circle">Сохранить</button>
+                
+            </form>
+        </section>
+    </section>
+
+<div class="ck ck-reset_all ck-body ck-rounded-corners" dir="ltr" role="application"><div class="ck ck-clipboard-drop-target-line ck-hidden"></div><div class="ck ck-aria-live-announcer"><div aria-live="polite" aria-relevant="additions"><ul class="ck ck-aria-live-region-list"></ul></div><div aria-live="assertive" aria-relevant="additions"><ul class="ck ck-aria-live-region-list"></ul></div></div></div></dialog>
+<script src="prototype/proto-asis.js"></script>
+<script>window.SCRIBE_BASE = "prototype/"; window.PROTO_VERSION = "A";</script>
+<script src="prototype/draft-data.js?v=1794398684"></script>
+<script src="prototype/proto-main-A.js?v=1794474144"></script>
+</body></html>

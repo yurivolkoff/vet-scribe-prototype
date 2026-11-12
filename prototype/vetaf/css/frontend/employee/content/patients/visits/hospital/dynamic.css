@@ -1,0 +1,227 @@
+@charset "utf-8";
+
+
+/* --------------------------------------------------------------------------
+   Dynamic
+-------------------------------------------------------------------------- */
+
+	div[data-tab="pane"][data-id="dynamic"] div[data-search-parent] {
+
+		display: flex;
+		flex-direction: column;
+		gap: 1.875rem;
+
+		/* Header */
+		> header {
+
+			display: flex;
+			justify-content: space-between;
+
+			.search-field-block input {
+				border: var(--border-width) solid var(--grey-dc-color);
+				background: none;
+				height: 3rem;
+			}
+
+		}
+
+		/* Chart */
+		#chart-holder {
+
+			border-radius: .375rem;
+			border: var(--border-width) solid var(--grey-e6-color);
+			--title-color: var(--grey-8c-color);
+			--line-color: var(--grey-dc-color);
+			--border-radius: 3;
+			--font-size: 14;
+			--1-status: var(--red-color);
+			--2-status: #FF9933;
+			--3-status: #FFCD33;
+			--4-status: var(--green-light-color);
+
+			> header {
+				border-bottom: var(--border-width) solid var(--grey-e6-color);
+				padding: .75rem 1.25rem;
+				font-weight: 600;
+				font-size: 1.125rem;
+			}
+
+			> main {
+				padding: 1.25rem;
+				position: relative;
+			}
+
+		}
+
+		/* Appointments */
+		#appointment-holder {
+
+			display: flex;
+			flex-direction: column;
+			gap: 1.875rem;
+
+			/* Item */
+			> div {
+
+				border-radius: .375rem;
+				border: var(--border-width) solid var(--grey-e6-color);
+
+				/* Opened */
+				&.opened {
+
+					> header {
+
+						background: var(--grey-fa-color);
+						border-bottom: var(--border-width) solid var(--grey-e6-color);
+						border-bottom-left-radius: 0;
+						border-bottom-right-radius: 0;
+
+						> svg {
+							transform: rotate(90deg);
+							color: var(--green-color);
+						}
+
+					}
+
+					> main {
+						display: flex;
+					}
+
+				}
+
+				/* Header */
+				> header {
+
+					padding: .5rem 1.25rem .75rem 1.25rem;
+					border-radius: .375rem;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					cursor: pointer;
+
+					&:hover {
+
+						background: var(--grey-fa-color);
+
+						svg {
+							color: var(--green-color);
+						}
+
+					}
+
+					> svg {
+						width: 1.5rem;
+						height: 1.5rem;
+						transform: rotate(180deg);
+						color: var(--grey-8c-color);
+					}
+
+					.title {
+						font-weight: 600;
+						font-size: 1.125rem;
+						line-height: 2rem;
+					}
+
+					.details {
+						color: var(--grey-b4-color);
+						display: flex;
+						align-items: center;
+						gap: .625rem;
+					}
+
+				}
+
+				/* Main */
+				> main {
+
+					display: none;
+					padding: 1rem 1.25rem;
+					flex-direction: column;
+					gap: 2rem;
+
+					> div {
+
+						width: 100%;
+
+						> header {
+							margin-bottom: .875rem;
+							font-weight: 500;
+						}
+
+						> section {
+
+							border: none !important;
+							display: flex;
+							flex-direction: column;
+							gap: .875rem;
+
+							> div {
+
+								display: grid;
+								align-items: center;
+								gap: 1rem;
+								grid-template-columns: .30fr repeat(2, 1fr) .6fr 4rem .8fr;
+
+								> span:first-child {
+									color: var(--grey-80-color);
+									font-variant-numeric: tabular-nums;
+								}
+
+								span.injection {
+									margin-left: .3rem;
+									text-transform: lowercase;
+								}
+
+								svg {
+
+									width: 1.5rem;
+									height: 1.5rem;
+
+									&.positive {
+										color: var(--green-color);
+									}
+
+									&.negative {
+										color: var(--red-color);
+									}
+
+								}
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+
+/* --------------------------------------------------------------------------
+   Mobile
+-------------------------------------------------------------------------- */
+
+	html[data-device="mobile"] {
+
+		#page > main[data-container="main"]:has(#visit-form) > .template div[data-id="hospital"] div[data-id="dynamic"] {
+
+			.search-field-block {
+				display: none;
+			}
+
+			#appointment-holder section.list {
+				overflow-x: auto;
+
+				> div {
+					grid-template-columns: 2.5rem repeat(2, 10rem) 8rem 4rem 14rem;
+				}
+			}
+
+		}
+
+	}

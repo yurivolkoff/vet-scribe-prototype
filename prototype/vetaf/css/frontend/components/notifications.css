@@ -1,0 +1,177 @@
+@charset "utf-8";
+
+
+/* --------------------------------------------------------------------------
+   Notifications Dialog
+-------------------------------------------------------------------------- */
+
+	#notifications-dialog {
+
+		width: 45rem;
+
+		.nav-container {
+
+			margin: 1.25rem;
+			display: flex;
+
+			nav[data-tab="filter"] a {
+
+				&[data-status="active"] span {
+					color: #000;
+				}
+
+				span.counter {
+					position: inherit;
+					margin-left: .5rem;
+				}
+
+			}
+
+		}
+
+		.list {
+
+			overflow: hidden !important;
+			border: none !important;
+			border-top-left-radius: 0 !important;
+			border-top-right-radius: 0 !important;
+
+			section {
+
+				overflow-y: auto;
+				max-height: 50svh;
+				overscroll-behavior: contain;
+
+				/* Notification */
+				div[data-id] {
+
+					gap: .3rem;
+					display: flex;
+					flex-direction: column;
+					align-items: start;
+					justify-content: center;
+					cursor: default !important;
+
+					span.control {
+						background: none;
+						border: none;
+						box-shadow: none;
+					}
+
+					&:hover span.control {
+
+						display: flex;
+
+						span {
+							display: flex;
+						}
+
+					}
+
+					&[data-status="0"] {
+
+						> div > div {
+
+							font-weight: 500;
+
+							span.status {
+								display: flex;
+							}
+
+						}
+
+					}
+
+					> div {
+
+						display: flex;
+						align-items: center;
+						justify-content: space-between;
+						margin-bottom: .5rem;
+
+						> div {
+
+							color: var(--grey-64-color);
+							letter-spacing: .01rem;
+							gap: .5rem;
+							display: flex;
+							align-items: center;
+
+							> span.status {
+								display: none;
+								border-radius: 50%;
+								width: .5rem;
+								height: .5rem;
+								background: var(--blue-color);
+							}
+
+						}
+
+					}
+
+					> span {
+
+						line-height: 150%;
+
+						> p:first-child {
+							margin-top: 0;
+						}
+
+						> p:last-child {
+							margin-bottom: 0;
+						}
+
+						a {
+							color: var(--green-color);
+						}
+
+					}
+
+					a.details {
+						color: var(--green-color);
+					}
+
+				}
+
+			}
+
+			.empty-list {
+				border-radius: .5rem;
+				padding-block: 1rem;
+				margin: 1.25rem !important;
+				background: var(--grey-fa-color);
+			}
+
+		}
+
+	}
+
+
+/* --------------------------------------------------------------------------
+   Mobile
+-------------------------------------------------------------------------- */
+
+	html[data-device="mobile"] {
+
+		#notifications-dialog {
+
+			.list section {
+
+				max-height: inherit;
+				height: 100%;
+
+				.control {
+
+					display: flex !important;
+
+					span {
+						display: flex;
+					}
+
+				}
+
+			}
+
+		}
+
+	}

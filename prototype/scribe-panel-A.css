@@ -1,0 +1,805 @@
+@charset "utf-8";
+
+/* --------------------------------------------------------------------------
+   Variant A: the draft right in the Vet.AF fields.
+   1. suggestion layer under the fields (.sx-*), 2. goods lines, 3. diagnoses,
+   4. narrow summary panel, 5. bar states after the draft is ready, 6. marks.
+   Loaded after scribe-A.css. Vet.AF tokens only (base.css :root); the light
+   green tint rgba(0,150,136,.035–.06) is the inline layer Vet.AF itself uses.
+   Unaccepted = dashed green frame on a light tint; accepted = ordinary field text.
+   Doses = yellow (attention), the same as the Vet.AF warning colour.
+-------------------------------------------------------------------------- */
+
+	:root {
+		--scribe-panel-w: 17.5rem;
+		--sx-tint: rgba(0, 150, 136, .045);
+		--sx-frame: rgba(0, 150, 136, .55);
+	}
+
+/* ---- 1. Suggestion layer ---- */
+
+	/* the host sits right under its field: pull it up into the 2.5rem gap of the Vet.AF form */
+	.sx-host {
+		font-family: 'Inter', sans-serif;
+		color: var(--grey-28-color);
+	}
+	.sx-host:empty { display: none; }
+	#visit-form .sx-host { margin-top: -1.75rem; }
+
+	.sx-block, .sx-goods, .sx-diag {
+		box-sizing: border-box;
+		border: var(--border-width) dashed var(--sx-frame);
+		border-radius: .375rem;
+		background: var(--sx-tint);
+		padding: .625rem .875rem .75rem;
+		display: flex;
+		flex-direction: column;
+		gap: .5rem;
+	}
+
+	.sx-head {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: .25rem .5rem;
+		font-size: .8125rem;
+		color: var(--grey-64-color);
+	}
+
+	.sx-badge {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex: 0 0 auto;
+		width: 1.375rem;
+		height: 1.375rem;
+		border-radius: 50%;
+		background: var(--green-light-color);
+		color: var(--green-color);
+
+		svg { width: 1rem; height: 1rem; }
+	}
+
+	.sx-from { font-weight: 600; color: var(--green-color); }
+	.sx-note { color: var(--grey-64-color); font-size: .8125rem; }
+	.sx-qtoggle { margin-left: auto; }
+
+	/* lines of a text field */
+	.sx-lines {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: .125rem;
+	}
+
+	.sx-line {
+		position: relative;
+		padding: .125rem 1.75rem .125rem 0;
+		font-size: 1rem;
+		line-height: 1.4;
+
+		.sx-q { display: none; margin: .0625rem 0 .3125rem; }
+
+		&:hover { background: rgba(0, 150, 136, .05); border-radius: .25rem; }
+	}
+	.show-quotes .sx-line .sx-q { display: block; }
+
+	.sx-x {
+		position: absolute;
+		top: .0625rem;
+		right: 0;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 1.5rem;
+		height: 1.5rem;
+		padding: 0;
+		border: 0;
+		border-radius: .25rem;
+		background: transparent;
+		color: var(--grey-8c-color);
+		cursor: pointer;
+		opacity: 0;
+		transition: var(--transition);
+
+		svg { width: 1.125rem; height: 1.125rem; }
+	}
+	.sx-line:hover .sx-x, .sx-x:focus-visible { opacity: 1; }
+	.sx-x:hover { background: var(--red-light-color); color: var(--red-color); }
+
+	/* quote «как прозвучало»: the main verification tool — readable size, numbers in bold */
+	.sx-q {
+		font-size: .9375rem;
+		line-height: 1.4;
+		color: var(--grey-64-color);
+
+		b { font-weight: 600; color: var(--grey-28-color); }
+	}
+	.sx-ql { color: var(--grey-8c-color); }
+	.sx-q-dose { font-size: 1rem; }
+	.sx-q-dose b { background: var(--yellow-light-color); border-radius: .1875rem; padding: 0 .125rem; }
+
+	/* dose line: strict tier */
+	.sx-dose {
+		margin: .375rem 0;
+		padding: .5rem .625rem .625rem;
+		border-left: 3px solid var(--yellow-color);
+		border-radius: 0 .375rem .375rem 0;
+		background: #FFF;
+		display: flex;
+		flex-direction: column;
+		gap: .25rem;
+
+		&:hover { background: #FFF; }
+		.sx-q { display: block; margin: 0; }
+
+		mark {
+			background: var(--yellow-light-color);
+			box-shadow: inset 0 -1px 0 var(--yellow-color);
+			border-radius: .1875rem;
+			padding: 0 .1875rem;
+			font-weight: 600;
+			color: var(--grey-28-color);
+		}
+
+		&.is-ok, &.is-fixed { border-left-color: var(--grey-dc-color); }
+		&.is-ok mark { background: transparent; box-shadow: inset 0 -1px 0 var(--grey-b4-color); }
+	}
+
+	.sx-dacts {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: .375rem .75rem;
+		margin-top: .25rem;
+	}
+	.sx-dhint { flex-basis: 100%; font-size: .8125rem; color: var(--yellow-color); }
+	.sx-dstate { font-size: .8125rem; color: var(--grey-64-color); }
+
+	.sx-fix {
+		box-sizing: border-box;
+		width: 100%;
+		height: 2.5rem;
+		padding: 0 .75rem;
+		border: var(--border-width) solid var(--green-color);
+		border-radius: .25rem;
+		box-shadow: 0 0 0 .1875rem rgba(0, 150, 136, .08);
+		font: 400 .9375rem 'Inter', sans-serif;
+		color: var(--grey-28-color);
+	}
+
+	/* values of single fields */
+	.sx-item {
+		display: flex;
+		flex-direction: column;
+		gap: .25rem;
+	}
+	.sx-triple .sx-item + .sx-item {
+		margin-top: .375rem;
+		padding-top: .625rem;
+		border-top: var(--border-width) solid rgba(0, 150, 136, .18);
+	}
+	.sx-il { font-size: .8125rem; font-weight: 600; color: var(--grey-64-color); }
+	.sx-val {
+		font-size: 1rem;
+		line-height: 1.4;
+
+		ins { text-decoration: none; background: var(--green-light-color); border-radius: .1875rem; padding: 0 .125rem; }
+		mark { background: var(--yellow-light-color); box-shadow: inset 0 -1px 0 var(--yellow-color); border-radius: .1875rem; padding: 0 .1875rem; font-weight: 600; color: var(--grey-28-color); }
+	}
+	.sx-vl { color: var(--grey-8c-color); font-size: .8125rem; }
+	.sx-cmp {
+		display: flex;
+		align-items: baseline;
+		flex-wrap: wrap;
+		gap: .25rem .625rem;
+		font-size: 1rem;
+	}
+	.sx-arrow { color: var(--grey-8c-color); }
+
+	/* actions */
+	.sx-acts {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: .5rem .875rem;
+		margin-top: .125rem;
+	}
+
+	.sx-host .button.sx-btn, .sx-summary .button.sx-btn {
+		height: 2.25rem;
+		padding: 0 .875rem;
+		font-size: .875rem;
+		white-space: nowrap;
+	}
+	.sx-host .button.sx-btn:not(.green):not(.green-title), .sx-summary .button.sx-btn:not(.green):not(.green-title) { background: #FFF; }
+	.sx-host .button.sx-btn-dose { border-color: var(--yellow-color); color: var(--grey-28-color); }
+	.sx-host .button.sx-btn-dose:hover { background: var(--yellow-light-color); }
+	.sx-host .button[disabled], .sx-summary .button[disabled] { opacity: .45; pointer-events: none; }
+
+	.sx-link {
+		border: 0;
+		background: none;
+		padding: 0;
+		font: 400 .875rem 'Inter', sans-serif;
+		color: var(--grey-64-color);
+		cursor: pointer;
+		text-decoration: underline;
+		text-decoration-color: var(--grey-dc-color);
+		text-underline-offset: .2em;
+		white-space: nowrap;
+
+		&:hover { color: var(--green-color); }
+	}
+	.sx-need { font-size: .8125rem; color: var(--yellow-color); }
+	.sx-muted { font-size: .8125rem; color: var(--grey-8c-color); }
+
+	/* after a decision: one quiet line under the field */
+	.sx-receipt {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: .25rem .5rem;
+		min-height: 1.75rem;
+		font-size: .8125rem;
+		color: var(--grey-64-color);
+
+		svg { width: 1.125rem; height: 1.125rem; color: var(--green-color); flex: 0 0 auto; --width: 2; }
+		.sx-rl { font-weight: 600; }
+		.sx-link { font-size: .8125rem; }
+
+		&.is-rejected { color: var(--grey-8c-color); }
+	}
+	.sx-receipt + .sx-receipt, .sx-block + .sx-receipt { margin-top: .125rem; }
+
+/* ---- 2. Goods: search tags above the Vet.AF search row (approved 2026-11-11) ---- */
+
+	[data-tab="pane"][data-id="items"] .sx-host { margin: 0; }
+
+	.sx-goods { gap: .625rem; }
+	.sx-gtitle { font-weight: 600; color: var(--grey-28-color); font-size: .875rem; }
+
+	.sx-tags { display: flex; flex-wrap: wrap; gap: .5rem .625rem; }
+
+	/* one tag = search button + «не оказывали» + quote tooltip (+ fallback queries when nothing was found) */
+	.sx-tg {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: .25rem .5rem;
+		max-width: 100%;
+	}
+	.sx-tb {
+		display: inline-flex;
+		align-items: center;
+		gap: .375rem;
+		min-height: 2.25rem;
+		padding: .25rem .25rem .25rem .75rem;
+		border: var(--border-width) solid var(--green-color);
+		border-right: 0;
+		border-radius: 1.125rem 0 0 1.125rem;
+		background: #FFF;
+		color: var(--green-color);
+		font: 500 .9375rem 'Inter', sans-serif;
+		text-align: left;
+		cursor: pointer;
+
+		svg { width: 1.25rem; height: 1.25rem; flex: 0 0 auto; }
+		.sx-th { color: var(--grey-64-color); font-weight: 400; font-size: .875rem; }
+		&:hover, &:focus-visible { background: var(--green-light-color); }
+	}
+	.sx-tx {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		align-self: stretch;
+		width: 2rem;
+		margin-left: -.5rem;
+		padding: 0;
+		border: var(--border-width) solid var(--green-color);
+		border-left: var(--border-width) solid rgba(0, 150, 136, .25);
+		border-radius: 0 1.125rem 1.125rem 0;
+		background: #FFF;
+		color: var(--grey-8c-color);
+		cursor: pointer;
+
+		svg { width: 1rem; height: 1rem; }
+		&:hover, &:focus-visible { background: var(--red-light-color); color: var(--red-color); }
+	}
+	.sx-tg.is-active .sx-tb { background: var(--green-light-color); box-shadow: 0 0 0 .1875rem rgba(0, 150, 136, .12); }
+	.sx-tg.is-done {
+		min-height: 2.25rem;
+		padding: 0 .75rem 0 .5rem;
+		border: var(--border-width) solid var(--grey-e6-color);
+		border-radius: 1.125rem;
+		background: var(--grey-fa-color);
+		font-size: .875rem;
+		color: var(--grey-64-color);
+
+		svg { width: 1.125rem; height: 1.125rem; color: var(--green-color); --width: 2; }
+		.sx-tn { font-weight: 500; color: var(--grey-28-color); }
+	}
+
+	.sx-tip {
+		position: absolute;
+		left: 0;
+		top: calc(100% + .375rem);
+		z-index: 5;
+		display: none;
+		width: max-content;
+		max-width: 26rem;
+		padding: .5rem .75rem;
+		border-radius: .375rem;
+		background: #FFF;
+		box-shadow: var(--box-shadow);
+		border: var(--border-width) solid var(--grey-e6-color);
+		font-size: .9375rem;
+		line-height: 1.4;
+		color: var(--grey-64-color);
+
+		b { color: var(--grey-28-color); font-weight: 600; }
+	}
+
+
+	.sx-rej { font-size: .8125rem; color: var(--grey-8c-color); }
+	.sx-rej .sx-link { font-size: .8125rem; }
+
+	.sx-gfoot {
+		padding-top: .5rem;
+		border-top: var(--border-width) solid rgba(0, 150, 136, .2);
+		font-size: .8125rem;
+		line-height: 1.35;
+		color: var(--grey-64-color);
+
+		p { margin: 0; }
+		p + p { margin-top: .25rem; }
+		p:first-child { color: var(--yellow-partial-color); }
+	}
+
+	/* Vet.AF search dropdown: «Ничего не найдено» */
+	.ui-menu-item.sx-none { padding: .75rem 1rem; color: var(--grey-8c-color); font-size: .9375rem; }
+
+	/* tags above the modal «Добавить товар в услугу» */
+
+
+	/* imitation of the Vet.AF modal «Добавить товар в услугу» (seen on vetaf.ru, 2026-11-11) */
+	#proto-good-dialog .sx-gform { display: flex; flex-direction: column; gap: 1.25rem; min-width: 26rem; }
+	#proto-good-dialog .sx-gsvc { font-size: .9375rem; color: var(--grey-64-color); }
+	#proto-good-dialog .sx-mwrap { position: relative; display: flex; flex-direction: column; }
+	#proto-good-dialog .sx-mq, #proto-good-dialog .sx-mqty { width: 100%; box-sizing: border-box; }
+	#proto-good-dialog .sx-mqty { max-width: 8rem; }
+	#proto-good-dialog .sx-mres {
+		position: absolute !important;
+		top: calc(100% + .25rem) !important;
+		left: 0 !important;
+		right: 0 !important;
+		z-index: 3;
+		flex-direction: column;
+		margin: 0;
+		padding: .375rem 0;
+		list-style: none;
+		max-height: 16rem;
+		overflow: auto;
+		border-radius: .375rem;
+		background: #FFF;
+		box-shadow: var(--box-shadow);
+
+		a { display: flex; justify-content: space-between; gap: 1rem; padding: .625rem 1rem; cursor: pointer; color: var(--grey-28-color); font-size: .9375rem; }
+		a span:last-child { color: var(--grey-8c-color); white-space: nowrap; }
+		a:hover { background: var(--grey-f5-color); }
+	}
+
+/* ---- 3. Diagnoses: suggested rows inside the Vet.AF diagnoses table ---- */
+
+	#visit-form #list-diagnoses .sx-host {
+		margin-top: 0;
+		display: flex;
+		flex-direction: column;
+		gap: .5rem;
+		padding: .75rem 1.25rem;
+		border-top: var(--border-width) solid var(--grey-dc-color);
+	}
+
+	.sx-diag {
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: .5rem 1rem;
+
+		.sx-dmain { display: flex; flex-direction: column; gap: .25rem; flex: 1 1 16rem; min-width: 0; }
+		.sx-val { font-weight: 500; }
+	}
+
+	/* quote above the Vet.AF dialog (popover in the top layer) */
+	.sx-pop {
+		position: fixed;
+		inset: auto;
+		margin: 0;
+		box-sizing: border-box;
+		display: none;
+		align-items: flex-start;
+		gap: .625rem;
+		padding: .75rem 1rem;
+		border: var(--border-width) dashed var(--sx-frame);
+		border-radius: .5rem;
+		background: #F7FCFB;
+		box-shadow: var(--box-shadow);
+		font-family: 'Inter', sans-serif;
+		color: var(--grey-28-color);
+
+		&:popover-open { display: flex; }
+		.sx-badge { margin-top: .0625rem; }
+		.sx-muted { margin-top: .25rem; }
+	}
+
+	/* diagnosis rows added in the prototype (Vet.AF row markup not captured: closed visit had none) */
+	#list-diagnoses .list section > div.scribe-row {
+		display: grid;
+		align-items: center;
+		padding: .75rem 1.25rem;
+		border-top: var(--border-width) solid var(--grey-dc-color);
+		font-size: .9375rem;
+	}
+
+	/* Vet.AF custom-select inside the dialog: positioned in flow for the prototype */
+	#proto-diag-dialog .custom-select .select {
+		position: absolute !important;
+		top: 100% !important;
+		left: 0 !important;
+		width: 100% !important;
+	}
+	#proto-diag-dialog .custom-select { position: relative; }
+
+/* ---- 4. Summary panel: narrow, short, collapsible ---- */
+
+	.scribe-panel > section.sx-summary {
+		padding: 0;
+		gap: 0;
+		overflow: auto;
+		min-height: 0;
+	}
+	.scribe-panel [hidden] { display: none !important; }
+
+	.sx-sec {
+		display: flex;
+		flex-direction: column;
+		gap: .375rem;
+		padding: .75rem .875rem .875rem;
+		border-bottom: var(--border-width) solid var(--grey-fo-color);
+
+		&:last-child { border-bottom: 0; }
+	}
+
+	.sx-h {
+		font-size: .75rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: .02em;
+		color: var(--grey-8c-color);
+	}
+
+	.sx-tabrow {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		grid-template-areas: "t c" "d c";
+		align-items: center;
+		column-gap: .5rem;
+		width: 100%;
+		margin: 0 -.5rem;
+		padding: .4375rem .5rem;
+		box-sizing: content-box;
+		border: 0;
+		border-radius: .375rem;
+		background: transparent;
+		text-align: left;
+		font-family: 'Inter', sans-serif;
+		cursor: pointer;
+
+		.sx-tt { grid-area: t; font-size: .9375rem; font-weight: 600; color: var(--grey-28-color); }
+		.sx-td { grid-area: d; font-size: .8125rem; color: var(--yellow-partial-color); }
+		.chev { grid-area: c; width: 1.25rem; height: 1.25rem; color: var(--grey-b4-color); }
+
+		&:hover { background: var(--grey-fa-color); }
+		&.is-current { background: var(--green-light-color); }
+		&.is-current .chev { color: var(--green-color); }
+		&.is-clear .sx-tt { color: var(--grey-64-color); font-weight: 500; }
+		&.is-clear .sx-td { color: var(--grey-8c-color); }
+	}
+
+	.sx-summary .button.sx-bulk {
+		width: 100%;
+		height: auto;
+		min-height: 2.25rem;
+		padding: .375rem .625rem;
+		white-space: normal;
+		line-height: 1.25;
+		font-size: .8125rem;
+	}
+
+	.sx-bulk-confirm {
+		display: flex;
+		flex-direction: column;
+		gap: .375rem;
+		padding: .625rem .75rem;
+		border: var(--border-width) dashed var(--sx-frame);
+		border-radius: .375rem;
+		background: var(--sx-tint);
+		font-size: .8125rem;
+		line-height: 1.35;
+		color: var(--grey-64-color);
+
+		b { color: var(--grey-28-color); font-weight: 600; }
+	}
+
+	.sx-bulk-done {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: .25rem .5rem;
+		padding: .25rem 0;
+		font-size: .8125rem;
+		color: var(--grey-64-color);
+
+		svg { width: 1.125rem; height: 1.125rem; color: var(--green-color); --width: 2; }
+	}
+
+	.sx-removed {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: .375rem;
+
+		li {
+			display: flex;
+			align-items: baseline;
+			justify-content: space-between;
+			gap: .5rem;
+			font-size: .8125rem;
+			line-height: 1.35;
+			color: var(--grey-64-color);
+		}
+		.sx-link { font-size: .8125rem; }
+	}
+
+	.sx-remind p {
+		margin: 0;
+		font-size: .8125rem;
+		line-height: 1.35;
+		color: var(--grey-64-color);
+	}
+
+/* ---- 5. Bar states added after the draft is ready / saved ---- */
+
+	.scribe-bar[data-state="ready"] [data-show~="ready"],
+	.scribe-bar[data-state="saved"] [data-show~="saved"] {
+		display: revert !important;
+	}
+	.scribe-bar[data-state="ready"] .scribe-badge[data-show~="ready"],
+	.scribe-bar[data-state="saved"] .scribe-badge[data-show~="saved"],
+	.scribe-bar[data-state="ready"] .button[data-show~="ready"],
+	.scribe-bar[data-state="saved"] .button[data-show~="saved"] {
+		display: inline-flex !important;
+	}
+	.scribe-bar[data-state="saved"] {
+		border-color: var(--grey-e6-color);
+		.scribe-badge { background: var(--green-light-color); color: var(--green-color); }
+	}
+
+	/* every Vet.AF tab pane makes room for the panel, not only the exam form */
+	.scribe-panel-open .template > :not(header.header-sticky) {
+		margin-right: calc(var(--scribe-panel-w) + 1rem);
+	}
+	.scribe-panel-open #visit-form > [data-tab="pane"] { margin-right: 0; }
+
+	/* prototype bar out of the panel's way */
+	.proto-bar { right: auto; left: 1rem; }
+
+/* ---- 6. Marks in the Vet.AF form ---- */
+
+	.scribe-target {
+		outline: 2px solid var(--green-color);
+		outline-offset: .25rem;
+		border-radius: .25rem;
+	}
+
+	.scribe-flash {
+		animation: scribe-flash 1.4s ease-out;
+	}
+
+	@keyframes scribe-flash {
+		0% { box-shadow: 0 0 0 .5rem rgba(0, 150, 136, .25); }
+		100% { box-shadow: 0 0 0 0 rgba(0, 150, 136, 0); }
+	}
+
+/* ---- Round 1 additions ---- */
+
+	/* several blocks in one host (symptoms · weight · temperature) */
+	.sx-host { display: flex; flex-direction: column; gap: .5rem; }
+	.sx-host:empty { display: none; }
+
+	/* how the diagnosis was said: «Исключить» / «Предположение» next to the title, marker words in the quote */
+	.sx-dt { display: flex; align-items: baseline; flex-wrap: wrap; gap: .25rem .5rem; }
+	.sx-tag {
+		display: inline-flex;
+		align-items: center;
+		height: 1.375rem;
+		padding: 0 .5rem;
+		border-radius: .6875rem;
+		background: var(--yellow-light-color);
+		color: var(--yellow-partial-color);
+		font-size: .8125rem;
+		font-weight: 600;
+		white-space: nowrap;
+	}
+	.sx-q-diag mark { background: var(--yellow-light-color); box-shadow: inset 0 -1px 0 var(--yellow-color); border-radius: .1875rem; padding: 0 .125rem; font-weight: 600; color: var(--grey-28-color); }
+	.sx-pop .sx-tag { margin-right: .375rem; }
+
+	/* dose context: weight of the visit, quantity in the bill after a correction */
+	.sx-dctx { font-size: .8125rem; color: var(--grey-64-color); }
+	.sx-dwarn { color: var(--yellow-partial-color); }
+
+/* ---- Round 4 (goods review): stable search row, done items in one line, plate inside the modal ---- */
+
+	.sx-tg:has(.sx-tb:hover) .sx-tip, .sx-tg:has(.sx-tb:focus-visible) .sx-tip { display: block; }
+	.sx-tg { flex-wrap: nowrap; }
+
+	/* one reserved status line under the names: hint / quote of the active item / fallbacks — height does not jump */
+	.sx-gstat {
+		min-height: 2.75rem;
+		font-size: .875rem;
+		line-height: 1.35;
+		color: var(--grey-64-color);
+
+		&.is-active { color: var(--grey-28-color); }
+		.sx-q { font-size: .875rem; }
+		.sx-link { font-size: .875rem; color: var(--green-color); }
+	}
+	.sx-fb { font-size: .875rem; color: var(--yellow-partial-color); }
+	.sx-fb .sx-link { font-size: .875rem; color: var(--green-color); }
+
+	.sx-doneline {
+		display: flex;
+		align-items: center;
+		gap: .375rem;
+		font-size: .875rem;
+		color: var(--grey-64-color);
+
+		svg { width: 1.125rem; height: 1.125rem; color: var(--green-color); --width: 2; }
+		.sx-link { font-size: .875rem; }
+	}
+	.sx-donelist {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: .375rem;
+	}
+	.sx-done {
+		display: flex;
+		align-items: flex-start;
+		gap: .375rem;
+		font-size: .875rem;
+		line-height: 1.35;
+		color: var(--grey-64-color);
+
+		svg { width: 1.125rem; height: 1.125rem; color: var(--green-color); flex: 0 0 auto; --width: 2; }
+		b { font-weight: 600; color: var(--grey-28-color); }
+		.sx-dl2 { color: var(--grey-28-color); }
+		.sx-link { font-size: .8125rem; }
+	}
+	.sx-cmp-q { color: var(--grey-64-color); white-space: nowrap; }
+	.sx-cmp-q.is-diff { color: var(--yellow-partial-color); background: var(--yellow-light-color); border-radius: .1875rem; padding: 0 .1875rem; }
+
+	/* plate with goods inside the Vet.AF modal, above its card (same width) */
+	#proto-good-dialog > .sx-gplate {
+		box-sizing: border-box;
+		width: 30rem;
+		margin: auto 0 .5rem;
+		display: flex;
+		align-items: flex-start;
+		gap: .625rem;
+		padding: .75rem 1rem;
+		border: var(--border-width) dashed var(--sx-frame);
+		border-radius: .5rem;
+		background: #F7FCFB;
+		box-shadow: var(--box-shadow);
+		font-family: 'Inter', sans-serif;
+		color: var(--grey-28-color);
+
+		.sx-gpop-b { display: flex; flex-direction: column; gap: .5rem; min-width: 0; flex: 1 1 auto; }
+		.sx-from { font-size: .8125rem; }
+		.sx-tip { display: none !important; }
+		.sx-gstat { min-height: 2.5rem; }
+	}
+	#proto-good-dialog > section { margin-top: 0 !important; margin-bottom: auto !important; }
+	#proto-good-dialog .sx-mqty-err { display: block; min-height: 1.1em; margin-top: .25rem; font-size: .8125rem; color: var(--red-color); }
+
+	/* Vet.AF dropdown: price with its unit */
+	#list-items-in-sale .ui-holder a span:last-child, #proto-good-dialog .sx-mres a span:last-child { white-space: nowrap; }
+	.sx-tg.is-active .sx-tip { display: none !important; }
+	.sx-other { display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem .5rem; margin-top: .25rem; font-size: .875rem; color: var(--grey-64-color); }
+	.sx-other .sx-link { font-size: .875rem; color: var(--green-color); white-space: normal; text-align: left; }
+	.sx-other .sx-link.sx-muted { color: var(--grey-64-color); }
+
+/* ---- Round 5: added but not a clean match — yellow, in sight until confirmed ---- */
+	.sx-checklist { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: .375rem; }
+	.sx-check {
+		padding: .375rem .625rem;
+		border-left: 3px solid var(--yellow-color);
+		border-radius: 0 .375rem .375rem 0;
+		background: var(--yellow-light-color);
+		font-size: .875rem;
+		line-height: 1.35;
+		color: var(--grey-28-color);
+
+		.sx-dl2 { display: flex; gap: .875rem; margin-top: .125rem; }
+		.sx-link { font-size: .875rem; color: var(--green-color); }
+	}
+	/* Vet.AF dropdown wide enough for «520 ₽/шт» */
+	#list-items-in-sale .ui-holder ul { min-width: 24rem; }
+	#list-items-in-sale .ui-holder a { gap: 1rem; }
+	#list-items-in-sale .ui-holder a { grid-template-columns: minmax(0, 1fr) auto !important; }
+	#list-items-in-sale .ui-holder a span:first-child { white-space: normal !important; min-width: 0; }
+
+/* ---- 2026-11-12: no dose confirmation — names and doses in bold, the quote of a dose line always visible ---- */
+
+	.sx-line .sx-t b { font-weight: 600; color: var(--grey-28-color); }
+	.sx-line.has-dose .sx-q { display: block; }
+	.sx-val b, .sx-cmp b { font-weight: 600; color: var(--grey-28-color); }
+	.sx-q-dose b { background: transparent; padding: 0; }
+
+	/* added goods: under the Vet.AF search row, one line each, the billed position in bold */
+	.sx-goods-done {
+		margin: 0 0 1rem;
+		padding: .625rem .875rem;
+		border: 1px solid var(--grey-e6-color);
+		border-radius: .5rem;
+		background: #FFF;
+		display: flex;
+		flex-direction: column;
+		gap: .375rem;
+
+		.sx-from { font-size: .8125rem; color: var(--grey-64-color); font-weight: 600; }
+		.sx-dl1 { color: var(--grey-28-color); }
+		.sx-muted { font-size: .8125rem; }
+	}
+
+	/* the static disclaimer at the bottom of the summary */
+	.sx-remind p { margin: 0; font-size: .8125rem; line-height: 1.4; color: var(--grey-64-color); }
+
+/* ---- 2026-11-12, round after lenses: billed ≠ heard mark, doses in the bulk preview, × visible ---- */
+	.sx-diffmark {
+		flex: 0 0 auto;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 1.125rem;
+		height: 1.125rem;
+		border-radius: 50%;
+		background: var(--yellow-color);
+		color: #FFF;
+		font: 700 .75rem/1 'Inter', sans-serif;
+	}
+	.sx-done.is-diff .sx-dl1 b { box-shadow: inset 0 -2px 0 var(--yellow-color); }
+	.sx-bulk-doses {
+		margin: 0;
+		padding: 0 0 0 .5rem;
+		list-style: none;
+		border-left: 2px solid var(--grey-dc-color);
+		display: flex;
+		flex-direction: column;
+		gap: .25rem;
+
+		.sx-t { font-size: .8125rem; }
+		.sx-t b { font-weight: 600; }
+		.sx-q { display: block; font-size: .75rem; }
+	}
+	.sx-x { opacity: .35; }
+	.sx-diffnote { font-size: .8125rem; color: var(--yellow-partial-color); }

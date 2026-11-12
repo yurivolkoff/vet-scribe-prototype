@@ -1,0 +1,249 @@
+@charset "utf-8";
+
+/* --------------------------------------------------------------------------
+   Base
+-------------------------------------------------------------------------- */
+
+	@font-face {
+		font-family: 'Inter';
+		src: url('../fonts/Inter-Regular.ttf');
+		font-weight: 400;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: 'Inter';
+		src: url('../fonts/Inter-Medium.ttf');
+		font-weight: 500;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: 'Inter';
+		src: url('../fonts/Inter-SemiBold.ttf');
+		font-weight: 600;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: 'Inter';
+		src: url('../fonts/Inter-Bold.ttf');
+		font-weight: 700;
+		font-display: swap;
+	}
+
+	@view-transition {
+		navigation: auto;
+	}
+
+	::view-transition-old(content) {
+		animation: .15s ease-out both fade-out;
+	}
+
+	::view-transition-new(content) {
+		animation: .15s ease-in both fade-in;
+	}
+
+	:root {
+		--grey-dc-color: #DCDCDC;
+		--grey-b4-color: #B4B4B4;
+		--grey-e6-color: #E6E6E6;
+		--grey-8c-color: #8C8C8C;
+		--grey-28-color: #282828;
+		--grey-fa-color: #FAFAFA;
+		--grey-40-color: #404040;
+		--grey-f5-color: #F5F5F5;
+		--grey-80-color: #808080;
+		--grey-64-color: #646464;
+		--grey-fo-color: #F0F0F0;
+		--green-color: #009688;
+		--green-light-color: #DCF5F3;
+		--blue-color: #5082C8;
+		--blue-light-color: #E9F0FA;
+		--red-color: #FC5555;
+		--red-light-color: #FFE6E6;
+		--yellow-color: #C98200;
+		--yellow-light-color: #FFF4D3;
+		--yellow-partial-light-color: #FFE8C7;
+		--yellow-partial-color: #C96A00;
+		--yellow-star-color: #FFBE21;
+		--black-4-opacity: rgba(0, 0, 0, .04);
+		--box-shadow: 0 0 2rem rgba(0, 0, 0, .09);
+		--transition: all 150ms ease-in-out;
+		--dialog-header-height: 3.625rem;
+		--control-dots-padding: 2rem;
+		--text-shadow: 0 0 .45rem rgba(0, 150, 136, .22);
+		--space-base: 1.25rem;
+		--dialog-header-background: linear-gradient(to left, var(--green-light-color) 0%, var(--grey-fa-color) 70%);
+		--border-width: 1px;
+		--line-width: 1px;
+	}
+
+	* {
+		scrollbar-color: var(--grey-dc-color) transparent;
+		scrollbar-width: thin;
+	}
+
+	html {
+		scrollbar-gutter: stable;
+	}
+
+	html, body {
+		width: 100%;
+		height: 100%;
+		padding: 0;
+		margin: 0;
+		color: #000;
+		font-family: 'Inter', sans-serif;
+	}
+
+	body {
+		padding-top: env(safe-area-inset-top);
+		padding-bottom: env(safe-area-inset-bottom);
+		overscroll-behavior: none;
+	}
+
+
+/* --------------------------------------------------------------------------
+   Native Dialog
+-------------------------------------------------------------------------- */
+
+	dialog {
+
+		position: fixed;
+		inset: 0;
+		width: 100%;
+		max-width: none;
+		height: 100svh;
+		max-height: none;
+		margin: 0;
+		padding: var(--space-base);
+		border: none;
+		background: transparent;
+		outline: none;
+		box-sizing: border-box;
+		overflow-x: hidden;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		scrollbar-width: none;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
+
+		&[open] {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		&[open]:has(~ dialog[open]) {
+			overflow: hidden;
+		}
+
+		&[open]:has(~ dialog[open])::backdrop {
+			background: transparent;
+		}
+
+		&::backdrop {
+			background: rgba(0, 0, 0, .4);
+			backdrop-filter: blur(.2rem);
+		}
+
+		> section {
+
+			flex: none;
+			margin-block: auto;
+			background: #FFF;
+			border-radius: .5rem;
+			overflow: visible;
+
+			> header > [data-action="dialog-close"] {
+
+				display: block;
+				width: 1.875rem !important;
+				min-width: 1.875rem;
+				max-width: 1.875rem;
+				height: 1.875rem !important;
+				min-height: 1.875rem;
+				max-height: 1.875rem;
+				margin-right: -.5rem;
+				color: var(--grey-b4-color);
+				stroke: currentColor;
+				cursor: pointer;
+				transition: var(--transition);
+				flex: 0 0 1.875rem;
+				box-sizing: border-box;
+
+				&:hover {
+					color: var(--green-color);
+					transform: scale(1.1);
+				}
+
+			}
+
+		}
+
+	}
+
+
+/* --------------------------------------------------------------------------
+	List
+-------------------------------------------------------------------------- */
+
+	.item-updated {
+		animation: item-updated 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.item-deleted {
+		animation: item-deleted 0.3s ease-in forwards;
+	}
+
+
+/* --------------------------------------------------------------------------
+   Animations
+-------------------------------------------------------------------------- */
+
+	@keyframes item-updated {
+
+		0% {
+			opacity: 0;
+			filter: blur(0.25rem);
+			transform: translateY(-1rem);
+		}
+
+		60% {
+			opacity: 1;
+			filter: blur(0);
+			transform: translateY(1rem);
+		}
+
+		100% {
+			opacity: 1;
+			filter: blur(0);
+			transform: translateY(0);
+		}
+
+	}
+
+	@keyframes item-deleted {
+
+		0% {
+			opacity: 1;
+			filter: blur(0);
+			transform: translateY(0);
+		}
+
+		40% {
+			opacity: 1;
+			filter: blur(0);
+			transform: translateY(1rem);
+		}
+
+		100% {
+			opacity: 0;
+			filter: blur(.25rem);
+			transform: translateY(-1rem);
+		}
+
+	}
