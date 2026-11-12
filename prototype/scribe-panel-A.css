@@ -803,3 +803,75 @@
 	}
 	.sx-x { opacity: .35; }
 	.sx-diffnote { font-size: .8125rem; color: var(--yellow-partial-color); }
+
+/* ---- 2026-11-12: suggestions under their own fields (lab variant 3), paired highlight (variant 1), transitions ---- */
+
+	/* the row of cells copies the Vet.AF columns (set from JS: grid-template-columns, column-gap of .triple-row) */
+	#visit-form .sx-host.sx-cells { display: grid; align-items: start; row-gap: .5rem; }
+	.sx-cell { min-width: 0; position: relative; }
+	.sx-cell .sx-il { display: none; }
+	.sx-cell .sx-receipt { align-items: flex-start; }
+
+	/* a pointer from the card up to its field */
+	.sx-cell > .sx-block { position: relative; overflow: visible; }
+	.sx-cell > .sx-block::before {
+		content: ''; position: absolute; top: -7px; left: 1.25rem; transform: translateX(-50%);
+		border: 7px solid transparent; border-top: 0; border-bottom-color: var(--sx-frame);
+	}
+
+	/* compact number card */
+	.sx-numcard { padding: .375rem .5rem .5rem; gap: .25rem; cursor: default; }
+	.sx-nc-v { display: flex; align-items: center; gap: .25rem; font-size: 1.0625rem; line-height: 1.2; white-space: nowrap; }
+	.sx-nc-v b { font-weight: 600; }
+	.sx-nc-v .sx-badge { flex: 0 0 auto; }
+	.sx-nc-was { font-size: .75rem; color: var(--grey-64-color); }
+	.sx-nc-acts { display: flex; gap: .375rem; margin-top: .125rem; }
+	.sx-ib { width: 2rem; min-width: 2rem; height: 2rem; padding: 0 !important; display: inline-flex; align-items: center; justify-content: center; }
+	.sx-ib svg { width: 1.25rem; height: 1.25rem; margin: 0 !important; }
+	.sx-nc-q {
+		display: none !important; position: absolute; z-index: 30; top: calc(100% + .375rem); left: 0; width: 16rem;
+		padding: .5rem .625rem; background: #FFF; border: 1px solid var(--grey-dc-color); border-radius: .375rem;
+		box-shadow: 0 6px 16px rgba(0, 0, 0, .1); font-size: .875rem;
+	}
+	.sx-numcard.is-last .sx-nc-q { left: auto; right: 0; }
+	.sx-numcard:hover .sx-nc-q, .sx-numcard:focus-within .sx-nc-q { display: block !important; }
+
+	/* paired highlight: the field and its suggestion light up together */
+	#visit-form label { outline: 2px solid transparent; outline-offset: .25rem; border-radius: .25rem; transition: outline-color .15s ease; }
+	#visit-form label.scribe-target { outline-color: var(--green-color); }
+	.sx-block, .sx-diag { transition: box-shadow .15s ease, background-color .15s ease, border-color .15s ease; }
+	.sx-block.sx-pair { border-style: solid; border-color: var(--green-color); background: rgba(0, 150, 136, .08); box-shadow: 0 0 0 3px rgba(0, 150, 136, .15); }
+	/* a field with an open suggestion: a small dot after its caption */
+	#visit-form label.sx-has > span:first-child::after {
+		content: ''; display: inline-block; width: .4375rem; height: .4375rem; margin-left: .375rem; border-radius: 50%;
+		background: var(--green-color); vertical-align: middle;
+	}
+
+	/* transitions: a decided block folds away, its receipt fades in */
+	.sx-closing { transition: height .2s ease, opacity .15s ease, padding .2s ease, margin .2s ease !important; opacity: 0; padding-top: 0 !important; padding-bottom: 0 !important; }
+	.sx-appear { animation: sx-appear .25s ease both; }
+	@keyframes sx-appear { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+	@media (prefers-reduced-motion: reduce) {
+		.sx-closing, .sx-appear, .scribe-flash { transition: none !important; animation: none !important; }
+		#visit-form label, .sx-block, .sx-diag { transition: none; }
+	}
+	/* round 8: the quote under its own card, with the field name and a caret; visible focus; readable small text */
+	.sx-nc-q { width: 13rem; }
+	.sx-nc-q::before { content: ''; position: absolute; top: -7px; left: 1.25rem; transform: translateX(-50%); border: 7px solid transparent; border-top: 0; border-bottom-color: var(--grey-dc-color); }
+	.sx-numcard.is-last .sx-nc-q::before { left: auto; right: 1.25rem; transform: translateX(50%); }
+	.sx-nc-ql { font-weight: 600; color: var(--grey-28-color); }
+	.sx-nc-qi { margin-left: auto; padding-left: .25rem; font-size: .8125rem; color: var(--grey-8c-color); cursor: help; }
+	.sx-nc-was { font-size: .8125rem; }
+	.sx-ib-no { color: var(--grey-64-color); }
+	.sx-ib:focus-visible { outline: 2px solid var(--green-color) !important; outline-offset: 2px; }
+	.sx-nowrap { white-space: nowrap; }
+	/* round 9: the «» mark in the card corner, so it never pushes the number out of a narrow column */
+	.sx-numcard { padding-right: 1.25rem; }
+	.sx-nc-qi { position: absolute; top: .25rem; right: .375rem; margin: 0; padding: 0; line-height: 1; }
+	/* full-text buttons one under the other (Yuri 2026-11-12). A number column is ≈ 80–95 px at 1366–1440:
+	   the card may take half of the 3.5rem gap on its open side (weight → right, temperature → left), so «Заменить на 5,8» fits */
+	.sx-nc-acts { flex-direction: column; align-items: stretch; gap: .375rem; }
+	.sx-nc-acts .sx-btn { width: 100%; height: auto; min-height: 2rem; padding: .3125rem .5rem; font-size: .8125rem; line-height: 1.2; white-space: normal; text-align: center; justify-content: center; }
+	.sx-cell > .sx-numcard { width: calc(100% + 1.625rem); }
+	.sx-cell > .sx-numcard.is-last { margin-left: -1.625rem; }
+	.sx-cell > .sx-numcard.is-last::before { left: calc(1.25rem + 1.625rem); }

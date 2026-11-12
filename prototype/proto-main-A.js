@@ -27,6 +27,7 @@
     chev: '<svg class="chev" viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"><path d="M13 10l6 6l-6 6"/></g></svg>',
     search: '<svg viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"><circle cx="14.5" cy="14.5" r="6.5"/><path d="M19.5 19.5l5 5"/></g></svg>',
     x: '<svg viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M11 11l10 10"/><path d="M21 11l-10 10"/></g></svg>',
+    check: '<svg viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 16.5l4.5 4.5L23 11.5"/></g></svg>',
     micOff: '<svg viewBox="0 0 32 32"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 14V9a3.5 3.5 0 0 0-6.6-1.6"/><path d="M12.5 12.5v3a3.5 3.5 0 0 0 5.6 2.8"/><path d="M9 15.5c0 3.9 3.1 7 7 7 1.6 0 3-.5 4.2-1.4"/><path d="M23 15.5c0 .9-.2 1.8-.5 2.6"/><path d="M16 22.5v4"/><path d="M12.5 26.5h7"/><path d="M7 7l18 18"/></g></svg>',
     tick: '<svg viewBox="0 0 32 32"><use href="' + BASE + 'vetaf/i/frontend/employee/svg/icons.svg#tick"></use></svg>'
   };
@@ -81,7 +82,7 @@
   unit({ id: 'symptom', tab: 'inspections', kind: 'input', field: 'symptom', label: 'Ведущие симптомы', value: A.symptoms.value, quote: A.symptoms.quote, group: 'triple' });
   unit({ id: 'weight', tab: 'inspections', kind: 'number', field: 'weight', label: 'Вес, кг', value: String(A.weight.value), show: fmtNum(A.weight.value), quote: A.weight.quote, group: 'triple' });
   unit({ id: 'temperature', tab: 'inspections', kind: 'number', field: 'temperature', label: 'Температура, °C', value: String(A.temperature.value), show: fmtNum(A.temperature.value), quote: A.temperature.quote, group: 'triple' });
-  A.diagnoses.forEach((d, i) => unit({ id: 'dg' + i, tab: 'inspections', kind: 'diag', label: 'Диагноз', title: d.title, quote: d.quote }));
+  A.diagnoses.forEach((d, i) => unit({ id: 'dg' + i, tab: 'inspections', kind: 'diag', label: 'Диагноз', title: d.title, quote: d.quote, dkind: d.kind }));
   unit({ id: 'manipulation', tab: 'inspections', kind: 'text', field: 'manipulation', label: 'Манипуляции', lines: lines(A.manipulations) });
   unit({ id: 'treatment', tab: 'recommendations', kind: 'text', field: 'treatment', label: 'План лечения', lines: lines(A.treatment) });
   unit({ id: 'recommendation', tab: 'recommendations', kind: 'text', field: 'recommendation', label: 'Рекомендация по уходу', lines: lines(A.recommendations) });
@@ -262,19 +263,22 @@
   // one dictionary (Yuri 2026-11-12): the button is a verb, the state is the same verb in the past tense;
   // the source is clear from the block label «Из записи», so states do not repeat it
   const unitOf = u => u.field === 'weight' ? ' кг' : ' °C';
-  function receipt(u) {
+  function receipt(u, inCell) {
+    const lbl = u.group && !inCell ? '<span class="sx-rl">' + esc(u.label) + '</span>' : '';
+    const fresh = u.fresh ? ' sx-appear' : '';
     if (u.status === 'rejected') {
-      const what = u.kind === 'number' && u.kept ? 'Оставлено: ' + esc(u.kept) + unitOf(u) : 'Убрано';
-      return '<div class="sx-receipt is-rejected" data-u="' + u.id + '">' + (u.group ? '<span class="sx-rl">' + esc(u.label) + '</span>' : '') +
+      const what = u.kind === 'number' && u.kept ? 'Оставлено: <span class="sx-nowrap">' + esc(u.kept) + unitOf(u) + '</span>' : 'Убрано';
+      return '<div class="sx-receipt is-rejected' + fresh + '" data-u="' + u.id + '">' + lbl +
         '<span>' + what + '</span><button type="button" class="sx-link" data-a="restore">Вернуть</button></div>';
     }
-    const how = u.kind === 'number' ? (u.was ? 'Заменено: ' + esc(u.show) + unitOf(u) + ', было ' + esc(u.was) + unitOf(u) : 'Принято: ' + esc(u.show) + unitOf(u))
+    const nb = x => '<span class="sx-nowrap">' + esc(x) + unitOf(u) + '</span>';
+    const how = u.kind === 'number' ? (u.was ? 'Заменено: ' + nb(u.show) + ', было ' + nb(u.was) : 'Принято: ' + nb(u.show))
       : u.mode === 'append' ? 'Дописано' : u.mode === 'replace' ? 'Заменено' : 'Принято';
     const ed = edited(u);
     const tail = saved && !dirty ? '<span class="sx-muted">· сохранено</span>'
       : ed ? '<span class="sx-muted">· текст изменён в поле, отменить нельзя</span>'
       : '<button type="button" class="sx-link" data-a="undo">Отменить</button>';
-    return '<div class="sx-receipt" data-u="' + u.id + '">' + ICON.tick + (u.group ? '<span class="sx-rl">' + esc(u.label) + '</span>' : '') +
+    return '<div class="sx-receipt' + fresh + '" data-u="' + u.id + '">' + ICON.tick + lbl +
       '<span>' + how + '</span>' + tail + '</div>';
   }
 
@@ -344,11 +348,32 @@
       '<div class="sx-q sx-q-dose">' + quoteHtml(u.quote) + '</div><div class="sx-acts">' + acts + '</div></div>';
   }
 
+  // a compact card under a narrow number field: the value, the current one if different, ✓ / ✕ (their meaning in the tooltip)
+  function numCard(u) {
+    const raw = formInput(u.field).value.trim();
+    const cur = u.field === 'weight' ? fmtNum(raw) : raw;
+    const differs = raw && parseFloat(raw) !== parseFloat(u.value);
+    const ok = differs ? 'Заменить на ' + u.show : 'Принять ' + u.show, no = differs ? 'Оставить ' + cur : 'Убрать';
+    // the quote opens on hover / focus right under its own card, names its field and points at the card with a caret
+    const qid = 'sx-q-' + u.id;
+    return '<div class="sx-block sx-numcard' + (u.field === 'temperature' ? ' is-last' : '') + '" data-u="' + u.id + '">' +
+      '<span class="sx-nc-qi" title="Как прозвучало" aria-hidden="true">«»</span>' +
+      '<div class="sx-nc-v"><span class="sx-nowrap"><b>' + esc(u.show) + '</b>' + unitOf(u) + '</span></div>' +
+      (differs ? '<div class="sx-nc-was">в поле ' + esc(cur) + '</div>' : '') +
+      '<div class="sx-q sx-nc-q" id="' + qid + '"><span class="sx-nc-ql">' + esc(u.label.replace(/,.*$/, '')) + '.</span> ' + quoteHtml(u.quote) + '</div>' +
+      // Yuri 2026-11-12: two full-text buttons one under the other, not icons
+      '<div class="sx-nc-acts"><button type="button" class="button green sx-btn" data-a="accept" data-mode="' + (differs ? 'replace' : 'set') + '" aria-describedby="' + qid + '">' + esc(ok) + '</button>' +
+      '<button type="button" class="button sx-btn" data-a="' + (differs ? 'keep' : 'reject') + '" aria-describedby="' + qid + '">' + esc(no) + '</button></div></div>';
+  }
+
   // how the vet said it: «надо исключить» is not a diagnosis set; the type is still the vet's choice (not preselected)
   const DIAG_MARK = /(надо исключить|исключить|скорее всего|на мой взгляд|подозрева\p{L}*|возможно)/giu;
-  const diagTag = u => /исключ/i.test(u.quote) ? 'Надо исключить' : (/скорее всего|на мой взгляд|подозрева|возможно/i.test(u.quote) || /\?/.test(u.title)) ? 'Предположение' : '';
+  // Yuri 2026-11-12: the model returns the type of every diagnosis (Vet.AF ids) — it is prefilled in the dialog and shown
+  // on the suggestion in Vet.AF words; the markers in the quote stay highlighted, so the vet sees why this type
+  const KINDS = { differential: 'Дифференциальный', final: 'Окончательный', clinical: 'Клинический', preliminary: 'Предварительный' };
+  const diagTag = u => KINDS[u.dkind] || '';
   const diagQuote = u => quoteHtml(u.quote).replace(DIAG_MARK, m => '<mark>' + m + '</mark>');
-  const diagTagHtml = u => diagTag(u) ? '<span class="sx-tag" title="Так прозвучало в записи">' + diagTag(u) + '</span>' : '';
+  const diagTagHtml = u => diagTag(u) ? '<span class="sx-tag" title="Тип диагноза из записи">' + diagTag(u) + '</span>' : '';
 
   function diagRow(u) {
     if (u.status === 'done') return '';
@@ -364,9 +389,15 @@
       host(u.id, after(q('#visit-form label.visit-target'))).innerHTML = u.status === 'new' ? '<div class="sx-block sx-single">' + head(u) + inputItem(u) + '</div>' : receipt(u);
     });
     U.filter(u => u.kind === 'text').forEach(u => { host(u.id, after(fieldLabel(u.field))).innerHTML = textBlock(u); });
-    // symptoms · weight · temperature: one item per field, in the order of the Vet.AF row
-    host('triple', after(q('#visit-form .triple-row'))).innerHTML = U.filter(u => u.group === 'triple').map(u =>
-      !isPending(u) ? receipt(u) : '<div class="sx-block sx-triple">' + head(null) + (u.kind === 'number' ? numberItem(u) : inputItem(u)) + '</div>').join('');
+    // symptoms · weight · temperature (Yuri 2026-11-12, lab variant 3): each suggestion right under its own field,
+    // in a grid that copies the columns of the Vet.AF row; numbers are compact cards, the quote opens on hover / focus
+    const row = q('#visit-form .triple-row');
+    const th = host('triple', after(row));
+    th.classList.add('sx-cells');
+    const cs = getComputedStyle(row);
+    th.style.gridTemplateColumns = cs.gridTemplateColumns; th.style.columnGap = cs.columnGap;
+    th.innerHTML = U.filter(u => u.group === 'triple').map(u => '<div class="sx-cell">' +
+      (!isPending(u) ? receipt(u, true) : u.kind === 'number' ? numCard(u) : '<div class="sx-block sx-triple" data-u="' + u.id + '">' + head(null) + inputItem(u) + '</div>') + '</div>').join('');
     const dl = q('#list-diagnoses .list');
     host('diag', el => dl.insertBefore(el, q('.empty-list', dl))).innerHTML = U.filter(u => u.kind === 'diag').map(diagRow).join('');
     renderTags();
@@ -399,6 +430,17 @@
     u.status = 'new'; u.applied = null; u.mode = null;
   }
 
+  // fold an element to zero height, then call fn (height, padding and opacity transition; 200 ms)
+  function collapse(el, fn) {
+    let done = false;
+    const go = () => { if (done) return; done = true; fn(); };
+    el.style.height = el.offsetHeight + 'px'; el.style.overflow = 'hidden'; void el.offsetHeight;
+    el.classList.add('sx-closing');
+    el.style.height = '0px';
+    el.addEventListener('transitionend', ev => { if (ev.propertyName === 'height') go(); });
+    setTimeout(go, 320);
+  }
+
   function flash(el) {
     if (!el) return;
     el.classList.remove('scribe-flash'); void el.offsetWidth; el.classList.add('scribe-flash');
@@ -411,14 +453,17 @@
     const dlg = q('#proto-diag-dialog');
     q('input[name="title"]', dlg).value = u.title;
     const cs = q('.custom-select', dlg);
-    q('input[type="hidden"][name="kind"]', cs).value = '';
-    q('input[readonly]', cs).value = '';
-    cs.classList.add('bottom');
+    // the type from the recording is set like a choice in the Vet.AF list; the list stays closed — the vet changes it if needed
+    const k = KINDS[u.dkind] ? u.dkind : '';
+    q('input[type="hidden"][name="kind"]', cs).value = k;
+    q('input[readonly]', cs).value = KINDS[k] || '';
+    qa('[data-view="list"] > span[data-id]', cs).forEach(o => o.classList.toggle('selected', o.dataset.id === k));
+    cs.classList.toggle('bottom', !k);
     q('.scribe-diag-need', dlg)?.remove();
     dlg.showModal();
     // the quote stays visible above the dialog: our popover in the top layer, not part of the dialog
     if (!pop) { pop = document.createElement('div'); pop.className = 'sx-pop'; pop.setAttribute('popover', 'manual'); document.body.appendChild(pop); }
-    pop.innerHTML = '<span class="sx-badge">' + ICON.mic + '</span><div><div class="sx-q sx-q-dose sx-q-diag">' + diagTagHtml(u) + diagQuote(u) + '</div><div class="sx-muted">Выберите тип диагноза сами</div></div>';
+    pop.innerHTML = '<span class="sx-badge">' + ICON.mic + '</span><div><div class="sx-q sx-q-dose sx-q-diag">' + diagTagHtml(u) + diagQuote(u) + '</div><div class="sx-muted">Тип подставлен из записи — проверьте</div></div>';
     if (!pop.matches(':popover-open')) pop.showPopover();
     const r = q(':scope > section', dlg).getBoundingClientRect();
     pop.style.width = r.width + 'px';
@@ -793,7 +838,10 @@
     bar.dataset.state = isSaved ? 'saved' : 'ready';
   }
 
-  function renderAll() { renderInline(); renderPanel(); updateBarText(); }
+  function renderAll() {
+    renderInline(); renderPanel(); updateBarText();
+    U.forEach(u => { u.fresh = false; if (u.field) fieldLabel(u.field)?.classList.toggle('sx-has', draftReady && u.status === 'new'); });
+  }
 
   // go to the first open suggestion of a tab and show it
   function gotoTab(tab) {
@@ -955,6 +1003,12 @@
       const u = byId(a.dataset.u || item?.dataset.u);
       const li = a.closest('[data-l]');
       const l = u && li && u.lines ? u.lines[+li.dataset.l] : null;
+      // the decided block folds away instead of vanishing (Yuri 2026-11-12: «чтобы анимации не так скакали»)
+      const blk = (act === 'accept' || act === 'reject' || act === 'keep') && u && u.kind !== 'good' ? a.closest('.sx-block, .sx-diag') : null;
+      if (blk && !blk.dataset.closing && !matchMedia('(prefers-reduced-motion: reduce)').matches) { blk.dataset.closing = '1'; collapse(blk, () => a.click()); return; }
+      if ((act === 'undo' || act === 'restore') && u && Date.now() - (u.decidedAt || 0) < 600) return;   // second click of a double click
+      if (u && (act === 'accept' || act === 'reject' || act === 'keep')) u.decidedAt = Date.now();
+      if (u && (act === 'accept' || act === 'reject' || act === 'keep' || act === 'undo' || act === 'restore')) u.fresh = true;
       if (act !== 'bulk' && act !== 'bulk-go' && act !== 'bulk-undo' && act !== 'goto') bulk = null;
 
       if (act === 'accept' && u) accept(u, a.dataset.mode);
@@ -995,6 +1049,10 @@
       }
       if (act === 'bulk-undo' && bulk) { bulk.ids.map(byId).filter(x => x.status === 'done' && !edited(x)).forEach(undo); bulk = null; }
       renderAll();
+      // keyboard: after a decision the focus stays at the same place — on «Отменить» / «Вернуть» of that suggestion,
+      // so the next Tab goes on to the next suggestion instead of jumping to the top of the page
+      if (u && (act === 'accept' || act === 'reject' || act === 'keep')) q('.sx-host .sx-receipt[data-u="' + u.id + '"] .sx-link')?.focus({ preventScroll: true });
+      if (u && (act === 'undo' || act === 'restore')) q('.sx-host [data-u="' + u.id + '"] [data-a="accept"], .sx-host [data-u="' + u.id + '"] [data-a="diag"]')?.focus({ preventScroll: true });
     }, true);
 
     // Vet.AF searches: typing filters the price list (main row: all; modal: goods only)
@@ -1004,13 +1062,23 @@
       if (e.target.matches('#quantity, #proto-good-dialog .sx-mqty')) { e.target.classList.remove('input-error'); const er = q('#proto-good-dialog .sx-mqty-err'); if (er) er.textContent = ''; }
     }, true);
 
-    // hover: outline the Vet.AF field the suggestion belongs to
-    document.addEventListener('mouseover', e => {
+    // paired highlight (Yuri 2026-11-12, lab variant 1): hover or focus on a suggestion or on its Vet.AF field
+    // lights up both, so the eye finds the pair without reading labels
+    function pair(e) {
+      if (!draftReady) return;
+      let u = null;
       const it = e.target.closest('.sx-host [data-u]');
+      if (it) u = byId(it.dataset.u);
+      else { const lab = e.target.closest('#visit-form label'); if (lab) u = U.find(x => x.field && x.status === 'new' && fieldLabel(x.field) === lab); }
       qa('.scribe-target').forEach(x => x.classList.remove('scribe-target'));
-      const u = it && byId(it.dataset.u);
-      if (u && u.field && u.status === 'new') fieldLabel(u.field)?.classList.add('scribe-target');
-    });
+      qa('.sx-pair').forEach(x => x.classList.remove('sx-pair'));
+      if (!u || !u.field || u.status !== 'new') return;
+      fieldLabel(u.field)?.classList.add('scribe-target');
+      qa('.sx-host [data-u="' + u.id + '"]').forEach(x => x.closest('.sx-block')?.classList.add('sx-pair'));
+    }
+    document.addEventListener('mouseover', pair);
+    document.addEventListener('focusin', pair);
+    addEventListener('resize', () => { if (draftReady) renderInline(); });
 
     // the summary follows the Vet.AF tab the vet opens
     q('header.header-sticky nav').addEventListener('click', () => { bulk = null; setTimeout(renderPanel, 0); });
@@ -1025,6 +1093,7 @@
       if (opt) {
         e.preventDefault(); e.stopPropagation();
         q('input[type="hidden"][name="kind"]', cs).value = opt.dataset.id;
+        qa('[data-view="list"] > span[data-id]', cs).forEach(o => o.classList.toggle('selected', o === opt));
         q('input[readonly]', cs).value = opt.textContent.trim();
         cs.classList.remove('bottom');
         q('.scribe-diag-need', dlg)?.remove();
