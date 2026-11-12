@@ -244,6 +244,7 @@
 
   // ================================================================ 4. inline layer under the fields
   let draftReady = false, saved = false, dirty = false, savedAt = null, completed = false;
+  let guardUntil = 0;           // see «double click» guard in the flow
   let bulk = null;            // { tab, step: 'confirm' | 'done', ids }
   const undoStore = {};
   const hosts = {};
@@ -285,8 +286,8 @@
     const ed = edited(u);
     // edited after acceptance (Yuri 2026-11-12): one click returns the field to how it was right after acceptance;
     // «Отменить» then brings back the vet's edited version — nothing is lost for good
-    const back = u.kind === 'number' ? 'Вернуть ' + esc(u.show) : 'Вернуть текст из записи';
-    if (ed) return '<div class="sx-receipt' + fresh + '" data-u="' + u.id + '">' + ICON.tick + lbl + '<span>' + how + ', изменено в поле</span>' +
+    const back = u.kind === 'number' ? 'Вернуть ' + esc(u.show) : 'Вернуть принятый текст';
+    if (ed) return '<div class="sx-receipt' + fresh + '" data-u="' + u.id + '">' + ICON.tick + lbl + '<span>Изменено в поле</span>' +
       '<button type="button" class="sx-link" data-a="reapply">' + back + '</button></div>';
     if (u.reapplied) return '<div class="sx-receipt' + fresh + '" data-u="' + u.id + '">' + ICON.tick + lbl +
       '<span>' + (u.kind === 'number' ? 'Возвращено: ' + nb(u.show) : 'Текст возвращён') + '</span><button type="button" class="sx-link" data-a="undo">Отменить</button></div>';
@@ -606,7 +607,7 @@
     const done = goods().filter(u => u.status === 'done');
     // one status line (hint / quote / «искать: …»), under the group whose name is in the search now
     const act = activeTag && activeTag.scope === 'main' ? byId(activeTag.id) : null;
-    const lineUnder = act && act.home ? 'home' : open.length ? 'main' : home.length ? 'home' : null;
+    const lineUnder = open.length ? 'main' : home.length ? 'home' : null;   // one fixed place: the group does not jump on a click
     h.innerHTML = '<div class="sx-goods">' +
       head(null, '<span class="sx-gtitle">— ' + (open.length ? nNotBilled(open.length) : 'все рассмотрены') + '</span>') +
       (open.length ? '<div class="sx-tags">' + open.map(u => tagHtml(u, 'main')).join('') + '</div>' : '') +
@@ -1031,6 +1032,7 @@
       const blk = (act === 'accept' || act === 'reject' || act === 'keep') && u && u.kind !== 'good' ? a.closest('.sx-block, .sx-diag') : null;
       if (blk && !blk.dataset.closing && !matchMedia('(prefers-reduced-motion: reduce)').matches) { blk.dataset.closing = '1'; collapse(blk, () => a.click()); return; }
       if ((act === 'undo' || act === 'restore') && u && Date.now() - (u.decidedAt || 0) < 600) return;   // second click of a double click
+      if (act === 'accept' || act === 'reject' || act === 'keep' || act === 'reapply' || act === 'undo') guardUntil = Date.now() + 600;
       if (u && (act === 'accept' || act === 'reject' || act === 'keep' || act === 'reapply')) u.decidedAt = Date.now();
       if (u && (act === 'accept' || act === 'reject' || act === 'keep' || act === 'undo' || act === 'restore' || act === 'reapply')) u.fresh = true;
       if (act !== 'bulk' && act !== 'bulk-go' && act !== 'bulk-undo' && act !== 'goto') bulk = null;
@@ -1101,6 +1103,11 @@
       fieldLabel(u.field)?.classList.add('scribe-target');
       qa('.sx-host [data-u="' + u.id + '"]').forEach(x => x.closest('.sx-block')?.classList.add('sx-pair'));
     }
+    // after a decision the layout changes; for 0,6 s the second click of a double click is swallowed anywhere in the form,
+    // so it cannot select or overwrite a word in a field that has just grown under the cursor
+    ['mousedown', 'click', 'dblclick'].forEach(t => document.addEventListener(t, e => {
+      if (e.detail >= 2 && Date.now() < guardUntil && e.target.closest('#visit-form')) { e.preventDefault(); e.stopPropagation(); }
+    }, true));
     document.addEventListener('mouseover', pair);
     document.addEventListener('focusin', pair);
     addEventListener('resize', () => { if (draftReady) renderInline(); });

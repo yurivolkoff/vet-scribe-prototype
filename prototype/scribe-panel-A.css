@@ -879,3 +879,16 @@
 /* ---- 2026-11-12: drugs prescribed for home — clickable names in their own group (optional, not counted) ---- */
 	.sx-home { display: flex; flex-direction: column; gap: .375rem; padding-top: .5rem; border-top: 1px solid rgba(0, 150, 136, .18); }
 	.sx-home-h { font-size: .8125rem; color: var(--grey-64-color); }
+	/* home-drug names have no «×»: the chip is rounded on both sides */
+	.sx-home .sx-tb { border-right: var(--border-width) solid var(--green-color); border-radius: 1.125rem; padding-right: .75rem; }
+	/* Yuri 2026-11-12: home drugs are green links with a search icon, not chips (they are optional, not a to-do) */
+	.sx-home .sx-tags { gap: .375rem 1.25rem; }
+	.sx-home .sx-tb {
+		min-height: 0; padding: 0; border: 0 !important; border-radius: 0; background: transparent !important; box-shadow: none !important;
+		gap: .25rem; font: 400 .9375rem 'Inter', sans-serif; color: var(--green-color);
+		text-decoration: underline; text-decoration-color: rgba(0, 150, 136, .4); text-underline-offset: 3px;
+
+		svg { width: 1.125rem; height: 1.125rem; }
+		&:hover, &:focus-visible { text-decoration-color: var(--green-color); }
+	}
+	.sx-home .sx-tg.is-active .sx-tb { font-weight: 600; text-decoration-color: var(--green-color); }
