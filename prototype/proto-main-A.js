@@ -89,6 +89,14 @@
   // goods and services: search tags, the vet picks the position in Vet.AF (approved 2026-11-11)
   A.items.forEach((it, i) => unit({ id: 'it' + i, tab: 'items', kind: 'good', label: it.name, name: it.name, quote: it.quote,
     type: it.type, recQty: it.quantity, recUnit: it.unit || '', qs: it.queries.concat(EXTRA_Q[it.name] || []) }));
+  // drugs prescribed for home (Yuri 2026-11-12): clickable like the goods above, but optional — not counted in «не в счёте».
+  // The prototype takes them from the dose lines of «План лечения»; in the product the model returns them as a list with queries.
+  const HOME_Q = { 'Локсиком суспензия': ['локсиком', 'мелокс', 'локсик'], 'Стоп-цистит био': ['стоп-цистит', 'стоп'] };
+  A.treatment.filter(x => DOSES.some(r => r[0].test(x.text))).forEach((x, i) => {
+    const name = (x.text.match(/^(.+?)(?= с завтра| по |,)/) || [0, x.text])[1];
+    unit({ id: 'hm' + i, tab: 'items', kind: 'good', home: true, label: name, name, quote: x.quote, type: 'good', recQty: null, recUnit: '',
+      qs: HOME_Q[name] || [name.split(' ')[0].toLowerCase()] });
+  });
 
   // state helpers
   const byId = id => U.find(u => u.id === id);
@@ -100,7 +108,7 @@
     return {
       fields: us.filter(isField).length,
       diags: us.filter(u => u.kind === 'diag').length,
-      goods: us.filter(u => u.kind === 'good').length
+      goods: us.filter(u => u.kind === 'good' && !u.home).length
     };
   }
   function plural(n, a, b, c) { const m = n % 10, h = n % 100; return m === 1 && h !== 11 ? a : m >= 2 && m <= 4 && (h < 10 || h >= 20) ? b : c; }
@@ -275,8 +283,14 @@
     const how = u.kind === 'number' ? (u.was ? 'Заменено: ' + nb(u.show) + ', было ' + nb(u.was) : 'Принято: ' + nb(u.show))
       : u.mode === 'append' ? 'Дописано' : u.mode === 'replace' ? 'Заменено' : 'Принято';
     const ed = edited(u);
+    // edited after acceptance (Yuri 2026-11-12): one click returns the field to how it was right after acceptance;
+    // «Отменить» then brings back the vet's edited version — nothing is lost for good
+    const back = u.kind === 'number' ? 'Вернуть ' + esc(u.show) : 'Вернуть текст из записи';
+    if (ed) return '<div class="sx-receipt' + fresh + '" data-u="' + u.id + '">' + ICON.tick + lbl + '<span>' + how + ', изменено в поле</span>' +
+      '<button type="button" class="sx-link" data-a="reapply">' + back + '</button></div>';
+    if (u.reapplied) return '<div class="sx-receipt' + fresh + '" data-u="' + u.id + '">' + ICON.tick + lbl +
+      '<span>' + (u.kind === 'number' ? 'Возвращено: ' + nb(u.show) : 'Текст возвращён') + '</span><button type="button" class="sx-link" data-a="undo">Отменить</button></div>';
     const tail = saved && !dirty ? '<span class="sx-muted">· сохранено</span>'
-      : ed ? '<span class="sx-muted">· текст изменён в поле, отменить нельзя</span>'
       : '<button type="button" class="sx-link" data-a="undo">Отменить</button>';
     return '<div class="sx-receipt' + fresh + '" data-u="' + u.id + '">' + ICON.tick + lbl +
       '<span>' + how + '</span>' + tail + '</div>';
@@ -424,11 +438,17 @@
     flash(u.kind === 'diag' ? null : fieldLabel(u.field));
   }
 
-  function undo(u) {
-    if (u.kind === 'text') editor(u.field).innerHTML = undoStore[u.id];
-    else { const i = formInput(u.field); i.value = undoStore[u.id]; i.setAttribute('value', undoStore[u.id]); }
-    u.status = 'new'; u.applied = null; u.mode = null;
+  function setField(u, v) {
+    if (u.kind === 'text') editor(u.field).innerHTML = v;
+    else { const i = formInput(u.field); i.value = v; i.setAttribute('value', v); }
   }
+  function undo(u) {
+    setField(u, undoStore[u.id]);
+    u.status = 'new'; u.applied = null; u.mode = null; u.reapplied = false;
+  }
+  // «Вернуть текст из записи»: the field as right after acceptance; the vet's version is kept for «Отменить»
+  function reapply(u) { u.edits = fieldNow(u); setField(u, u.applied); u.reapplied = true; dirty = true; flash(fieldLabel(u.field)); }
+  function unreapply(u) { setField(u, u.edits); u.reapplied = false; dirty = true; }
 
   // fold an element to zero height, then call fn (height, padding and opacity transition; 200 ms)
   function collapse(el, fn) {
@@ -521,10 +541,11 @@
   // pending item: the name puts its query into the open search; «×» removes it (with «Вернуть»)
   function tagHtml(u, scope) {
     const active = activeTag && activeTag.id === u.id && activeTag.scope === scope;
+    const x = u.home ? '' : '<button type="button" class="sx-tx" data-a="reject" title="Убрать" aria-label="Убрать: ' + esc(u.name) + '">' + ICON.x + '</button>';
     return '<span class="sx-tg' + (active ? ' is-active' : '') + '" data-u="' + u.id + '">' +
       '<button type="button" class="sx-tb" data-a="gtag" aria-describedby="tip-' + scope + '-' + u.id + '">' + ICON.search +
         '<span class="sx-tn">' + esc(u.name) + '</span>' + (heardQty(u) ? '<span class="sx-th">прозвучало ' + esc(heardQty(u)) + '</span>' : '') + '</button>' +
-      '<button type="button" class="sx-tx" data-a="reject" title="Убрать" aria-label="Убрать: ' + esc(u.name) + '">' + ICON.x + '</button>' +
+      x +
       '<span class="sx-tip" role="tooltip" id="tip-' + scope + '-' + u.id + '">' + quoteHtml(u.quote) + '</span></span>';
   }
   // one reserved line under the names: the hint, or the active item's quote, empty result and «Уже внесено»
@@ -574,22 +595,25 @@
     return out;
   }
 
-  // drugs prescribed for home (dose lines of «План лечения») — the model does not offer them for the bill
-  const homeDrugs = () => byId('treatment').lines.filter(l => l.dose).map(l => (l.text.match(/^(.+?)(?= с завтра| по |,)/) || [0, l.text])[1]);
-  const homeHint = () => 'Назначено на дом, в счёт не предложено: ' + homeDrugs().join(', ') + '. Добавьте, если отпускаете в клинике';
 
   // block above the search row of the goods tab; the added items go under the search row, so the row itself does not move down
   function renderTags() {
     const box = q('#list-items-in-sale');
     const form = q(':scope > form', box);
     const h = host('goods', el => box.insertBefore(el, form));
-    const open = goods().filter(isPending), rej = goods().filter(u => u.status === 'rejected');
+    const open = goods().filter(u => isPending(u) && !u.home), rej = goods().filter(u => u.status === 'rejected');
+    const home = goods().filter(u => isPending(u) && u.home);
     const done = goods().filter(u => u.status === 'done');
+    // one status line (hint / quote / «искать: …»), under the group whose name is in the search now
+    const act = activeTag && activeTag.scope === 'main' ? byId(activeTag.id) : null;
+    const lineUnder = act && act.home ? 'home' : open.length ? 'main' : home.length ? 'home' : null;
     h.innerHTML = '<div class="sx-goods">' +
       head(null, '<span class="sx-gtitle">— ' + (open.length ? nNotBilled(open.length) : 'все рассмотрены') + '</span>') +
-      (open.length ? '<div class="sx-tags">' + open.map(u => tagHtml(u, 'main')).join('') + '</div>' + statusLine('main') : '') +
+      (open.length ? '<div class="sx-tags">' + open.map(u => tagHtml(u, 'main')).join('') + '</div>' : '') +
+      (lineUnder === 'main' ? statusLine('main') : '') +
+      (home.length ? '<div class="sx-home"><div class="sx-home-h">Назначено на дом — если отпускаете в клинике:</div><div class="sx-tags">' + home.map(u => tagHtml(u, 'main')).join('') + '</div></div>' : '') +
+      (lineUnder === 'home' ? statusLine('main') : '') +
       (rej.length ? '<div class="sx-rej">Убрано: ' + rej.map(u => esc(u.name) + ' <button type="button" class="sx-link" data-a="restore" data-u="' + u.id + '">Вернуть</button>').join(' · ') + '</div>' : '') +
-      (homeDrugs().length ? '<div class="sx-gfoot"><p>' + esc(homeHint()) + '</p></div>' : '') +
     '</div>';
     const hd = host('goods-done', el => form.after(el));
     hd.innerHTML = done.length ? '<div class="sx-goods-done"><div class="sx-from">Добавлено в счёт</div><ul class="sx-donelist">' + done.map(doneHtml).join('') + '</ul></div>' : '';
@@ -603,8 +627,8 @@
     if (!dlg) return;
     let plate = q(':scope > .sx-gplate', dlg);
     if (!plate) { plate = document.createElement('div'); plate.className = 'sx-gplate'; dlg.insertBefore(plate, dlg.firstChild); }
-    const list = goods().filter(u => u.type === 'good' && isPending(u));
-    const done = goods().filter(u => u.type === 'good' && u.status === 'done');
+    const list = goods().filter(u => u.type === 'good' && !u.home && isPending(u));
+    const done = goods().filter(u => u.type === 'good' && !u.home && u.status === 'done');
     plate.innerHTML = '<span class="sx-badge">' + ICON.mic + '</span><div class="sx-gpop-b"><div class="sx-from">Из записи — товары</div>' +
       (list.length ? '<div class="sx-tags">' + list.map(u => tagHtml(u, 'modal')).join('') + '</div>' + statusLine('modal') : '') +
       (done.length ? '<ul class="sx-donelist">' + done.map(doneHtml).join('') + '</ul>' : '') +
@@ -1007,15 +1031,16 @@
       const blk = (act === 'accept' || act === 'reject' || act === 'keep') && u && u.kind !== 'good' ? a.closest('.sx-block, .sx-diag') : null;
       if (blk && !blk.dataset.closing && !matchMedia('(prefers-reduced-motion: reduce)').matches) { blk.dataset.closing = '1'; collapse(blk, () => a.click()); return; }
       if ((act === 'undo' || act === 'restore') && u && Date.now() - (u.decidedAt || 0) < 600) return;   // second click of a double click
-      if (u && (act === 'accept' || act === 'reject' || act === 'keep')) u.decidedAt = Date.now();
-      if (u && (act === 'accept' || act === 'reject' || act === 'keep' || act === 'undo' || act === 'restore')) u.fresh = true;
+      if (u && (act === 'accept' || act === 'reject' || act === 'keep' || act === 'reapply')) u.decidedAt = Date.now();
+      if (u && (act === 'accept' || act === 'reject' || act === 'keep' || act === 'undo' || act === 'restore' || act === 'reapply')) u.fresh = true;
       if (act !== 'bulk' && act !== 'bulk-go' && act !== 'bulk-undo' && act !== 'goto') bulk = null;
 
       if (act === 'accept' && u) accept(u, a.dataset.mode);
       if (act === 'reject' && u) { u.status = 'rejected'; u.auto = false; if (activeTag && activeTag.id === u.id) activeTag = null; }
       if (act === 'keep' && u) { u.status = 'rejected'; u.kept = fmtNum(formInput(u.field).value.trim()); }
       if (act === 'restore' && u) { u.status = 'new'; u.kept = null; }
-      if (act === 'undo' && u && !edited(u)) undo(u);
+      if (act === 'undo' && u && !edited(u)) { if (u.reapplied) unreapply(u); else undo(u); }
+      if (act === 'reapply' && u && u.status === 'done') reapply(u);
       if (act === 'quotes' && u) u.showQuotes = !u.showQuotes;
       if (act === 'drop' && l) {
         l.excluded = true;
@@ -1051,7 +1076,7 @@
       renderAll();
       // keyboard: after a decision the focus stays at the same place — on «Отменить» / «Вернуть» of that suggestion,
       // so the next Tab goes on to the next suggestion instead of jumping to the top of the page
-      if (u && (act === 'accept' || act === 'reject' || act === 'keep')) q('.sx-host .sx-receipt[data-u="' + u.id + '"] .sx-link')?.focus({ preventScroll: true });
+      if (u && (act === 'accept' || act === 'reject' || act === 'keep' || act === 'reapply' || (act === 'undo' && u.status === 'done'))) q('.sx-host .sx-receipt[data-u="' + u.id + '"] .sx-link')?.focus({ preventScroll: true });
       if (u && (act === 'undo' || act === 'restore')) q('.sx-host [data-u="' + u.id + '"] [data-a="accept"], .sx-host [data-u="' + u.id + '"] [data-a="diag"]')?.focus({ preventScroll: true });
     }, true);
 

@@ -875,3 +875,7 @@
 	.sx-cell > .sx-numcard { width: calc(100% + 1.625rem); }
 	.sx-cell > .sx-numcard.is-last { margin-left: -1.625rem; }
 	.sx-cell > .sx-numcard.is-last::before { left: calc(1.25rem + 1.625rem); }
+
+/* ---- 2026-11-12: drugs prescribed for home — clickable names in their own group (optional, not counted) ---- */
+	.sx-home { display: flex; flex-direction: column; gap: .375rem; padding-top: .5rem; border-top: 1px solid rgba(0, 150, 136, .18); }
+	.sx-home-h { font-size: .8125rem; color: var(--grey-64-color); }
