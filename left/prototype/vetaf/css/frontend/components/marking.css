@@ -1,0 +1,165 @@
+@charset "utf-8";
+
+
+/* --------------------------------------------------------------------------
+   True Tag List
+-------------------------------------------------------------------------- */
+
+	.marked-list {
+
+		> header {
+			background: none;
+			color: #000;
+			border: none;
+			position: inherit;
+			padding: 0;
+			margin: 0;
+			font-weight: 600;
+			font-size: 1.25rem;
+			display: block;
+			height: inherit;
+		}
+
+		&.visible {
+			display: flex !important;
+		}
+
+		display: none !important;
+		flex-direction: column;
+
+		div.list {
+
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+			border: none !important;
+
+			.selected {
+
+				> div {
+
+					background: var(--grey-f5-color);
+
+					div[data-action="scan"] {
+						display: flex;
+					}
+
+				}
+
+			}
+
+			.scanned svg {
+				color: #000 !important;
+			}
+
+			> div {
+
+				border: var(--border-width) solid var(--grey-e6-color);
+				border-radius: .375rem;
+				padding: .5rem;
+				display: flex;
+				flex-direction: column;
+
+				&:has(.error-block) {
+					border: var(--border-width) solid var(--red-color);
+				}
+
+				input {
+					width: 0;
+					height: 0;
+					padding: 0;
+					opacity: 0;
+					pointer-events: none;
+				}
+
+				> div {
+
+					display: flex;
+					flex-direction: column;
+					gap: 1rem;
+					padding: .625rem;
+					border-radius: .5rem;
+
+					&:hover {
+						background: var(--grey-f5-color);
+						cursor: pointer;
+					}
+
+					> div:first-child {
+
+						display: flex;
+						gap: 1rem;
+
+						svg {
+							width: 2.625rem;
+							height: 2.625rem;
+							color: var(--grey-b4-color);
+						}
+
+						> div {
+
+							display: flex;
+							flex-direction: column;
+							justify-content: space-between;
+
+							span.title {
+								font-size: 1.125rem;
+							}
+
+							span.status {
+								color: var(--grey-80-color);
+							}
+
+						}
+
+					}
+
+					> div[data-action="scan"] {
+						display: none;
+						border: none;
+						color: #000;
+						pointer-events: none;
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	[data-id="history"] .marked-list {
+		margin-top: 1rem;
+	}
+
+
+/* --------------------------------------------------------------------------
+   Deposit
+-------------------------------------------------------------------------- */
+
+	#pay-deposit-dialog .marked-list {
+		margin-top: 1rem;
+		gap: .875rem;
+	}
+
+
+/* --------------------------------------------------------------------------
+   Return
+-------------------------------------------------------------------------- */
+
+	div[data-id="paid"] .title {
+
+		span:has(svg) {
+
+			margin-left: 0;
+
+			svg {
+				width: 1.5rem;
+				height: 1.5rem;
+				color: var(--grey-b4-color);
+			}
+
+		}
+
+	}

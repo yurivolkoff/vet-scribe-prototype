@@ -1,0 +1,415 @@
+@charset "utf-8";
+
+/* --------------------------------------------------------------------------
+   Visit scribe: recording bar under the visit tabs + "Черновик из записи" panel.
+   Additions only. Built from Vet.AF tokens (base.css :root) and patterns:
+   .button / .button.green (frontend/common.css), card look of .dropdown-button .data
+   (employee/common.css), dialog header gradient (--dialog-header-background).
+   Colours (screens-v1): green = normal flow and done; yellow = attention / pause;
+   red = reserved for failures (not used on this screen).
+   One visual identity for the whole recording flow: the round badge with the mic,
+   the same card surface and the same title type in the bar and in the panel.
+-------------------------------------------------------------------------- */
+
+	:root {
+		--scribe-panel-w: 24rem;
+	}
+
+	/* ---- Recording bar ---- */
+
+	.scribe-bar {
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		min-height: 3.75rem;
+		margin-top: .625rem;
+		padding: .5rem .625rem .5rem .625rem;
+		border: var(--border-width) solid var(--green-color);
+		border-radius: .375rem;
+		background: #FFF;
+		box-shadow: var(--box-shadow);
+		font-family: 'Inter', sans-serif;
+		transition: var(--transition);
+	}
+
+	.scribe-main {
+		display: flex;
+		align-items: center;
+		gap: .75rem;
+		flex: 1 1 auto;
+		min-width: 0;
+	}
+
+	/* Badge: the mark of the recording flow, reused in the panel header */
+	.scribe-badge {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex: 0 0 auto;
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: 50%;
+		background: var(--green-color);
+		color: #FFF;
+		box-shadow: 0 0 0 0 rgba(0, 150, 136, .2);
+		transition: box-shadow .12s linear, background var(--transition);
+
+		svg {
+			width: 1.75rem;
+			height: 1.75rem;
+		}
+	}
+
+	.scribe-text {
+		display: flex;
+		flex-direction: column;
+		gap: .125rem;
+		min-width: 0;
+	}
+
+	.scribe-title {
+		font-size: 1rem;
+		font-weight: 600;
+		color: var(--grey-28-color);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.scribe-time {
+		font-variant-numeric: tabular-nums;
+	}
+
+	.scribe-sub {
+		font-size: .875rem;
+		color: var(--grey-64-color);
+		line-height: 1.3;
+	}
+
+	.scribe-sub.ok {
+		color: var(--green-color);
+	}
+
+	.scribe-actions {
+		display: flex;
+		align-items: center;
+		gap: .5rem;
+		flex: 0 0 auto;
+
+		.button {
+			height: 2.5rem;
+			padding: 0 1rem 0 .75rem;
+			gap: .375rem;
+			white-space: nowrap;
+
+			svg {
+				width: 1.5rem;
+				height: 1.5rem;
+			}
+		}
+	}
+
+	.scribe-spinner {
+		width: 1.25rem;
+		height: 1.25rem;
+		box-sizing: border-box;
+		border-radius: 50%;
+		border: 2px solid var(--green-color);
+		border-right-color: transparent;
+		animation: scribe-spin .9s linear infinite;
+	}
+
+	/* ---- Bar states ---- */
+
+	/* idle: the Vet.AF dialog-header gradient (same as the panel header), solid badge, primary action */
+	.scribe-bar[data-state="idle"] {
+		background: var(--dialog-header-background);
+	}
+
+	.scribe-bar[data-state="checking"] {
+		border-color: var(--grey-e6-color);
+		.scribe-badge { background: var(--grey-f5-color); color: var(--grey-8c-color); }
+	}
+
+	.scribe-bar[data-state="recording"] {
+		background: var(--green-light-color);
+	}
+
+	.scribe-bar[data-state="paused"] {
+		border-color: var(--yellow-color);
+		background: var(--yellow-light-color);
+		.scribe-badge { background: var(--yellow-color); box-shadow: none !important; }
+		.scribe-title { color: var(--yellow-partial-color); }
+	}
+
+	.scribe-bar:is([data-state="sending"], [data-state="sent"], [data-state="drafting"]) {
+		border-color: var(--grey-e6-color);
+		.scribe-badge { background: var(--green-light-color); color: var(--green-color); }
+	}
+
+	/* state-dependent pieces: hidden unless their state is listed in data-show */
+	.scribe-bar [data-show], .scribe-panel [data-show] { display: none !important; }
+	.scribe-bar[data-state="idle"]      [data-show~="idle"],
+	.scribe-bar[data-state="checking"]  [data-show~="checking"],
+	.scribe-bar[data-state="recording"] [data-show~="recording"],
+	.scribe-bar[data-state="paused"]    [data-show~="paused"],
+	.scribe-bar[data-state="sending"]   [data-show~="sending"],
+	.scribe-bar[data-state="sent"]      [data-show~="sent"],
+	.scribe-bar[data-state="drafting"]  [data-show~="drafting"] {
+		display: revert !important;
+	}
+	.scribe-bar[data-state="checking"]  .button[data-show~="checking"],
+	.scribe-bar[data-state="idle"]      .button[data-show~="idle"],
+	.scribe-bar[data-state="recording"] .button[data-show~="recording"],
+	.scribe-bar[data-state="paused"]    .button[data-show~="paused"],
+	.scribe-bar[data-state="checking"]  .scribe-level[data-show~="checking"],
+	.scribe-bar[data-state="recording"] .scribe-level[data-show~="recording"] {
+		display: inline-flex !important;
+	}
+
+	.scribe-bar[data-state="idle"] .scribe-badge[data-show~="idle"],
+	.scribe-bar[data-state="checking"] .scribe-badge[data-show~="checking"],
+	.scribe-bar[data-state="recording"] .scribe-badge[data-show~="recording"],
+	.scribe-bar[data-state="paused"] .scribe-badge[data-show~="paused"],
+	.scribe-bar[data-state="sending"] .scribe-badge[data-show~="sending"],
+	.scribe-bar[data-state="sent"] .scribe-badge[data-show~="sent"],
+	.scribe-bar[data-state="drafting"] .scribe-badge[data-show~="drafting"] {
+		display: inline-flex !important;
+	}
+
+	/* panel collapsed: the bar offers to show it again */
+	.scribe-panel-open .scribe-bar[data-state] .button[data-scribe="expand"] {
+		display: none !important;
+	}
+	.scribe-bar[data-state="drafting"] .button[data-show~="drafting"] {
+		display: inline-flex !important;
+	}
+
+	.scribe-level {
+		align-items: flex-end;
+		gap: 3px;
+		height: 1.25rem;
+		margin-left: .25rem;
+
+		i {
+			display: block;
+			width: 3px;
+			height: 20%;
+			border-radius: 1px;
+			background: var(--green-color);
+			transition: height .12s linear;
+		}
+	}
+
+	.scribe-bar[data-state="checking"] .scribe-level i {
+		background: var(--grey-b4-color);
+	}
+
+	/* ---- Panel "Черновик из записи" (opens when there is something to show) ---- */
+
+	.scribe-panel-open #visit-form {
+		margin-right: calc(var(--scribe-panel-w) + 1rem);
+	}
+
+	.scribe-panel {
+		position: fixed;
+		z-index: 2;
+		display: none;
+		flex-direction: column;
+		box-sizing: border-box;
+		width: var(--scribe-panel-w);
+		border: var(--border-width) solid var(--grey-fo-color);
+		border-radius: .375rem;
+		background: #FFF;
+		box-shadow: var(--box-shadow);
+		font-family: 'Inter', sans-serif;
+		overflow: hidden;
+	}
+
+	.scribe-panel-open .scribe-panel {
+		display: flex;
+	}
+
+	.scribe-panel > header {
+		display: flex;
+		align-items: center;
+		gap: .75rem;
+		padding: .75rem .75rem .75rem .875rem;
+		background: var(--dialog-header-background);
+		border-bottom: var(--border-width) solid var(--grey-fo-color);
+
+		.scribe-badge {
+			width: 2rem;
+			height: 2rem;
+			background: var(--green-light-color);
+			color: var(--green-color);
+
+			svg { width: 1.375rem; height: 1.375rem; }
+		}
+
+		.scribe-title { flex: 1 1 auto; }
+	}
+
+	.scribe-collapse {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2rem;
+		height: 2rem;
+		border: 0;
+		border-radius: .25rem;
+		background: transparent;
+		color: var(--grey-8c-color);
+		cursor: pointer;
+
+		svg { width: 1.5rem; height: 1.5rem; }
+
+		&:hover { background: var(--green-light-color); color: var(--green-color); }
+	}
+
+	.scribe-panel > section {
+		padding: 1rem .875rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		overflow: auto;
+	}
+
+	.scribe-steps {
+		display: flex;
+		flex-direction: column;
+		gap: .75rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+
+		li {
+			display: flex;
+			align-items: center;
+			gap: .625rem;
+			font-size: .9375rem;
+			color: var(--grey-8c-color);
+		}
+
+		li[data-step="done"] { color: var(--grey-28-color); }
+		li[data-step="active"] { color: var(--grey-28-color); font-weight: 500; }
+
+		.mark {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 1.25rem;
+			height: 1.25rem;
+			flex: 0 0 auto;
+			box-sizing: border-box;
+			border-radius: 50%;
+			border: var(--border-width) solid var(--grey-dc-color);
+		}
+
+		li[data-step="done"] .mark {
+			border: 0;
+			background: var(--green-color);
+			color: #FFF;
+
+			svg { width: 1.25rem; height: 1.25rem; --width: 2; }
+		}
+
+		li[data-step="active"] .mark {
+			border: 2px solid var(--green-color);
+			border-right-color: transparent;
+			animation: scribe-spin .9s linear infinite;
+		}
+
+		.meta {
+			margin-left: auto;
+			color: var(--grey-8c-color);
+			font-weight: 400;
+			font-variant-numeric: tabular-nums;
+		}
+	}
+
+	.scribe-note {
+		font-size: .875rem;
+		line-height: 1.35;
+		color: var(--grey-64-color);
+		padding: .75rem .875rem;
+		border-radius: .375rem;
+		background: var(--grey-fa-color);
+	}
+
+	@keyframes scribe-spin {
+		to { transform: rotate(360deg); }
+	}
+
+/* --------------------------------------------------------------------------
+   Prototype-only controls (not part of the designed UI)
+-------------------------------------------------------------------------- */
+
+	.proto-bar {
+		position: fixed;
+		right: 1rem;
+		bottom: 1rem;
+		z-index: 9999;
+		display: flex;
+		gap: .5rem;
+		align-items: center;
+		padding: .375rem .625rem;
+		border: 1px dashed var(--grey-b4-color);
+		border-radius: .375rem;
+		background: rgba(255, 255, 255, .92);
+		font: 400 .75rem/1.2 'Inter', sans-serif;
+		color: var(--grey-80-color);
+
+		a { color: var(--blue-color); cursor: pointer; }
+	}
+
+/* ---- 2026-11-12: microphone error, delete an accidental recording (Yuri) ---- */
+
+	/* no microphone access: a failure — red border and a crossed-out microphone; one action */
+	.scribe-bar[data-state="mic"] {
+		border-color: var(--red-color);
+		background: var(--red-light-color);
+		.scribe-badge { background: var(--red-color); color: #FFF; }
+		.scribe-title { color: var(--red-color); }
+	}
+	/* «Удалить запись?» — the same calm yellow as the pause it comes from */
+	.scribe-bar[data-state="confirm"] {
+		border-color: var(--yellow-color);
+		background: var(--yellow-light-color);
+		.scribe-badge { background: var(--yellow-color); box-shadow: none !important; }
+	}
+	.scribe-bar[data-state="mic"]     [data-show~="mic"],
+	.scribe-bar[data-state="confirm"] [data-show~="confirm"] {
+		display: revert !important;
+	}
+	.scribe-bar[data-state="mic"]     :is(.button, .scribe-badge, .scribe-barlink)[data-show~="mic"],
+	.scribe-bar[data-state="confirm"] :is(.button, .scribe-badge)[data-show~="confirm"],
+	.scribe-bar[data-state="paused"]  .scribe-barlink[data-show~="paused"] {
+		display: inline-flex !important;
+	}
+
+	/* tertiary action in the bar: a text link, away from the main buttons */
+	.scribe-barlink {
+		align-items: center;
+		margin-right: .5rem;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		font: 400 .875rem/1.2 'Inter', sans-serif;
+		color: var(--grey-64-color);
+		text-decoration: underline;
+		text-underline-offset: 2px;
+		cursor: pointer;
+
+		&:hover { color: var(--red-color); }
+	}
+	.scribe-bar .button.scribe-danger {
+		border-color: var(--red-color);
+		color: var(--red-color);
+
+		&:hover { background: var(--red-color); color: #FFF; }
+	}
+	/* readable title on the red state: the colour is carried by the border and the badge */
+	.scribe-bar[data-state="mic"] .scribe-title { color: var(--grey-28-color); }

@@ -1,0 +1,573 @@
+@charset "utf-8";
+
+
+/* --------------------------------------------------------------------------
+   Header Sticky
+-------------------------------------------------------------------------- */
+
+	.header-sticky {
+
+		position: sticky;
+		top: 0;
+		z-index: 2;
+		background: linear-gradient(180deg, white 70%, transparent 100%);
+
+		> div {
+			align-items: inherit;
+		}
+
+		/* DropDown Extend */
+		.dropdown-button {
+
+			width: 11rem;
+
+			.button {
+				height: 2.75rem;
+				width: 11rem;
+				background: var(--green-color);
+				color: #FFF !important;
+				justify-content: center !important;
+				border: var(--border-width) solid var(--green-color) !important;
+			}
+
+			.data {
+
+				width: 100%;
+
+				a {
+					grid-template-columns: auto 1fr;
+				}
+
+			}
+
+		}
+
+	}
+
+
+/* --------------------------------------------------------------------------
+   History List
+-------------------------------------------------------------------------- */
+
+	#list-visits {
+
+		&[data-office='true'] :where(header, section a) {
+			grid-template-columns: 7rem 1fr 1fr 1fr .8fr .7fr;
+		}
+
+		&[data-office='false'] :where(header, section a) {
+			grid-template-columns: 7rem 1.5fr 1fr .5fr .7fr;
+		}
+
+		section a > span:nth-child(2) {
+
+			display: flex;
+			align-items: center;
+			word-wrap: anywhere;
+
+			svg {
+				width: 1.5rem;
+				height: 1.5rem;
+				color: var(--grey-8c-color);
+				margin-right: .5rem;
+				flex-shrink: 0;
+			}
+
+			span {
+				word-wrap: anywhere;
+			}
+
+		}
+
+	}
+
+
+/* --------------------------------------------------------------------------
+   Visit Form -> inspections
+-------------------------------------------------------------------------- */
+
+	#visit-form {
+
+		:where(div[data-id="inspections"], div[data-id="recommendations"]) > div {
+			gap: 2.5rem;
+			display: flex;
+			flex-direction: column;
+		}
+
+		div[data-id="inspections"] .visit-target > span:last-child {
+			position: relative;
+			box-sizing: border-box;
+			display: block;
+		}
+
+		.visit-target > span:first-child {
+
+			position: relative;
+			justify-content: space-between;
+
+			#title-length {
+
+				color: var(--grey-64-color);
+				text-align: right;
+				gap: .3rem;
+				font-size: .75rem;
+
+				&.visible {
+					display: flex;
+				}
+
+			}
+
+		}
+
+		.triple-row {
+			display: grid;
+			grid-gap: 3.5rem;
+			grid-template-columns: 1fr .3fr .3fr;
+		}
+
+	}
+
+
+/* --------------------------------------------------------------------------
+   Local Storage
+-------------------------------------------------------------------------- */
+
+	#local-storage {
+
+		display: none;
+		flex-direction: column;
+		gap: 1rem;
+
+		&.visible {
+			display: block;
+		}
+
+		> div:has(button) {
+
+			display: flex;
+			justify-content: space-evenly;
+			margin-top: 1rem;
+
+			button {
+				height: 2rem;
+			}
+
+		}
+
+	}
+
+
+/* --------------------------------------------------------------------------
+   Animations
+-------------------------------------------------------------------------- */
+
+	@keyframes pulseStatusBlue {
+
+		0%, 100% {
+			background: var(--blue-light-color);
+			box-shadow: 0 0 0 0 rgba(80, 130, 200, 0);
+		}
+
+		50% {
+			background: #EEF4FC;
+			box-shadow: 0 0 0 .25rem rgba(80, 130, 200, .12);
+		}
+
+	}
+
+
+/* --------------------------------------------------------------------------
+   Archive Visit
+-------------------------------------------------------------------------- */
+
+	div[data-type="archive"] {
+
+		:where(.uploaders-container, .print-share-block, #list-items-in-sale > header, #list-items-in-sale .control, #list-items-in-sale footer a, .payment-block button, .left-section .dropdown-button, .create-button-container, .dropdown-button a[data-target="#visit-form"]) {
+			display: none !important;
+		}
+
+		:where([data-post-type="changeEmployeesUpdate"], [data-role="inline-edit"], [data-post-type="changeEmployee"]) {
+			pointer-events: none !important;
+		}
+
+	}
+
+
+/* --------------------------------------------------------------------------
+   CkEditor: Reset Defaults
+-------------------------------------------------------------------------- */
+
+	div[role="application"].ck {
+
+		transition: var(--transition);
+		border-radius: .25rem !important;
+		overflow: hidden;
+
+		&:has(div[contenteditable]:focus) {
+			border: var(--border-width) solid var(--green-color) !important;
+		}
+
+		div[role="toolbar"].ck-toolbar {
+			background: #fff !important;
+			border-top-left-radius: .25rem;
+			border-top-right-radius: .25rem;
+		}
+
+		div[role="textbox"].ck-editor__editable {
+			padding: 0 !important;
+		}
+
+		.ck-sticky-panel__content {
+			position: inherit !important;
+		}
+
+		.ck-dropdown__panel {
+			max-height: 10rem !important;
+			overflow: auto !important;
+		}
+
+	}
+
+
+/* --------------------------------------------------------------------------
+   Buttons in Analyzes or Hospital
+-------------------------------------------------------------------------- */
+
+	.create-button-container {
+
+		display: flex;
+		gap: .5rem;
+		margin-bottom: 1.875rem;
+		border: var(--border-width) solid var(--grey-e6-color);
+		border-radius: .5rem;
+		padding: .5rem;
+
+		> div {
+
+			background: var(--grey-fa-color);
+			padding-block: var(--space-base);
+			box-sizing: border-box;
+			color: var(--grey-64-color);
+			border-radius: .375rem;
+			width: 100%;
+			justify-content: center;
+			align-items: center;
+			display: flex;
+			flex-direction: column;
+			cursor: pointer;
+			transition: var(--transition);
+
+			&:hover {
+
+				color: var(--green-color);
+
+				span {
+					color: var(--green-color);
+					background: var(--green-light-color);
+				}
+
+				svg {
+					color: var(--green-color);
+				}
+
+			}
+
+			> div {
+				margin-top: 1rem;
+				text-align: center;
+				letter-spacing: .01rem;
+				color: currentColor;
+			}
+
+		}
+
+		span {
+			background: var(--grey-fo-color);
+			color: var(--grey-b4-color);
+			border-radius: .625rem;
+			width: 4rem;
+			height: 4rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: var(--transition);
+		}
+
+		svg {
+			color: currentColor;
+			transition: var(--transition);
+			width: 2.5rem;
+			height: 2.5rem;
+			display: block;
+			flex-shrink: 0;
+		}
+
+	}
+
+
+/* --------------------------------------------------------------------------
+   Lack Error
+-------------------------------------------------------------------------- */
+
+	.lack {
+
+		margin-left: 0;
+		padding-left: 1.7rem;
+		color: #000;
+
+		> li {
+
+			line-height: 200%;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+
+		}
+
+	}
+
+	#prescription-dialog {
+		width: 50svw;
+	}
+
+
+/* --------------------------------------------------------------------------
+   Mobile
+-------------------------------------------------------------------------- */
+
+	html[data-device="mobile"] {
+
+		#page {
+
+			> main[data-container="main"] {
+
+				> .template {
+
+					/* List Visits */
+					> #list-visits.sticky-list {
+
+						/* Header */
+						.wrapper > header {
+
+							> span:nth-child(1) {
+								display: flex;
+							}
+
+							> span:nth-child(2) {
+								display: none;
+							}
+
+						}
+
+						/* Content */
+						> section > * {
+
+							> span:nth-child(2) {
+								order: 1;
+								grid-column: 1 / -1;
+								position: sticky;
+								left: var(--space-base);
+								z-index: 1;
+								display: flex;
+								align-items: center;
+								justify-content: center;
+								width: min-content;
+								max-width: 100%;
+								box-sizing: border-box;
+							}
+
+							> span:nth-child(1) {
+								order: 2;
+								grid-column: auto;
+								position: static;
+								left: auto;
+								z-index: auto;
+								width: auto;
+								max-width: none;
+							}
+
+							> span:nth-child(3) {
+								order: 3;
+							}
+
+							> span:nth-child(4) {
+								order: 4;
+							}
+
+							> span:nth-child(5) {
+								order: 5;
+							}
+
+						}
+
+						&[data-office="false"] {
+							--table-template-columns: 15rem repeat(3, 10rem);
+						}
+
+						&[data-office="true"] {
+
+							--table-template-columns: 15rem repeat(4, 10rem);
+
+							> section > * > span:nth-child(6) {
+								order: 6;
+							}
+
+						}
+
+					}
+
+				}
+
+				/* Visit Form */
+				&:has(#visit-form) {
+
+					margin-top: var(--header-height);
+
+					aside.left-section {
+
+						gap: 0;
+
+						#local-storage {
+							border-radius: 0;
+						}
+
+						> section.visit-block {
+
+							border-top: none;
+							border-bottom: none;
+							padding: calc(var(--space-base) / 1.5) var(--space-base);
+
+							> *:not(header) {
+								display: none;
+							}
+
+							> header {
+
+								padding-bottom: 0;
+
+								&::after {
+									display: none;
+								}
+
+							}
+
+						}
+
+						> section.animal-block, .animal-in-hospital {
+							display: none;
+						}
+
+					}
+
+					> .template {
+
+						header.header-sticky {
+
+							top: auto;
+							position: static;
+							padding: 0 0 var(--space-base);
+
+							> div:first-child {
+
+								height: auto;
+								gap: 0;
+
+								nav[data-tab="control"] {
+
+									border-radius: 0;
+									scroll-snap-type: inline mandatory;
+
+									& > * {
+										scroll-snap-align: start;
+									}
+
+								}
+
+							}
+
+							> div:last-child {
+
+								.button {
+									width: min-content;
+									border-radius: 0;
+								}
+
+								svg {
+									display: none;
+								}
+
+								a {
+									grid-template-columns: 1fr;
+								}
+
+							}
+
+						}
+
+						#visit-form {
+
+							margin-inline: var(--space-base);
+
+							:where(div[data-id="inspections"], div[data-id="recommendations"]) > div {
+								gap: var(--space-base);
+							}
+
+							.triple-row {
+								grid-row-gap: var(--space-base);
+								grid-column-gap: 1rem;
+								grid-template-columns: repeat(2, 1fr);
+
+								label:nth-child(1) {
+									grid-row: 1;
+									grid-column: 1 / -1;
+								}
+							}
+
+						}
+
+						/* Items */
+						div[data-id="items"] {
+
+							margin-inline: var(--space-base);
+
+							#list-items-in-sale > header {
+								display: flex;
+								flex-direction: column;
+
+								> div {
+									display: flex;
+									flex-direction: column;
+								}
+							}
+
+						}
+
+						/* Hospital */
+						div[data-id="hospital"] {
+							margin-inline: var(--space-base);
+
+							#hospital-control {
+								margin-bottom: var(--space-base);
+							}
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+		/* Good Dialog */
+		#good-dialog > section {
+			display: flex;
+
+			form label:last-of-type {
+				flex-grow: 1;
+			}
+		}
+
+	}

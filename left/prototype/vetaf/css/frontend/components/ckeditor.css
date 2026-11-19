@@ -1,0 +1,92 @@
+@charset "utf-8";
+
+
+/* --------------------------------------------------------------------------
+   Redefine colors
+-------------------------------------------------------------------------- */
+
+	:root {
+		--ck-color-tooltip-background: var(--green-color) !important;
+		--ck-font-face: 'Inter', sans-serif !important;
+	}
+
+
+/* --------------------------------------------------------------------------
+   CKEditor Document
+-------------------------------------------------------------------------- */
+
+	.ck-editor {
+		border: var(--border-width) solid var(--grey-dc-color) !important;
+		border-bottom-left-radius: .25rem !important;
+		border-bottom-right-radius: .25rem !important;
+	}
+
+	div[role="application"] {
+
+		> .ck-editor__main {
+
+			padding-left: 1rem !important;
+			padding-right: .5rem !important;
+			border: none !important;
+			border-radius: .25rem !important;
+
+			> .ck-editor__editable {
+				border: none !important;
+				box-shadow: none !important;
+				overflow-x: hidden !important;
+			}
+
+		}
+
+		.ck-toolbar {
+			border: none !important;
+			background: var(--grey-f5-color) !important;
+			border-radius: 0 !important;
+		}
+
+		.ck-editor__top {
+			border-bottom: var(--border-width) solid var(--grey-dc-color) !important;
+			background: #FFF !important;
+		}
+
+		.ck-toolbar__items > .ck.ck-button {
+			border-radius: .375rem !important;
+			outline: none !important;
+			border: none !important;
+			box-shadow: none !important;
+			cursor: pointer;
+		}
+
+		.ck.ck-button:hover, .ck-button.ck-on {
+			background: var(--grey-f5-color) !important;
+			color: var(--green-color) !important;
+		}
+
+		.ck.ck-editor__top .ck-sticky-panel .ck-sticky-panel__content {
+			border: none !important;
+			border-radius: 0 !important;
+		}
+
+		.ck-tooltip {
+			font-size: .875rem !important;
+			box-shadow: var(--box-shadow) !important;
+			border-radius: .375rem !important;
+			font-family: 'Inter', sans-serif;
+		}
+
+		.ck-powered-by-balloon {
+			display: none !important;
+		}
+
+		.ck.ck-balloon-panel {
+			z-index: 1001 !important;
+		}
+
+		.circle-loader {
+			width: 1.125rem !important;
+			height: 1.125rem !important;
+			border: .125rem solid var(--grey-e6-color) !important;
+			border-bottom-color: var(--green-color) !important;
+		}
+
+	}

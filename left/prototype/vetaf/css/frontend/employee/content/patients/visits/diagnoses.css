@@ -1,0 +1,172 @@
+@charset "utf-8";
+
+
+/* --------------------------------------------------------------------------
+   Diagnoses Container
+-------------------------------------------------------------------------- */
+
+	#list-diagnoses {
+
+		/* List */
+		.list {
+
+			--table-template-columns: 1fr repeat(2, .4fr) .5fr 1.25rem;
+
+			border-radius: .5rem .5rem 0 0;
+
+			header, section > div {
+				grid-template-columns: var(--table-template-columns);
+			}
+
+			section {
+
+				max-height: 40svh;
+				overflow: auto;
+
+				> div:last-child {
+					border-radius: 0 !important;
+				}
+
+			}
+
+			.empty-list {
+				padding-block: 1rem;
+			}
+
+		}
+
+		/* Footer */
+		footer {
+
+			border: var(--border-width) solid var(--grey-dc-color);
+			border-top: none;
+			border-radius: 0 0 .5rem .5rem;
+			padding: 1rem 1.25rem;
+			box-sizing: border-box;
+
+			button {
+
+				height: 2.375rem;
+				display: none;
+
+				&.visible {
+					display: flex;
+				}
+
+			}
+
+		}
+
+	}
+
+
+/* --------------------------------------------------------------------------
+   Mobile
+-------------------------------------------------------------------------- */
+
+	html[data-device="mobile"] {
+
+		#list-diagnoses {
+
+			/* Empty */
+			&:has(.empty-list.visible) {
+
+				.empty-list {
+					margin-inline: 0;
+				}
+
+				> footer {
+
+					border: none;
+					padding-inline: 0;
+
+					button {
+						width: 100%;
+					}
+
+				}
+
+			}
+
+			/* List */
+			.list {
+
+				--table-template-columns: repeat(3, 15rem) 12rem 1.25rem;
+
+				border: var(--border-width) solid var(--grey-dc-color);
+				border-radius: .5rem .5rem 0 0;
+
+				/* Header */
+
+				.wrapper > header {
+
+					> span:nth-child(4) {
+						order: 1;
+					}
+
+					> span:nth-child(2) {
+						order: 2;
+					}
+
+					> span:nth-child(3) {
+						order: 3;
+					}
+
+					> span:nth-child(1) {
+						display: none;
+					}
+
+				}
+
+				/* Content */
+
+				> section {
+
+					overflow-x: hidden;
+					overflow-y: auto;
+
+					> * {
+
+						> span:nth-child(2) {
+							order: 1;
+						}
+
+						> span:nth-child(3) {
+							order: 2;
+						}
+
+						> span:nth-child(4) {
+							order: 3;
+							padding-right: calc(var(--control-dots-padding) + var(--space-base));
+						}
+
+					}
+
+					/* Footer */
+
+					> footer {
+						flex-direction: column;
+						gap: 1rem;
+						border: none;
+					}
+
+				}
+
+
+			}
+
+			/* Footer */
+			> footer {
+
+				button {
+					font-size: .875rem;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+
+			}
+
+		}
+
+	}

@@ -1,0 +1,122 @@
+@charset "utf-8";
+
+
+/* --------------------------------------------------------------------------
+   Categories Manager
+-------------------------------------------------------------------------- */
+
+	#categories-dialog {
+
+		width: 48rem;
+		max-width: 100%;
+		padding: 0;
+		box-sizing: border-box;
+		margin: 0;
+
+		> section {
+
+			display: flex;
+			flex-direction: column;
+			gap: 1.25rem;
+
+			/* Form */
+			form {
+
+				box-sizing: border-box;
+				display: flex;
+				flex-direction: row;
+				align-items: flex-start;
+				gap: 1rem;
+				padding: 1.25rem !important;
+				border-radius: .875rem;
+				background: radial-gradient(circle at 100% 0%, rgba(0, 150, 136, .055), transparent 42%),
+					var(--grey-fa-color);
+				border: 1px solid var(--grey-e6-color);
+
+				label:nth-child(1) {
+					flex-grow: 1;
+				}
+
+				label {
+					min-width: 0;
+				}
+
+				input,
+				select,
+				textarea {
+
+					background: #FFF;
+					border-color: var(--grey-e6-color);
+					box-shadow: none;
+
+					&:focus {
+						border-color: var(--green-color);
+						box-shadow: 0 0 0 .1875rem rgba(0, 150, 136, .08);
+					}
+
+				}
+
+				.separator {
+					width: 100%;
+					height: var(--line-width);
+					background: var(--grey-e6-color);
+				}
+
+				.attention-block {
+					margin: 0;
+					flex-basis: 100%;
+				}
+
+			}
+
+			/* List */
+			.list {
+
+				border: 1px solid var(--grey-e6-color);
+				border-radius: .875rem;
+				background: #FFF;
+				overflow: hidden;
+				box-sizing: border-box;
+
+				&.trusted section div {
+					grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+				}
+
+				header {
+					background: var(--grey-fa-color);
+				}
+
+				section {
+
+					overflow-y: auto;
+					max-height: 30svh;
+					overscroll-behavior: contain;
+					scrollbar-gutter: stable;
+					padding: .5rem;
+					box-sizing: border-box;
+
+					> div,
+					> a {
+
+						border-radius: .625rem;
+						border-bottom: none;
+						transition: var(--transition);
+
+						&:hover {
+							background: var(--grey-fa-color);
+						}
+
+						&.selected {
+							background: radial-gradient(circle at 100% 50%, rgba(0, 150, 136, .08), transparent 45%),
+								var(--green-light-color);
+						}
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}

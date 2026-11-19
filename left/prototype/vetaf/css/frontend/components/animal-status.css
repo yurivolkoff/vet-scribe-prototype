@@ -1,0 +1,201 @@
+/* --------------------------------------------------------------------------
+   Animal Statuses
+-------------------------------------------------------------------------- */
+
+:root {
+	--status-healthy: var(--green-light-color);
+	--status-healthy-text: var(--green-color);
+
+	--status-positive: var(--green-light-color);
+	--status-positive-text: var(--green-color);
+
+	--status-negative: var(--red-light-color);
+	--status-negative-text: var(--red-color);
+
+	--status-examination: var(--yellow-light-color);
+	--status-examination-text: var(--yellow-color);
+
+	--status-treatment: #EDE4FF;
+	--status-treatment-text: #7C3AED;
+
+	--status-death: var(--grey-f5-color);
+	--status-death-text: var(--grey-80-color);
+
+	--status-inactive: var(--grey-f5-color);
+	--status-inactive-text: var(--grey-80-color);
+}
+
+/* --------------------------------------------------------------------------
+   Animal Status -> Left Menu
+-------------------------------------------------------------------------- */
+
+div[data-animal] {
+
+	svg.arrow {
+		color: currentColor;
+	}
+
+	div[data-view="list"] {
+
+		span[data-id] {
+
+			span.status {
+				width: .5rem;
+				height: .5rem;
+				border-radius: 50%;
+				display: inline-block;
+				flex-shrink: 0;
+				margin-right: 1rem;
+				background: var(--grey-dc-color);
+			}
+
+		}
+
+		span[data-id="healthy"] span.status {
+			background: var(--green-color);
+		}
+
+		span[data-id="positive"] span.status {
+			background: var(--blue-color);
+		}
+
+		span[data-id="negative"] span.status {
+			background: var(--red-color);
+		}
+
+		span[data-id="examination"] span.status {
+			background: var(--yellow-color);
+		}
+
+		span[data-id="treatment"] span.status {
+			background: var(--status-treatment-text);
+		}
+
+		span[data-id="death"] span.status,
+		span[data-id="inactive"] span.status {
+			background: var(--grey-dc-color);
+		}
+
+	}
+
+}
+
+
+/* --------------------------------------------------------------------------
+   Healthy
+-------------------------------------------------------------------------- */
+
+span.animal-status-healthy {
+	background: var(--green-light-color);
+	color: var(--green-color);
+}
+
+:where([data-animal].animal-status-healthy) input[readonly] {
+	border: var(--border-width) solid var(--green-light-color);
+	background: var(--green-light-color);
+	color: var(--green-color);
+}
+
+[data-animal].animal-status-healthy svg.arrow {
+	color: var(--green-color) !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   Positive
+-------------------------------------------------------------------------- */
+
+span.animal-status-positive {
+	background: var(--blue-light-color);
+	color: var(--blue-color);
+}
+
+:where([data-animal].animal-status-positive) input[readonly] {
+	border: var(--border-width) solid var(--blue-light-color);
+	background: var(--blue-light-color);
+	color: var(--blue-color);
+}
+
+[data-animal].animal-status-positive svg.arrow {
+	color: var(--blue-color) !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   Negative
+-------------------------------------------------------------------------- */
+
+span.animal-status-negative {
+	background: var(--red-light-color);
+	color: var(--red-color);
+}
+
+[data-animal].animal-status-negative input[readonly] {
+	border: var(--border-width) solid var(--red-light-color);
+	background: var(--red-light-color);
+	color: var(--red-color);
+}
+
+[data-animal].animal-status-negative svg.arrow {
+	color: var(--red-color) !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   Examination
+-------------------------------------------------------------------------- */
+
+span.animal-status-examination {
+	background: var(--yellow-light-color);
+	color: var(--yellow-color);
+}
+
+[data-animal].animal-status-examination input[readonly] {
+	border: var(--border-width) solid var(--yellow-light-color);
+	background: var(--yellow-light-color);
+	color: #A86F00;
+}
+
+[data-animal].animal-status-examination svg.arrow {
+	color: #A86F00 !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   Treatment
+-------------------------------------------------------------------------- */
+
+span.animal-status-treatment {
+	background: var(--status-treatment);
+	color: var(--status-treatment-text);
+}
+
+[data-animal].animal-status-treatment input[readonly] {
+	border: var(--border-width) solid var(--status-treatment);
+	background: var(--status-treatment);
+	color: var(--status-treatment-text);
+}
+
+[data-animal].animal-status-treatment svg.arrow {
+	color: var(--status-treatment-text) !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   Death / Inactive
+-------------------------------------------------------------------------- */
+
+span.animal-status-death, span.animal-status-inactive {
+	background: var(--grey-fo-color);
+	color: var(--grey-80-color);
+}
+
+:where([data-animal].animal-status-death, [data-animal].animal-status-inactive) input[readonly] {
+	border: var(--border-width) solid var(--grey-f5-color);
+	background: var(--grey-f5-color);
+	color: var(--grey-80-color);
+}
+
+:where([data-animal].animal-status-death, [data-animal].animal-status-inactive) svg.arrow {
+	color: var(--grey-80-color) !important;
+}

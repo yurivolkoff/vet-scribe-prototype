@@ -1,0 +1,132 @@
+@charset "utf-8";
+
+
+/* --------------------------------------------------------------------------
+   Delete Request
+-------------------------------------------------------------------------- */
+
+	.confirm-code {
+
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+		box-sizing: border-box;
+
+		> main {
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: .875rem;
+		}
+
+		.confirm-code-title {
+			color: var(--grey-64-color);
+			font-size: 1.125rem;
+			font-weight: 500;
+			line-height: 1.25;
+			text-align: center;
+		}
+
+		.confirm-code-field {
+
+			position: relative;
+			display: flex;
+			gap: .75rem;
+			cursor: text;
+
+			input {
+				position: absolute;
+				inset: 0;
+				width: 100%;
+				height: 100%;
+				opacity: 0;
+				border: none;
+				padding: 0;
+				margin: 0;
+				cursor: text;
+			}
+
+			span {
+				width: 3.5rem;
+				height: 3.5rem;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				border-radius: .5rem;
+				border: var(--border-width) solid var(--grey-dc-color);
+				background: #FFF;
+				color: #000;
+				font-size: 1.75rem;
+				font-weight: 500;
+				line-height: 1;
+				box-sizing: border-box;
+				transition: var(--transition);
+			}
+
+			&:focus-within span.active {
+				border-color: var(--green-color);
+				box-shadow: 0 0 0 .1875rem rgba(0, 150, 136, .08);
+			}
+
+		}
+
+		.confirm-code-original {
+
+			color: var(--grey-80-color);
+			font-size: 1rem;
+			line-height: 1.25;
+
+			span {
+				color: var(--green-color);
+				font-weight: 600;
+				letter-spacing: .04rem;
+			}
+
+		}
+
+		.confirm-code-note {
+			width: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: .625rem;
+			margin-top: .25rem;
+			padding-top: 1rem;
+			border-top: var(--border-width) solid var(--grey-e6-color);
+			color: var(--grey-8c-color);
+			font-size: .875rem;
+			line-height: 1.35;
+			text-align: center;
+			text-wrap: balance;
+		}
+
+		button {
+			display: none;
+		}
+
+		&.error {
+
+			.confirm-code-field span {
+				border-color: var(--red-color);
+				box-shadow: 0 0 0 .1875rem rgba(255, 82, 82, .08);
+			}
+
+			.confirm-code-original span {
+				color: var(--red-color);
+			}
+
+		}
+
+		&.success {
+
+			.confirm-code-field span {
+				border-color: var(--green-color);
+				background: var(--green-light-color);
+				color: var(--green-color);
+			}
+
+		}
+
+	}

@@ -1,0 +1,120 @@
+@charset "utf-8";
+
+/* --------------------------------------------------------------------------
+   Image Cropper
+-------------------------------------------------------------------------- */
+
+	.cropper-source {
+
+		position: relative;
+		display: inline-block;
+		overflow: hidden;
+		line-height: 0;
+		background: var(--grey-28-color);
+		border-radius: .25rem;
+		touch-action: none;
+		user-select: none;
+
+		.cropper-image {
+			display: block;
+			max-width: 100%;
+			height: auto;
+			pointer-events: none;
+			user-select: none;
+		}
+
+		.cropper-selection {
+
+			position: absolute;
+			z-index: 2;
+			top: 0;
+			left: 0;
+			box-sizing: border-box;
+			cursor: move;
+			border: .125rem solid var(--grey-fa-color);
+			outline: .125rem solid var(--green-color);
+			box-shadow: 0 0 0 100vmax rgba(0, 0, 0, .52);
+			will-change: transform, width, height;
+
+			&::before {
+				content: '';
+				position: absolute;
+				inset: 0 33.333%;
+				pointer-events: none;
+				border-right: var(--border-width) solid rgba(255, 255, 255, .4);
+				border-left: var(--border-width) solid rgba(255, 255, 255, .4);
+			}
+
+			&::after {
+				content: '';
+				position: absolute;
+				inset: 33.333% 0;
+				pointer-events: none;
+				border-top: var(--border-width) solid rgba(255, 255, 255, .4);
+				border-bottom: var(--border-width) solid rgba(255, 255, 255, .4);
+			}
+
+			.cropper-size {
+				position: absolute;
+				z-index: 3;
+				left: 50%;
+				bottom: .5rem;
+				padding: .3rem .5rem;
+				transform: translateX(-50%);
+				white-space: nowrap;
+				pointer-events: none;
+				line-height: 1;
+				font-size: .7rem;
+				font-weight: 500;
+				color: var(--grey-fa-color);
+				border-radius: .25rem;
+				background: var(--green-color);
+				box-shadow: 0 .125rem .5rem rgba(0, 150, 136, .22);
+			}
+
+			.cropper-handle {
+
+				position: absolute;
+				z-index: 4;
+				width: .875rem;
+				height: .875rem;
+				box-sizing: border-box;
+				border: .125rem solid var(--grey-fa-color);
+				border-radius: 50%;
+				background: var(--green-color);
+				box-shadow: 0 0 0 .125rem rgba(0, 150, 136, .12),
+				            0 .125rem .5rem rgba(0, 0, 0, .25);
+
+				&.cropper-handle-nw {
+					top: 0;
+					left: 0;
+					transform: translate(-50%, -50%);
+					cursor: nwse-resize;
+				}
+
+				&.cropper-handle-ne {
+					top: 0;
+					right: 0;
+					transform: translate(50%, -50%);
+					cursor: nesw-resize;
+				}
+
+				&.cropper-handle-se {
+					right: 0;
+					bottom: 0;
+					transform: translate(50%, 50%);
+					cursor: nwse-resize;
+				}
+
+				&.cropper-handle-sw {
+					bottom: 0;
+					left: 0;
+					transform: translate(-50%, 50%);
+					cursor: nesw-resize;
+				}
+
+			}
+
+		}
+
+	}

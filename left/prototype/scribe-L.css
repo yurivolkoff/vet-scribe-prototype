@@ -1,0 +1,653 @@
+@charset "utf-8";
+
+/* --------------------------------------------------------------------------
+   Variant L: the recording card is the FIRST card of the left column.
+   Base: Peter's live CSS «AI protocol block» — vetaf-ai-protocol.css, copied verbatim.
+   This file is ONLY our delta to it, so the difference is easy to read. Vet.AF tokens only (base.css :root).
+   Every selector repeats Peter's prefix `aside.left-section .ai-protocol-block` so it wins by order, not by weight.
+   Round 2 (2026-11-18, lenses r1 + coordinator): one row «Пауза | Завершить» in recording, red dot and a visible level,
+   one height for all phases with a recording at stake, pinned bar with the main action, number in the «Готово» badge.
+   1. colours per state            2. header: time, sound level, lock
+   3. buttons: two rows, one main   4. phases of one height
+   5. «Готово»: remainder map        6. pinned header
+   7. counters on the Vet.AF tabs    8. «Принять текст» dialog        9. prototype bar
+-------------------------------------------------------------------------- */
+
+/* ---- 1. Colours per state ---- */
+
+	/* round 4 (Yuri): the card never looks like Peter's neutral cards — in every state a green or yellow/red tint and a
+	   coloured border. Levels of green, from quiet to strong:
+	   idle, «всё проверено» — the gradient of «Готово», but shorter and with a lighter border;
+	   checking, sending, drafting — a flat faint green with the same light border (a process, nothing to press);
+	   «Готово» — Peter's base: full gradient, solid green border;
+	   recording — Peter's solid light green, solid border, pulsing badge. */
+	aside.left-section .ai-protocol-block:is([data-state="idle"], [data-state="saved"]) {
+		border-color: rgba(0, 150, 136, .45);
+		background: linear-gradient(to left, var(--green-light-color) 0%, #FFF 40%);
+	}
+
+	aside.left-section .ai-protocol-block:is([data-state="checking"], [data-state="sending"], [data-state="drafting"]) {
+		border-color: rgba(0, 150, 136, .45);
+		background: rgba(0, 150, 136, .045);
+	}
+
+	/* yellow = «needs you, not urgent»: pause, delete confirmation, unsent, no suggestions, reminder (spec §3.9, §3.10, §7) */
+	aside.left-section .ai-protocol-block:is([data-state="paused"], [data-state="confirm"], [data-state="unsent"], [data-state="nodraft"], [data-state="remind"]) {
+		border-color: var(--yellow-color);
+		background: var(--yellow-light-color);
+
+		.badge {
+			background: var(--yellow-color);
+		}
+	}
+
+	/* sending and drafting: nothing for the vet to do — light badge with the Vet.AF loader */
+	aside.left-section .ai-protocol-block:is([data-state="sending"], [data-state="drafting"]) {
+
+		.badge {
+			background: var(--green-light-color);
+		}
+	}
+
+	/* round 9 (Yuri): after the recording — Peter's tick in the green circle, in «Готово» and in the folded «всё проверено»;
+	   the tick is drawn bold, as Peter does for his «sent / ready / saved» */
+	aside.left-section .ai-protocol-block > section .badge svg[data-show~="ready-clear"] {
+		--width: 2;
+	}
+
+	/* recording (round 4, Yuri): Peter's pulsing badge (ai-protocol-pulse) is back. [решение дизайнера] A calm outline ring
+	   follows the microphone level (width set from JS, 0–5 px, smoothed) — it does not fight the pulse's box-shadow */
+	aside.left-section .ai-protocol-block[data-state="recording"] .badge {
+		outline: 0 solid rgba(0, 150, 136, .3);
+		transition: outline-width .2s ease-out;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		aside.left-section .ai-protocol-block[data-state="recording"] .badge {
+			animation: none;
+		}
+	}
+
+	/* titles stay dark: the colour is carried by the border, the background and the badge (A, review r6; yellow text ≈ 3:1) */
+	aside.left-section .ai-protocol-block[data-state="paused"] header span.visible {
+		color: inherit;
+	}
+
+	/* idle: no badge — the text takes the whole width, 1–2 lines (round 2: the reminder has its badge, it shares the phase height) */
+	aside.left-section .ai-protocol-block[data-state="idle"] > section {
+
+		.badge {
+			display: none;
+		}
+
+		.status {
+			grid-column: 1 / -1;
+		}
+	}
+
+	/* one highlight when the suggestions arrive (A: .scribe-flash), and the reminder button pulses once */
+	@keyframes ai-pulse-once {
+		0% { box-shadow: 0 0 0 0 rgba(0, 150, 136, .45); }
+		70% { box-shadow: 0 0 0 .75rem rgba(0, 150, 136, 0); }
+		100% { box-shadow: 0 0 0 0 rgba(0, 150, 136, 0); }
+	}
+
+	aside.left-section .ai-protocol-block > section .control .button.ai-pulse {
+		animation: ai-pulse-once 1.6s ease-out 1;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		aside.left-section .ai-protocol-block > section .control .button.ai-pulse {
+			animation: none;
+		}
+	}
+
+/* ---- 2. Header (round 7, Yuri) ---- */
+
+	/* the separator under the header: Peter's --grey-fo is invisible on our fills (1,00–1,14 : 1). --grey-b4, a Vet.AF
+	   border token, is the only one that stays visible on every fill: white 2,07 · green-light (idle and «Готово»
+	   gradient, recording) 1,82 · process green 1,96 · yellow-light 1,89 · red-light 1,75 */
+	aside.left-section .ai-protocol-block > header::after {
+		background: var(--grey-b4-color);
+	}
+
+	/* the timer stays Peter's grey (--grey-8c, his span.time) — no override; every title starts at the same x:
+	   no leading dot or tick in any state (the pulsing badge and the browser tab title carry the recording) */
+
+	/* no microphone: titles are ≤ 24 characters now (round 2); if a longer one comes from the SDK it wraps instead of being cut */
+	aside.left-section .ai-protocol-block[data-state="mic"] > header > span > span {
+		white-space: normal;
+	}
+
+	/* a recording at stake: the card does not fold (designer 2026-11-18), so no arrow and no hover */
+	aside.left-section .ai-protocol-block.is-locked > header {
+		cursor: default;
+
+		> span > svg.arrow {
+			display: none;
+		}
+
+		&:hover > span {
+			background: transparent;
+		}
+	}
+
+/* ---- 3. Buttons (round 5, spec v2 §1 «two fixed places»): one row in every state. The left place is the toggle —
+   «Начать запись» / «Пауза» / «Продолжить» / «Не удалять» (and «Отменить» while checking); the right place is
+   «Завершить» and never moves. The main colour moves by meaning: recording — «Завершить», pause — «Продолжить».
+   After a click the pointer lands on the same place in its new meaning, on an empty place or on a harmless action. ---- */
+
+	aside.left-section .ai-protocol-block > section .control {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		justify-content: stretch;
+		gap: .5rem;
+
+		.button {
+			grid-column: auto;
+			width: 100%;
+			min-width: 0;
+			padding-inline: .5rem;
+			white-space: nowrap;   /* a label never wraps; if it does not fit, the checks see it as clipped */
+		}
+
+		/* one action → the whole row: idle / reminder «Начать запись», no microphone, «Повторить», «Вернуться к записи» */
+		:is([data-bar="start"], [data-bar="retry"]) {
+			grid-column: 1 / -1;
+		}
+
+		/* checking: «Отменить» on the left place, where «Начать запись» was pressed; the right place stays empty */
+		[data-bar="cancel"] {
+			grid-column: 1;
+		}
+
+		/* nothing to press (sending, drafting, ready): no empty row */
+		&:not(:has(> .visible)) {
+			display: none;
+		}
+	}
+
+	/* the record mark on the green button: white dot instead of the red one (spec §3.1) */
+	aside.left-section .ai-protocol-block > section .control .button[data-show~="idle"] svg {
+		color: currentColor;
+	}
+
+	/* the left / right place of every state */
+	aside.left-section .ai-protocol-block > section .control {
+		:is([data-bar="pause"], [data-bar="resume"], [data-bar="restart"], [data-bar="delete-no"], [data-bar="send-unsent"]) { order: 1; }
+		:is([data-bar="stop"], [data-bar="delete-yes"], [data-bar="skip-unsent"]) { order: 2; }
+	}
+
+	/* unsent (not in the recording group): «Отправить запись» is the longer label — its place is wider */
+	aside.left-section .ai-protocol-block[data-state="unsent"] > section .control {
+		grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+	}
+
+	/* «Завершить» is inactive for the first 2 s of a recording */
+	aside.left-section .ai-protocol-block > section .control .button:disabled {
+		opacity: .45;
+		cursor: default;
+		pointer-events: none;
+	}
+
+	/* pause: the bin moves into the card header, on the right (the arrow is hidden while the card cannot fold) */
+	aside.left-section .ai-protocol-block {
+		position: relative;
+	}
+
+	aside.left-section .ai-protocol-block[data-state="paused"] {
+
+		> section .control [data-bar="delete-ask"] {
+			position: absolute;
+			top: .5rem;
+			right: .75rem;
+			width: 2.25rem;
+			height: 2.25rem;
+			min-height: 0;
+			padding: 0;
+			border-color: transparent;
+			background: transparent;
+
+			svg { width: 1.5rem; height: 1.5rem; }
+
+			&:hover { border-color: var(--red-color); background: var(--red-light-color); color: var(--red-color); }
+		}
+
+		> header > span {
+			padding-right: 2.75rem;
+		}
+	}
+
+	/* the green «Завершить» becomes secondary in pause and after an interruption */
+	aside.left-section .ai-protocol-block:is([data-state="paused"], [data-state="interrupted"]) > section .control .button.green[data-bar="stop"] {
+		border-color: var(--grey-e6-color);
+		background: #FFF;
+		color: var(--grey-64-color);
+
+		&:hover {
+			border-color: var(--green-color);
+			background: var(--green-light-color);
+			color: var(--green-color) !important;
+			box-shadow: none;
+		}
+	}
+
+	/* delete confirmation in one row: «Не удалять» (main, left) | «Удалить» (red, right) */
+	aside.left-section .ai-protocol-block > section .control .button.ai-danger {
+		border-color: var(--red-color);
+		color: var(--red-color);
+
+		&:hover {
+			background: var(--red-color);
+			color: #FFF;
+		}
+	}
+
+	/* reminder: «Не записывать этот приём» — a quiet link under the button (not a button: one row of buttons) */
+	aside.left-section .ai-protocol-block > section .control .ai-link {
+		grid-column: 1 / -1;
+		order: 3;
+		justify-self: center;
+		padding: .125rem .25rem;
+		border: 0;
+		background: none;
+		font: 400 .875rem/1.3 'Inter', sans-serif;
+		color: var(--grey-64-color);
+		text-decoration: underline;
+		text-decoration-color: var(--grey-b4-color);
+		text-underline-offset: .2em;
+		cursor: pointer;
+
+		&:hover {
+			color: var(--grey-28-color);
+		}
+	}
+
+/* ---- 4. Heights (round 5, spec v2 §1). The recording group — checking, recording, pause, delete, interrupted —
+   has one height by lines: header in one line, the status exactly two lines next to the badge, one
+   row of buttons. Errors, unsent, no suggestions, idle, sending, drafting: by content, no forced minimum. ---- */
+
+	aside.left-section .ai-protocol-block:is([data-state="checking"], [data-state="recording"], [data-state="paused"], [data-state="confirm"], [data-state="interrupted"]) > section .status {
+		display: flex;
+		align-items: center;
+		min-height: 2.5rem;
+
+		> span {
+			height: 2.6em;
+			overflow: hidden;
+			align-items: center;
+		}
+	}
+
+	aside.left-section .ai-protocol-block:is([data-state="sending"], [data-state="drafting"]) > .result:not(:empty) {
+		gap: .5rem;
+		padding-bottom: 1rem;
+	}
+
+	aside.left-section .ai-protocol-block .ai-res-top {
+		display: grid;
+		gap: .375rem;
+	}
+
+	aside.left-section .ai-protocol-block .ai-progress {
+		height: .375rem;
+		margin-top: .375rem;
+		border-radius: 2.875rem;
+		background: var(--grey-dc-color);
+		overflow: hidden;
+
+		i {
+			display: block;
+			width: 0;
+			height: 100%;
+			border-radius: inherit;
+			background: var(--green-color);
+			transition: width 2.1s ease-in-out;
+		}
+
+		i.is-going {
+			width: 100%;
+		}
+
+	}
+
+	aside.left-section .ai-protocol-block .ai-safe {
+		margin: 0;
+		font-size: .875rem;
+		line-height: 1.3;
+		color: var(--grey-28-color);
+	}
+
+	aside.left-section .ai-protocol-block .ai-muted {
+		margin: 0;
+		font-size: .8125rem;
+		line-height: 1.35;
+		color: var(--grey-8c-color);
+	}
+
+/* ---- 5. «Готово» (round 8, Yuri «вариант 1»; texts of round 11): «Из записи — 18 предложений», a thin progress bar, «Вы проверили:» and one row per tab with
+   suggestions, the current tab marked with a plain bar on the left (the Vet.AF left-menu pattern), one hint.
+   Badge: the microphone while something is left, the tick only when everything is decided. ---- */
+
+	aside.left-section .ai-protocol-block:is([data-state="ready"], [data-state="saved"]) > .result {
+		gap: .5rem;
+		padding-bottom: 1rem;
+	}
+
+	aside.left-section .ai-protocol-block.is-guard[data-state="ready"] .badge {
+		background: var(--yellow-color);
+	}
+
+	/* «Из записи — 18 предложений» — the total (round 11) */
+	aside.left-section .ai-protocol-block > section .status > span.ai-left.is-count {
+		font-size: .9375rem;
+		font-weight: 600;
+		color: var(--grey-28-color);
+		font-variant-numeric: tabular-nums;
+	}
+
+	/* the thin progress bar: the Vet.AF payment-block look, green */
+	aside.left-section .ai-protocol-block .ai-progress.ai-done-bar {
+		margin-top: 0;
+
+		i { transition: width .3s ease-out; }
+	}
+
+	aside.left-section .ai-protocol-block .ai-note {
+		margin: 0;
+		font-size: .8125rem;
+		line-height: 1.35;
+		color: var(--grey-64-color);
+	}
+
+	/* round 11: «Вы проверили:» — one caption above the rows */
+	aside.left-section .ai-protocol-block .ai-map-cap {
+		margin: 0 0 -.25rem;
+		font-size: .8125rem;
+		line-height: 1.35;
+		color: var(--grey-64-color);
+	}
+
+	/* the tab map */
+	aside.left-section .ai-protocol-block .ai-map {
+		display: flex;
+		flex-direction: column;
+		margin-inline: -.5rem;
+	}
+
+	aside.left-section .ai-protocol-block .ai-tabrow {
+		position: relative;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: baseline;
+		column-gap: .75rem;
+		width: 100%;
+		box-sizing: border-box;
+		padding: .375rem .5rem .375rem .75rem;
+		border: 0;
+		border-radius: .375rem;
+		background: transparent;
+		font-family: 'Inter', sans-serif;
+		text-align: left;
+		cursor: pointer;
+		transition: background .2s;
+
+		.ai-tt { font-size: .9375rem; font-weight: 500; line-height: 1.3; color: var(--grey-28-color); }
+		.ai-tn { font-size: .875rem; line-height: 1.3; color: var(--grey-64-color); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+		&:hover { background: rgba(0, 150, 136, .06); }
+
+		/* the tab open now: a plain vertical bar on the left, as the active item of the Vet.AF left menu */
+		&.is-current::before {
+			content: "";
+			position: absolute;
+			top: .45rem;
+			bottom: .45rem;
+			left: .2rem;
+			width: .2rem;
+			border-radius: 1rem;
+			background: var(--green-color);
+		}
+
+		&.is-current .ai-tt { font-weight: 600; }
+
+		/* a finished tab: grey, «✓ 8 из 8» */
+		&.is-clear .ai-tt, &.is-clear .ai-tn { color: var(--grey-8c-color); }
+	}
+
+	/* nothing from the recording went into the visit */
+	aside.left-section .ai-protocol-block .ai-guard {
+		margin: 0;
+		padding: .375rem .625rem;
+		border-left: 3px solid var(--yellow-color);
+		border-radius: 0 .375rem .375rem 0;
+		background: var(--yellow-light-color);
+		font-size: .8125rem;
+		line-height: 1.35;
+		color: var(--grey-28-color);
+
+		.sx-link { font-size: .8125rem; color: var(--green-color); }
+	}
+
+	/* round 8: removed lines come back at their block — «Убрано строк: N · Вернуть» */
+	.sx-block .sx-dropped {
+		margin: .125rem 0 .25rem;
+		font-size: .8125rem;
+		color: var(--grey-8c-color);
+
+		.sx-link { font-size: .8125rem; }
+	}
+
+/* ---- 6. Pinned bar (spec §2 «Липкость», round 2): once the card's header is scrolled out of the column, a copy of it
+   stays on top with the main action — recording «Пауза», pause «Продолжить», reminder «Начать запись». A sticky element
+   with its real height; JS gives it a negative bottom margin of the same size, so the column does not move. ---- */
+
+	aside.left-section > .ai-protocol-pin {
+		position: sticky;
+		top: 0;
+		z-index: 5;
+		flex: 0 0 auto;
+		display: flex;
+		align-items: center;
+		gap: .5rem;
+		box-sizing: border-box;
+		padding: .375rem .5rem .375rem 1rem;
+		border: var(--border-width) solid var(--green-color);
+		border-radius: .5rem;
+		background: var(--green-light-color);
+		box-shadow: 0 .25rem 1rem rgba(0, 0, 0, .1);
+
+		&[hidden] { display: none; }
+
+		.ai-pin-t {
+			display: flex;
+			align-items: center;
+			flex: 1 1 auto;
+			min-width: 0;
+			padding: .25rem 0;
+			border: 0;
+			background: none;
+			font: 600 .9375rem/1.2 'Inter', sans-serif;
+			color: #000;
+			text-align: left;
+			white-space: nowrap;
+			overflow: hidden;
+			cursor: pointer;
+		}
+
+		.ai-pin-t span { display: flex; align-items: center; }
+		.ai-pin-tt { min-width: 0; overflow: hidden; }
+		.time { padding-left: .375rem; font-variant-numeric: tabular-nums; color: var(--grey-8c-color); }
+		span.counter { position: static; flex: 0 0 auto; margin-left: .5rem; border: 0; color: color-mix(in srgb, var(--green-color) 70%, #000); }
+
+		.button.ai-pin-act {
+			flex: 0 0 auto;
+			height: 2.25rem;
+			min-height: 0;
+			padding: 0 .625rem 0 .375rem;
+			gap: .25rem;
+			font-size: .875rem;
+
+			svg { width: 1.25rem; height: 1.25rem; }
+		}
+
+		.ai-pin-act[data-bar="start"] svg { color: #FFF; }
+
+		/* round 8: in «Готово» the action is a compact link, not a button */
+		.button.ai-pin-link {
+			height: auto;
+			padding: 0 .25rem;
+			border: 0;
+			background: none;
+			color: var(--green-color);
+			font-weight: 500;
+			text-decoration: underline;
+			text-underline-offset: .2em;
+
+			&:hover { background: none; color: var(--green-color); }
+		}
+
+		/* round 3: a long title and a button — the button goes to a second line, full width */
+		&.is-wrap {
+			flex-wrap: wrap;
+
+			.ai-pin-t { order: 1; }
+			.ai-pin-up { order: 2; }
+			.button.ai-pin-act { order: 3; flex: 1 1 100%; height: 2.25rem; justify-content: center; }
+		}
+
+		.ai-pin-up {
+			display: inline-flex;
+			flex: 0 0 auto;
+			padding: 0;
+			border: 0;
+			background: none;
+			cursor: pointer;
+
+			svg.arrow { width: 1.5rem; height: 1.5rem; transform: rotate(-90deg); color: var(--green-color); }
+		}
+	}
+
+	aside.left-section > .ai-protocol-pin:is([data-state="paused"], [data-state="confirm"], [data-state="remind"], [data-state="unsent"], [data-state="nodraft"]) {
+		border-color: var(--yellow-color);
+		background: var(--yellow-light-color);
+	}
+
+	aside.left-section > .ai-protocol-pin:is([data-state="interrupted"], [data-state="mic"]) {
+		border-color: var(--red-color);
+		background: var(--red-light-color);
+	}
+
+	aside.left-section > .ai-protocol-pin[data-state="ready"] {
+		background: linear-gradient(to left, var(--green-light-color) 0%, #FFF 70%);
+	}
+
+/* ---- 9. Prototype bar: no right panel any more — back to the bottom right, away from the left column ---- */
+
+	.proto-bar {
+		left: auto;
+		right: 1rem;
+		flex-wrap: wrap;
+		box-sizing: border-box;
+		max-width: min(38rem, calc(100vw - 2rem));
+
+		> div {
+			flex: 1 1 100%;
+		}
+	}
+
+	.proto-states a {
+		white-space: nowrap;
+		padding: 1px 6px;
+		margin-right: 2px;
+		border-radius: 3px;
+		cursor: pointer;
+	}
+
+	.proto-note {
+		color: #777;
+		line-height: 1.3;
+	}
+
+	aside.left-section > .ai-protocol-pin[data-state="sending"] {
+		border-color: var(--grey-e6-color);
+		background: #FFF;
+	}
+
+/* ---- 10. Round 4 (Yuri): no pointers from the «Из записи» blocks up to their fields — L only, A's rules overridden
+   here (scribe-panel-A.css: «.sx-cell > .sx-block::before», «.sx-host > .sx-block::before»). The caret of the number
+   card's quote tooltip stays: it points to the card, not to the field. ---- */
+
+	.sx-host > .sx-block::before,
+	.sx-cell > .sx-block::before {
+		content: none !important;
+	}
+
+/* ---- 11. Round 5 (spec v2 §5): «Искать иначе: …» right under the Vet.AF search field. The line is reserved while the
+   tab has names from the recording (padding under the search row), so the Vet.AF results below never jump. ---- */
+
+	/* round 6 (UX r3 #1): Vet.AF body text (1rem: 13 / 14 / 15 px), .5rem under the search row; the reserved room is
+	   the strip's line + the gaps, so the Vet.AF results below still never jump */
+	#list-items-in-sale > form > div.sx-alt-on {
+		padding-bottom: 2.3rem;
+	}
+
+	#list-items-in-sale > form > div > .sx-alt {
+		position: absolute;
+		left: 0;
+		top: calc(100% - 2.3rem + .5rem);
+		max-width: 70%;
+	}
+
+	.sx-alt {
+		font: 400 1rem/1.3 'Inter', sans-serif;
+		color: var(--grey-64-color);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+
+		.sx-link { font-size: 1rem; color: var(--green-color); }
+	}
+
+	#proto-good-dialog .sx-mwrap > .sx-alt {
+		min-height: 1.3em;
+		margin-top: .5rem;
+	}
+
+	/* one header height in every state (a title with spans and a plain one differed by 1.6 px); «нет микрофона» may wrap */
+	aside.left-section .ai-protocol-block:not([data-state="mic"]) > header > span {
+		box-sizing: border-box;
+		height: 2.4rem;   /* .5rem + 1.4rem title + .5rem: the fold arrow (taller) no longer changes it */
+
+		> span { height: 1.4rem; }
+	}
+
+/* ---- 12. Round 8 (Yuri, bug): folded, the card keeps a bottom padding equal to its top one (.5rem), like Peter's
+   other folded cards («Барсик»). His base padding «.5rem 1.25rem 0 1.25rem !important» relies on the open card's
+   trailing gap; a folded card has none, so its border sat right under the header row. ---- */
+
+	aside.left-section .ai-protocol-block.collapse-block:not(.opened) {
+		padding-bottom: .5rem !important;
+	}
+
+/* ---- 13. Round 12 (final lens) ---- */
+
+	/* the opened «всё проверено» card: the badge shows the tick, so the header text goes without its «✓» */
+	aside.left-section .ai-protocol-block.opened > header .ai-done-mark {
+		display: none;
+	}
+
+	/* empty bill: the goods row is not «done» — yellow accent, no tick, until «Оставить так» or an item is added */
+	aside.left-section .ai-protocol-block .ai-tabrow.is-warn {
+		background: var(--yellow-light-color);
+
+		.ai-tt { color: var(--grey-28-color); }
+		.ai-tn { color: var(--yellow-partial-color); font-weight: 600; }
+	}
+
+	/* final lens #5 (seen at 1728): the Vet.AF .button animates every property (--transition), so in the first frame after
+	   the bar appears its button grew from the default button size — the bar was ~15 px taller and its arrow dropped to a
+	   third row for a fraction of a second. In the bar only colours may animate. */
+	aside.left-section > .ai-protocol-pin .button {
+		transition: background-color .2s, color .2s, border-color .2s;
+	}
