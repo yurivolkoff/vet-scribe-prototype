@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Сбой и обработка записи</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600&display=swap">
+<style>
+/* Layout: two topics; each a bench of scenario controls over four live mocks — Vet.AF now, target, two independent variants. */
+:root{
+  --bg:#f3f5f5; --surface:#ffffff; --fg:#17201f; --muted:#5b6866; --line:#dde3e2; --accent:#0b6b62; --accent-fg:#ffffff;
+  --chip:#e8eeed; --warn-fg:#a3261c; --ok-fg:#17703a; --alt:#5a4fb0; --alt-fg:#ffffff;
+  /* the mock is a picture of Vet.AF's light UI: same in both themes */
+  --vf-page:#f6f7f8; --vf-card:#ffffff; --vf-ghost:#eceef0; --vf-ink:#1f1f1f; --vf-64:#646464; --vf-8c:#8c8c8c; --vf-c8:#c8c8c8;
+  --vf-green:#009688; --vf-green-l:#e0f2f1; --vf-green-b:rgba(0,150,136,.45); --vf-red:#e53935; --vf-red-l:#fdecea;
+  --vf-yellow:#f2a100; --vf-yellow-l:#fff6dc; --vf-yellow-ink:#6b4a00; --vf-link:#0b6b62;
+  --font-body:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --font-head:"Space Grotesk","Inter",-apple-system,sans-serif;
+  --font-mock:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121817; --surface:#1a2221; --fg:#e6eceb; --muted:#9aa8a6; --line:#2c3735; --accent:#4cc2b5; --accent-fg:#0d1716; --chip:#24302e; --warn-fg:#ff8a80; --ok-fg:#7bd99a; --alt:#a99cf5; --alt-fg:#15122b; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#121817; --surface:#1a2221; --fg:#e6eceb; --muted:#9aa8a6; --line:#2c3735; --accent:#4cc2b5; --accent-fg:#0d1716; --chip:#24302e; --warn-fg:#ff8a80; --ok-fg:#7bd99a; --alt:#a99cf5; --alt-fg:#15122b; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.5 var(--font-body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+.wrap{max-width:1560px;margin:0 auto;display:flex;flex-direction:column;gap:26px}
+h1,h2{font-family:var(--font-head);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:28px;line-height:1.2} h2{font-size:21px}
+p{margin:0} a{color:var(--accent)}
+.muted{color:var(--muted)} .small{font-size:13.5px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.intro{display:flex;flex-direction:column;gap:10px;max-width:78ch}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:12px;height:12px;border-radius:3px;border:2px solid var(--line);display:inline-block}
+.sw.t{border-color:var(--accent);background:var(--accent)} .sw.a{border-color:var(--alt)}
+
+.topic{display:flex;flex-direction:column;gap:12px}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:8px;border-bottom:1px solid var(--line)}
+.ctrl .lbl{font-weight:600;font-size:14px;margin-right:2px}
+.ctrl button{font:inherit;font-size:14px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;padding:6px 12px;cursor:pointer}
+.ctrl button:hover{border-color:var(--accent)}
+.ctrl button.on{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.ctrl .sep{width:1px;height:22px;background:var(--line);margin:0 4px}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.clock{font-size:13.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+.four{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,400px));gap:12px}
+.col{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.col.target{border:2px solid var(--accent)}
+.col.alt{border:2px dashed var(--alt)}
+@media (max-width:420px){.four{grid-template-columns:1fr}}
+.col h3{margin:0;font-size:15.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:2px 4px 0}
+.chip{font-size:11.5px;font-weight:600;padding:1px 8px;border-radius:10px;background:var(--chip);color:var(--muted)}
+.col.target .chip{background:var(--accent);color:var(--accent-fg)}
+.col.alt .chip{background:var(--alt);color:var(--alt-fg)}
+.col ul{margin:0;padding:0 4px 2px 22px;font-size:13.5px} .col li{margin:3px 0}
+.bad{color:var(--warn-fg)} .good{color:var(--ok-fg)}
+.note{font-size:12.5px;color:var(--vf-64);min-height:18px;margin-top:8px}
+.note.bad{color:#b3261e;font-weight:600}
+
+/* --- mock of Vet.AF's left column --- */
+.mock{background:var(--vf-page);border-radius:8px;padding:8px;position:relative;font-family:var(--font-mock);color:var(--vf-ink);min-height:250px}
+.mock .slot{max-width:330px}
+.ghost{background:var(--vf-card);border:1px solid #e9ebee;border-radius:8px;padding:12px;max-width:330px}
+.ghost i{display:block;height:9px;background:var(--vf-ghost);border-radius:4px;margin:6px 0}
+.hang{position:absolute;inset:0;background:rgba(255,255,255,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border-radius:8px;text-align:center;padding:20px;font-size:14px;color:var(--vf-64)}
+.hang b{color:var(--vf-ink)}
+
+.blk{border:1.5px solid var(--vf-green-b);border-radius:8px;background:linear-gradient(to left,var(--vf-green-l) 0%,var(--vf-card) 45%);padding:8px 14px 12px;margin-bottom:10px;transition:background .2s,border-color .2s}
+.blk header{display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:34px;font-weight:600;font-size:15.5px}
+.blk header .t{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:6px}
+.blk header .t small{font-size:15.5px;font-weight:500;color:var(--vf-8c);font-variant-numeric:tabular-nums}
+.blk header .chev{flex:none;color:var(--vf-8c);display:flex}
+.blk .row{display:grid;grid-template-columns:2.4rem 1fr;gap:12px;align-items:center;margin-top:6px}
+.blk .badge{width:2.4rem;height:2.4rem;border-radius:50%;background:var(--vf-green);color:#fff;display:flex;align-items:center;justify-content:center;transition:background .2s}
+.blk .badge svg{width:1.45rem;height:1.45rem}
+.blk .badge.pulse{animation:pulse 1.8s ease-in-out infinite}
+.blk .sub{font-size:13.5px;color:var(--vf-64);line-height:1.3;min-width:0}
+.blk .extra{font-size:12.5px;color:var(--vf-64);line-height:1.35;margin-top:8px}
+.blk .btns{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin-top:10px;min-height:2.3rem}
+.vbtn{font:inherit;font-size:14px;font-weight:600;height:2.3rem;padding:0 14px;border-radius:6px;border:1px solid var(--vf-c8);background:var(--vf-card);color:var(--vf-ink);display:inline-flex;align-items:center;gap:6px;cursor:pointer}
+.vbtn.green{background:var(--vf-green);border-color:var(--vf-green);color:#fff}
+.vbtn[disabled]{opacity:.55;cursor:default}
+.vbtn svg{width:1.15rem;height:1.15rem}
+.vlink{font:inherit;font-size:14px;font-weight:600;color:var(--vf-link);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.vlink[disabled]{color:var(--vf-8c);text-decoration:none;cursor:default}
+.when{font-size:12px;color:var(--vf-8c)}
+.okline{color:var(--vf-green);font-weight:600}
+.strip{background:var(--vf-yellow-l);border:1px solid var(--vf-yellow);border-radius:6px;padding:6px 9px;color:var(--vf-yellow-ink);font-size:12.5px;line-height:1.35;margin-top:8px}
+.strip.ok{background:var(--vf-green-l);border-color:var(--vf-green);color:#00695c}
+.blk[data-tone=work]{background:rgba(0,150,136,.045)}
+.blk[data-tone=work] .badge.soft{background:var(--vf-green-l);color:var(--vf-green)}
+.blk[data-tone=rec]{background:var(--vf-green-l);border-color:var(--vf-green)}
+.blk[data-tone=rec] .badge{animation:pulse 1.8s ease-in-out infinite}
+.blk[data-tone=red]{border-color:var(--vf-red);background:var(--vf-red-l)}
+.blk[data-tone=red] .badge{background:var(--vf-red)}
+.blk[data-tone=yellow]{border-color:var(--vf-yellow);background:var(--vf-yellow-l)}
+.blk[data-tone=yellow] .badge{background:var(--vf-yellow)}
+.blk[data-tone=yellow] header .t{color:#8a5a00}
+.blk[data-tone=ready]{border-color:var(--vf-green);background:linear-gradient(to left,var(--vf-green-l) 0%,var(--vf-card) 70%)}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,150,136,.3)}50%{box-shadow:0 0 0 .5rem rgba(0,150,136,0)}}
+.spin{width:1.25rem;height:1.25rem;border:2.5px solid currentColor;border-right-color:transparent;border-radius:50%;animation:rot .9s linear infinite}
+.hang .spin{color:var(--vf-8c)}
+@keyframes rot{to{transform:rotate(360deg)}}
+
+/* «Как в Vet.AF» on the stand: the thinking line */
+.glyph{display:inline-block;width:1em;text-align:center;flex:none}
+.glyph::after{content:"✻";animation:gl 1.3s steps(1) infinite}
+@keyframes gl{0%{content:"·"}10%{content:"✢"}20%{content:"✳"}30%{content:"✶"}40%{content:"✻"}50%{content:"✽"}60%{content:"✻"}70%{content:"✶"}80%{content:"✳"}90%{content:"✢"}}
+.phrase{display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;background:linear-gradient(100deg,var(--vf-ink) 0 38%,#b9b9b9 50%,var(--vf-ink) 62% 100%) 100% 0/250% 100% no-repeat;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:in .35s ease-out,sweep 2.2s linear infinite}
+@keyframes in{from{opacity:0;transform:translateY(.45em)}}
+@keyframes sweep{to{background-position:0 0}}
+.loop{display:inline-block;font-size:12px;font-weight:600;color:#b3261e;background:#fdecea;border-radius:10px;padding:1px 8px}
+
+/* target: steps + bar with stripes running back */
+.steps{display:flex;gap:6px;align-items:center;font-size:13px;color:var(--vf-8c);margin-top:8px;white-space:nowrap;overflow:hidden}
+.steps .s{display:flex;align-items:center;gap:5px}
+.steps .s.done{color:var(--vf-green)} .steps .s.cur{color:var(--vf-ink);font-weight:600}
+.steps .dot{width:15px;height:15px;border-radius:50%;border:1.5px solid currentColor;display:inline-flex;align-items:center;justify-content:center;font-size:9px;flex:none}
+.steps .s.done .dot{background:var(--vf-green);border-color:var(--vf-green);color:#fff}
+.steps .s.cur .dot{border-color:var(--vf-green)}
+.steps .s.cur .dot::after{content:"";width:5px;height:5px;border-radius:50%;background:var(--vf-green);animation:blink 1.2s ease-in-out infinite}
+@keyframes blink{50%{opacity:.25}}
+.steps .ln{flex:1;height:1.5px;background:var(--vf-c8);min-width:8px}
+.bar{height:6px;margin-top:10px;display:flex;gap:2px}
+.bar .seg{position:relative;height:6px;background:#dfe7e6;border-radius:3px;overflow:hidden}
+.bar .seg i{display:block;height:100%;width:0;background-color:var(--vf-green);border-radius:3px;transition:width .25s linear}
+.bar.m1 .seg i{background-image:repeating-linear-gradient(-45deg,rgba(255,255,255,.32) 0 5px,transparent 5px 10px);background-size:14.142px 14.142px;animation:back .9s linear infinite}
+@keyframes back{to{background-position:-14.142px 0}}
+.bar.fin .seg i{transition:width .3s ease-out}
+.bar.late .seg:last-child::after{content:"";position:absolute;top:0;bottom:0;width:30%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.75),transparent);animation:glint 1.5s ease-in-out infinite}
+@keyframes glint{from{left:60%}to{left:100%}}
+/* Y1: bar to 90%, hatched when late */
+.bar.y .seg i.hatch{background:repeating-linear-gradient(45deg,var(--vf-green) 0 .5rem,#4db6ac .5rem 1rem);background-size:1.41rem 100%;animation:stripe 1s linear infinite}
+@keyframes stripe{to{background-position:1.41rem 0}}
+.meta{margin-top:6px;font-size:12.5px;color:var(--vf-64);line-height:1.35;font-variant-numeric:tabular-nums}
+/* Y2: step list */
+.list{list-style:none;margin:0;padding:0;display:grid;gap:3px}
+.list li{display:flex;gap:7px;align-items:baseline;color:var(--vf-8c)}
+.list li::before{content:"";flex:none;width:.6rem;height:.6rem;border-radius:50%;border:2px solid #c9cdd1;transform:translateY(1px)}
+.list li.done{color:var(--vf-64)} .list li.done::before{background:var(--vf-green);border-color:var(--vf-green)}
+.list li.cur{color:var(--vf-ink);font-weight:600} .list li.cur::before{border-color:var(--vf-green);background:#fff}
+
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+summary{cursor:pointer;font-weight:600}
+details > div{margin-top:10px;display:flex;flex-direction:column;gap:10px;font-size:14px;max-width:110ch}
+details ul{margin:0;padding-left:18px} details li{margin:3px 0}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:600}
+td.num{font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="intro">
+    <span class="eyebrow">Vet.AF · блок записи приёма · 26.11.2026</span>
+    <h1>Сбой сервиса и ожидание черновика</h1>
+    <p class="muted">Живые макеты блока в левой колонке приёма: как сейчас и целевая версия, для ожидания — ещё упрощённая альтернатива. Сценарий выбирается сверху, кнопки внутри блоков нажимаются.</p>
+    <div class="legend">
+      <span><i class="sw"></i>Как в Vet.AF</span>
+      <span><i class="sw t"></i>Целевая версия</span>
+      <span><i class="sw a"></i>Альтернатива</span>
+    </div>
+  </header>
+
+  <!-- ========== 1. OUTAGE ========== -->
+  <section class="topic" aria-labelledby="h-err">
+    <h2 id="h-err">1. Сервис недоступен</h2>
+    <div class="ctrl" id="errCtrl" role="group" aria-label="Сценарий сбоя">
+      <span class="lbl">Сценарий:</span>
+      <button type="button" id="sc-open" data-sc="open">Врач открыл приём, сервис уже лежит</button>
+      <button type="button" id="sc-drop" data-sc="drop">Сервис упал, пока приём открыт</button>
+      <span class="sep"></span>
+      <button type="button" id="sc-up" data-sc="up">Сервис поднялся</button>
+      <button type="button" id="sc-reset" data-sc="reset">Сначала</button>
+    </div>
+    <p class="small muted">В «Сервис упал…» блоки 4 секунды ещё не знают о сбое (в жизни — до минуты): нажмите «Начать запись» в это время.</p>
+    <div class="four">
+      <div class="col">
+        <h3>Как в Vet.AF</h3>
+        <div class="mock"><div class="slot" id="e0"></div><div class="ghost"><i style="width:40%"></i><i style="width:80%"></i></div><div class="note" id="e0-note"></div></div>
+        <ul>
+          <li class="bad">Скрипт блока грузится с нашего сервера: когда он лежит, страница приёма висит (25.11).</li>
+          <li class="bad">Пока врач не нажал кнопку, сбоя не видно; ошибка отправляет проверять свой интернет.</li>
+        </ul>
+      </div>
+      <div class="col target">
+        <h3>Целевая версия <span class="chip">выбрана</span></h3>
+        <div class="mock"><div class="slot" id="eT"></div><div class="ghost"><i style="width:40%"></i><i style="width:80%"></i></div><div class="note" id="eT-note"></div></div>
+        <ul>
+          <li>Блок сам проверяет сервис: при открытии приёма, раз в минуту, при сбое — раз в 20 секунд.</li>
+          <li>Сбой — красный цвет ошибки, кнопки записи нет; на её месте «Проверить снова» — высота блока та же.</li>
+          <li>Сервис вернулся — блок сам становится обычным.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 2. WAIT ========== -->
+  <section class="topic" aria-labelledby="h-wait">
+    <h2 id="h-wait">2. Ожидание черновика после записи</h2>
+    <div class="ctrl" id="anCtrl" role="group" aria-label="Сценарий обработки">
+      <span class="lbl">Приём:</span>
+      <button type="button" id="pre-short" data-pre="short">40 секунд</button>
+      <button type="button" id="pre-mid" data-pre="mid">12 минут</button>
+      <button type="button" id="pre-long" data-pre="long" class="on">25 минут</button>
+      <button type="button" id="pre-late" data-pre="late">25 минут, дольше обычного</button>
+      <span class="sep"></span>
+      <span class="lbl">Скорость:</span>
+      <button type="button" id="sp-1" data-speed="1" class="on">×1</button>
+      <button type="button" id="sp-4" data-speed="4">×4</button>
+      <span class="sep"></span>
+      <button type="button" id="play">▶ Завершить запись</button>
+    </div>
+    <p class="clock" id="clock">Время ответа — как на пилоте: запись до минуты — около 12 с, 12 минут — около 43 с, 25 минут — около 65 с.</p>
+    <div class="four">
+      <div class="col">
+        <h3>Как в Vet.AF <span class="chip">стенд</span></h3>
+        <div class="mock"><div class="slot" id="w0"></div><div class="ghost"><i style="width:40%"></i><i style="width:80%"></i></div><div class="note" id="w0-note"></div></div>
+        <ul>
+          <li>Значок ✻ и фраза в заголовке, смена каждые 2,8 с; под ним — крутилка Пети.</li>
+          <li class="bad">Фразы идут по кругу; «меньше минуты» — неправда для длинного приёма.</li>
+        </ul>
+      </div>
+      <div class="col target">
+        <h3>Целевая версия <span class="chip">выбрана</span></h3>
+        <div class="mock"><div class="slot" id="wT"></div><div class="ghost"><i style="width:40%"></i><i style="width:80%"></i></div><div class="note" id="wT-note"></div></div>
+        <ul>
+          <li>Шаги «Расшифровка — Заполнение», по полосе всё время бегут полоски.</li>
+          <li>Ниже — длина записи и сколько займёт обработка; полоса рассчитана с запасом.</li>
+        </ul>
+      </div>
+      <div class="col alt">
+        <h3>Альтернатива <span class="chip">проще</span></h3>
+        <div class="mock"><div class="slot" id="wA"></div><div class="ghost"><i style="width:40%"></i><i style="width:80%"></i></div><div class="note" id="wA-note"></div></div>
+        <ul>
+          <li>Всё как в целевой версии, но полоса цельная — без отдельной части под расшифровку.</li>
+          <li>Строки «Обработка займёт…» нет: остаётся только длина записи.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <details>
+    <summary>Целевая версия: расчёт времени и что нужно сделать</summary>
+    <div>
+      <p>Строка времени зависит от длины записи. Нижняя граница — среднее время ответа на пилоте, верхняя — конец полосы, 1,6 × среднее с округлением вверх.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Длина записи</th><th>Приёмов на пилоте</th><th>Среднее время ответа</th><th>Конец полосы</th><th>Строка в блоке</th></tr></thead>
+        <tbody>
+          <tr><td>до 1 мин</td><td class="num">17</td><td class="num">11 с</td><td class="num">20 с</td><td>Обработка займёт 10–20 секунд</td></tr>
+          <tr><td>1–5 мин</td><td class="num">5</td><td class="num">14 с</td><td class="num">25 с</td><td>Обработка займёт 15–30 секунд</td></tr>
+          <tr><td>5–15 мин</td><td class="num">4</td><td class="num">43 с</td><td class="num">70 с</td><td>Обработка займёт 40–70 секунд</td></tr>
+          <tr><td>от 15 мин</td><td class="num">5</td><td class="num">65 с</td><td class="num">105 с</td><td>Обработка займёт 1–2 минуты</td></tr>
+        </tbody>
+      </table></div>
+      <p class="small muted">Пилот — 31 приём с готовой картой, срез 26.11. В корзинах от минуты по 4–5 приёмов, поэтому запас — оценка: ожидаем, что примерно в 9 случаях из 10 ответ придёт раньше конца полосы. Таблица хранится одним конфигом на сервере: если обработку ускорят, меняются только цифры.</p>
+      <p><b>Петя</b></p>
+      <ul>
+        <li>Подключать скрипт блока так, чтобы он не задерживал страницу (асинхронно или с коротким таймаутом); пока блок не загрузился — заглушка «Сервис ИИ-заполнения карты временно недоступен» (предложение Бориса).</li>
+        <li>Стили: красное состояние «недоступно» с рядом «Проверить снова · проверено в …», полоса с полосками, две строки под ней.</li>
+      </ul>
+      <p><b>Борис</b></p>
+      <ul>
+        <li>Проверка сервиса при открытии приёма и раз в минуту, во время сбоя — раз в 20 секунд; состояние «недоступно» и ручная проверка по ссылке.</li>
+        <li>Сигнал «расшифровано» для первой части полосы; конфиг времени по длине записи; тексты.</li>
+        <li>Строку с меняющимися фразами на прод не выкладывать — её заменяют шаги и полоса.</li>
+      </ul>
+      <p class="small muted">Почему так: неподвижный индикатор люди принимают за зависание (<a href="https://developer.apple.com/design/human-interface-guidelines/progress-indicators">Apple HIG</a>); ожиданию дольше 10 секунд нужен индикатор доли выполненного или список шагов (<a href="https://www.nngroup.com/articles/progress-indicators/">NN/g</a>); полоски, бегущие против хода полосы, сокращают субъективное ожидание примерно на 10% (<a href="https://www.chrisharrison.net/index.php/Research/ProgressBars2">Harrison и др., CHI 2010</a>).</p>
+    </div>
+  </details>
+</div>
+
+<script>
+const IC = {
+  chev:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>',
+  mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+  rec:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="5"/></svg>',
+  stop:'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>',
+  off:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 18h10a4 4 0 0 0 .7-7.94A6 6 0 0 0 6.2 9.1 4.5 4.5 0 0 0 7 18zM4 4l16 16"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>',
+  wave:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2"/></svg>',
+  warn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 2.5 20h19L12 4zM12 10v4M12 17v.5"/></svg>',
+  doc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5"/></svg>',
+  clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></svg>',
+};
+const SPIN = '<span class="spin"></span>';
+const blk = ({tone='idle', title, badge, soft=false, pulse=false, sub='', extra='', btns=null}) =>
+  `<div class="blk" data-tone="${tone}"><header><span class="t">${title}</span><span class="chev">${IC.chev}</span></header>
+   <div class="row"><div class="badge${soft?' soft':''}${pulse?' pulse':''}">${badge}</div><div class="sub">${sub}</div></div>${extra}${btns!==null?`<div class="btns">${btns}</div>`:''}</div>`;
+const setNote = (id, html, bad=false) => { const n = document.getElementById(id+'-note'); n.innerHTML = html; n.className = 'note' + (bad?' bad':''); };
+const hhmm = () => new Date().toTimeString().slice(0,5);
+const mmss = s => `${String(Math.floor(s/60)).padStart(2,'0')}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+const btn = (act, label, cls='', icon='', dis=false) => `<button type="button" class="vbtn ${cls}" data-act="${act}"${dis?' disabled':''}>${icon}${label}</button>`;
+
+/* ================= 1. OUTAGE ================= */
+const IDLE_SUB = 'ИИ запишет разговор и предложит данные для заполнения приёма';
+const startBtn = btn('rec','Начать запись','green',IC.rec);
+const idleBlk = (sub=IDLE_SUB, extra='') => blk({title:'Запись приёма', badge:IC.mic, sub, extra, btns:startBtn});
+const E = {up:true, known:true, sc:'reset', timers:[], s:{}, rec:0, recTimer:null};
+const later = (ms, fn) => E.timers.push(setTimeout(fn, ms));
+function resetStates(){ E.s = {e0:'idle', eT:'idle', checkedT:'', checkingT:false}; }
+
+function renderErr(){
+  const s = E.s, pending = !E.up && !E.known;
+  // --- 0. as in Vet.AF (v1)
+  const m0 = document.getElementById('e0').parentElement; m0.querySelector('.hang')?.remove();
+  const e0 = document.getElementById('e0');
+  if (s.e0==='hang'){
+    e0.innerHTML = idleBlk();
+    const h = document.createElement('div'); h.className='hang';
+    h.innerHTML = '<span class="spin"></span><b>Страница приёма не открывается</b>браузер ждёт скрипт блока с упавшего сервера';
+    m0.append(h); setNote('e0','');
+  } else if (s.e0==='err'){
+    e0.innerHTML = blk({tone:'red', title:'Нет связи с сервисом записи', badge:IC.mic, sub:'Проверьте интернет и нажмите кнопку ещё раз', btns:startBtn});
+    setNote('e0','Врач проверяет свой интернет, а лежит наш сервер', true);
+  } else if (s.e0==='rec'){ e0.innerHTML = recBlk(); setNote('e0','Сервис работает — запись пошла'); }
+  else { e0.innerHTML = idleBlk(); setNote('e0', E.up ? '' : 'Сбоя не видно, пока врач не нажмёт'); }
+
+  // --- target (B2)
+  const eT = document.getElementById('eT');
+  const rowT = s.checkingT ? '<button type="button" class="vlink" disabled>Проверяем…</button>'
+    : `<button type="button" class="vlink" data-act="checkT">Проверить снова</button><span class="when">· проверено в ${s.checkedT}</span>`;
+  if (['down','fail','still'].includes(s.eT)){
+    const sub = s.eT==='fail' ? 'Запись не началась. Заполните приём вручную.' : s.eT==='still' ? 'Пока недоступно. Заполните приём вручную.' : 'Временно недоступно. Заполните приём вручную.';
+    eT.innerHTML = blk({tone:'red', title:'Запись приёма', badge:IC.off, sub, btns:rowT});
+    setNote('eT', s.eT==='fail' ? 'Нажал ровно в момент падения — то же состояние' : E.sc==='drop' ? 'Блок заметил сбой сам, при плановой проверке' : 'Сбой виден сразу при открытии приёма');
+  } else if (s.eT==='back'){ eT.innerHTML = idleBlk('<span class="okline">Запись снова доступна</span>'); setNote('eT','Вернулся сам, без перезагрузки; высота блока не менялась'); }
+  else if (s.eT==='rec'){ eT.innerHTML = recBlk(); setNote('eT','Сервис работает — запись пошла'); }
+  else { eT.innerHTML = idleBlk(); setNote('eT', pending ? 'Сбой ещё не замечен — попробуйте нажать «Начать запись»' : ''); }
+
+}
+function recBlk(){ return blk({tone:'rec', title:'Идёт запись <small>00:01</small>', badge:IC.mic, sub:'По окончании приёма нажмите «Завершить»', btns:btn('back','Сбросить пример','',IC.stop)}); }
+function recover(){
+  const s = E.s;
+  if (s.e0==='err') s.e0='idle'; if (s.e0==='hang') s.e0='idle';
+  if (['down','fail','still'].includes(s.eT)){ s.eT='back'; later(5000, ()=>{ if (s.eT==='back'){ s.eT='idle'; renderErr(); } }); }
+}
+function scenario(sc){
+  E.timers.forEach(clearTimeout); E.timers=[];
+  document.querySelectorAll('#errCtrl button').forEach(b=>b.classList.toggle('on', b.dataset.sc===sc && sc!=='reset'));
+  if (sc==='up'){ if (E.up){ renderErr(); return; } E.up=true; E.known=true; E.sc='up'; recover(); renderErr(); return; }
+  resetStates(); E.sc = sc;
+  const s = E.s;
+  if (sc==='reset'){ E.up=true; E.known=true; }
+  if (sc==='open'){ E.up=false; E.known=true; s.checkedT=hhmm(); s.e0='hang'; s.eT='down'; }
+  if (sc==='drop'){ E.up=false; E.known=false;
+    later(4000, ()=>{ E.known=true; s.checkedT=hhmm(); if (s.eT==='idle') s.eT='down'; renderErr(); }); }
+  renderErr();
+}
+document.getElementById('errCtrl').addEventListener('click', e=>{ const b=e.target.closest('button[data-sc]'); if(b) scenario(b.dataset.sc); });
+document.querySelectorAll('#e0, #eT').forEach(slot => slot.addEventListener('click', e=>{
+  const b = e.target.closest('[data-act]'); if(!b || b.disabled) return;
+  const id = slot.id, s = E.s, act = b.dataset.act;
+  if (act==='back'){ s[id] = (id==='eT' && !E.up && E.known) ? 'down' : 'idle'; return renderErr(); }
+  if (act==='checkT'){ s.checkingT=true; renderErr(); return later(1500, ()=>{ s.checkingT=false; s.checkedT=hhmm(); if (E.up) recover(); else s.eT='still'; renderErr(); }); }
+  if (act==='rec'){
+    if (E.up){ s[id]='rec'; return renderErr(); }
+    if (id==='e0') s.e0='err';
+    if (id==='eT'){ s.eT='fail'; s.checkedT=hhmm(); }
+    renderErr();
+  }
+}));
+scenario('reset');
+
+/* ================= 2. WAIT ================= */
+// act — real answer time (pilot), tr — transcription done after stop, T — end of the target bar, len — recording, s
+const PRE = {
+  short:{act:12,  tr:1.5, T:20,  len:40,   rec:'40 с',   eta:'10–20 секунд'},
+  mid:  {act:43,  tr:4,   T:70,  len:720,  rec:'12 мин', eta:'40–70 секунд'},
+  long: {act:65,  tr:6,   T:105, len:1500, rec:'25 мин', eta:'1–2 минуты'},
+  late: {act:115, tr:6,   T:105, len:1500, rec:'25 мин', eta:'1–2 минуты'},
+};
+const PH = {
+  sending:["Отправляю остаток записи","Дожидаюсь последних фрагментов"],
+  transcribing:["Дослушиваю конец приёма","Перевожу речь в текст","Разбираю медицинские термины","Расставляю знаки препинания","Сверяю расшифровку"],
+  filling:["Читаю расшифровку","Выделяю жалобы и анамнез","Ищу результаты осмотра","Собираю диагнозы","Сверяю препараты и дозировки","Записываю назначения","Готовлю рекомендации владельцу","Подбираю товары и услуги","Раскладываю по полям приёма","Перепроверяю черновик"],
+};
+const A = {pre:'long', speed:1, t:0, run:false, done:false, fin:0, timer:null};
+const ease = (t,T) => t<=T ? 0.95*(1-Math.pow(1-t/T,1.5)) : 0.95 + 0.04*(1-Math.exp(-(t-T)/20));
+const keys = {};
+const put = (id, key, html) => { if (keys[id]!==key){ keys[id]=key; document.getElementById(id).innerHTML = html; } return document.getElementById(id); };
+const IDS = ['w0','wT','wA'];
+
+function renderWait(){
+  const P = PRE[A.pre], t = A.t;
+  if (A.run || A.done) document.getElementById('clock').textContent = `Прошло ${Math.floor(t)} с · ответ придёт на ${P.act}-й секунде`;
+  if (!A.run && !A.done){
+    IDS.forEach(id=>{ put(id, 'idle-'+A.pre, blk({tone:'rec', title:`Идёт запись <small>${mmss(P.len)}</small>`, badge:IC.mic, sub:'Нажмите «▶ Завершить запись» над макетами'})); setNote(id,''); });
+    return;
+  }
+  const ready = A.done && A.fin >= 3;
+
+  // --- as in Vet.AF (stand): thinking line
+  if (ready){ put('w0','ready', blk({tone:'ready', title:'Запись приёма завершена', badge:IC.check, sub:'Предложения появились под полями'})); setNote('w0',''); }
+  else if (!A.done){
+    const st = t < 0.8 ? 'sending' : t < P.tr ? 'transcribing' : 'filling', st0 = st==='sending'?0 : st==='transcribing'?0.8 : P.tr;
+    const list = PH[st], n = list.length, k = Math.floor((t-st0)/2.8);
+    const idx = k < n ? k : 1 + ((k-n) % (n-1)), round = k < n ? 1 : 2 + Math.floor((k-n)/(n-1));
+    put('w0', `${st}-${idx}`, blk({tone:'work', title:`<span class="glyph"></span><span class="phrase">${list[idx]}…</span>`, badge:SPIN, sub:'Обычно это занимает меньше минуты. Можете продолжать работу — предложения появятся под полями'}));
+    setNote('w0', round>1 ? `<span class="loop">фразы пошли по кругу: ${round}-й раз</span>` : '');
+  }
+
+  // --- target: B1 + stripes + two lines
+  if (ready){ put('wT','ready', blk({tone:'ready', title:'Черновик готов', badge:IC.check, sub:'Предложения появились под полями — проверьте и примите'})); setNote('wT', t < P.T ? 'Ответ пришёл раньше конца полосы' : ''); }
+  else {
+    const late = t > P.T && !A.done, trd = t >= P.tr || A.done;
+    const s1 = A.done ? 1 : Math.min(1, t/P.tr), s2 = A.done ? 1 : trd ? ease(t,P.T) : 0;
+    const sub = late ? 'Занимает чуть больше времени. Карта заполнится сама.' : 'Можно работать дальше — карта заполнится сама.';
+    const steps = `<div class="steps"><span class="s ${trd?'done':'cur'}"><span class="dot">${trd?'✓':''}</span>Расшифровка</span><span class="ln"></span><span class="s ${trd?'cur':''}"><span class="dot"></span>Заполнение</span></div>`;
+    const bar = '<div class="bar m1"><div class="seg" style="flex:1"><i></i></div><div class="seg" style="flex:9"><i></i></div></div>';
+    const meta = `<div class="meta">Запись: ${P.rec}<br>Обработка займёт ${P.eta}</div>`;
+    const el = put('wT', `w-${trd}-${late}-${A.pre}`, blk({tone:'work', title:'Обрабатываем запись', badge:IC.wave, soft:true, sub, extra: steps + bar + meta}));
+    const b = el.querySelector('.bar'), is = b.querySelectorAll('i');
+    b.classList.toggle('late', late); b.classList.toggle('fin', A.done);
+    is[0].style.width = (s1*100).toFixed(1)+'%'; is[1].style.width = (s2*100).toFixed(1)+'%';
+    if (!A.done) setNote('wT', late ? 'Дольше расчёта — полоса ползёт к концу, по ней идёт блик' : '');
+  }
+
+  // --- alternative: the target with one solid bar and no «Обработка займёт» line
+  if (ready){ put('wA','ready', blk({tone:'ready', title:'Черновик готов', badge:IC.check, sub:'Предложения появились под полями — проверьте и примите'})); setNote('wA', t < P.T ? 'Ответ пришёл раньше конца полосы' : ''); }
+  else {
+    const late = t > P.T && !A.done, trd = t >= P.tr || A.done;
+    const p = A.done ? 1 : ease(t,P.T);
+    const sub = late ? 'Занимает чуть больше времени. Карта заполнится сама.' : 'Можно работать дальше — карта заполнится сама.';
+    const steps = `<div class="steps"><span class="s ${trd?'done':'cur'}"><span class="dot">${trd?'✓':''}</span>Расшифровка</span><span class="ln"></span><span class="s ${trd?'cur':''}"><span class="dot"></span>Заполнение</span></div>`;
+    const el = put('wA', `a-${trd}-${late}-${A.pre}`, blk({tone:'work', title:'Обрабатываем запись', badge:IC.wave, soft:true, sub, extra: steps + '<div class="bar m1"><div class="seg" style="flex:1"><i></i></div></div>' + `<div class="meta">Запись: ${P.rec}</div>`}));
+    const b = el.querySelector('.bar');
+    b.classList.toggle('late', late); b.classList.toggle('fin', A.done);
+    b.querySelector('i').style.width = (p*100).toFixed(1)+'%';
+    if (!A.done) setNote('wA', late ? 'Дольше расчёта — полоса ползёт к концу, по ней идёт блик' : '');
+  }
+}
+function tick(){
+  const P = PRE[A.pre];
+  if (A.done){ A.fin++; renderWait(); if (A.fin>=3){ clearInterval(A.timer); A.run=false; document.getElementById('play').textContent='↺ Ещё раз'; } return; }
+  A.t += 0.1*A.speed;
+  if (A.t >= P.act){ A.t = P.act; A.done = true; A.fin = 0; }
+  renderWait();
+}
+function resetWait(){ clearInterval(A.timer); A.t=0; A.run=false; A.done=false; A.fin=0; Object.keys(keys).forEach(k=>delete keys[k]); document.getElementById('play').textContent='▶ Завершить запись'; renderWait(); }
+document.getElementById('anCtrl').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  if (b.dataset.pre){ A.pre=b.dataset.pre; document.querySelectorAll('[data-pre]').forEach(x=>x.classList.toggle('on',x===b)); resetWait(); }
+  if (b.dataset.speed){ A.speed=+b.dataset.speed; document.querySelectorAll('[data-speed]').forEach(x=>x.classList.toggle('on',x===b)); }
+  if (b.id==='play'){ resetWait(); A.run=true; b.textContent='■ Идёт обработка…'; A.timer=setInterval(tick,100); renderWait(); }
+});
+renderWait();
+</script>
+
+</body>
+</html>
